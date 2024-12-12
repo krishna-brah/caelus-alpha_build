@@ -1,18 +1,7 @@
 import React from 'react';
-import {
-  Box,
-  Image,
-  Badge,
-  Text,
-  VStack,
-  HStack,
-  Button,
-  useColorModeValue,
-  Heading,
-  SimpleGrid,
-  Tooltip,
-} from '@chakra-ui/react';
+import Image from 'next/image';
 import { Tag } from '../types/tags';
+import { motion } from 'framer-motion';
 
 interface ListingScore {
   designQuality: number;
@@ -51,123 +40,136 @@ export const DesignerListing: React.FC<DesignerListingProps> = ({
   canReview,
   onReview,
 }) => {
-  const bgColor = useColorModeValue('white', 'gray.800');
-  const borderColor = useColorModeValue('gray.200', 'gray.700');
-
   const getTierBadgeProps = (tier: string) => {
     switch (tier) {
       case 'Gold':
-        return { colorScheme: 'yellow', icon: '🌟' };
+        return {
+          bgColor: 'bg-gradient-to-r from-yellow-300 to-yellow-500',
+          textColor: 'text-yellow-900',
+          icon: '🌟'
+        };
       case 'Diamond':
-        return { colorScheme: 'cyan', icon: '💎' };
+        return {
+          bgColor: 'bg-gradient-to-r from-cyan-300 to-cyan-500',
+          textColor: 'text-cyan-900',
+          icon: '💎'
+        };
       case 'Cosmic':
-        return { colorScheme: 'purple', icon: '🌌' };
+        return {
+          bgColor: 'bg-gradient-to-r from-cosmic-400 to-cosmic-600',
+          textColor: 'text-white',
+          icon: '🌌'
+        };
       default:
-        return { colorScheme: 'gray', icon: '⭐' };
+        return {
+          bgColor: 'bg-gradient-to-r from-gray-300 to-gray-500',
+          textColor: 'text-gray-900',
+          icon: '⭐'
+        };
     }
   };
 
   return (
-    <Box
-      borderWidth="1px"
-      borderRadius="lg"
-      overflow="hidden"
-      bg={bgColor}
-      borderColor={borderColor}
+    <motion.div
+      whileHover={{ y: -4 }}
+      transition={{ duration: 0.2 }}
+      className="bg-white/5 backdrop-blur-lg rounded-2xl overflow-hidden border border-white/10 group"
     >
-      <Image
-        src={imageUrl}
-        alt={title}
-        height="300px"
-        width="100%"
-        objectFit="cover"
-      />
+      <div className="relative h-64">
+        <Image
+          src={imageUrl}
+          alt={title}
+          fill
+          className="object-cover group-hover:scale-105 transition-transform duration-300"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-cosmic-900/80 to-transparent" />
+      </div>
 
-      <Box p={6}>
-        <VStack align="stretch" spacing={4}>
-          <Box>
-            <Heading size="md">{title}</Heading>
-            <Text color="gray.600">{designer.name}</Text>
-          </Box>
+      <div className="p-6 space-y-4">
+        <div>
+          <h3 className="text-xl font-bold text-white font-space-grotesk">{title}</h3>
+          <p className="text-cosmic-100">{designer.name}</p>
+        </div>
 
-          {/* Designer Tags */}
-          <Box>
-            <Text fontWeight="bold" mb={2}>Designer Expertise</Text>
-            <HStack flexWrap="wrap" spacing={2}>
-              {designer.tags.map(tag => {
-                const { colorScheme, icon } = getTierBadgeProps(tag.tier);
-                return (
-                  <Tooltip
-                    key={tag.id}
-                    label={`${tag.value} - ${tag.tier} Tier`}
-                    hasArrow
-                  >
-                    <Badge colorScheme={colorScheme} px={2} py={1}>
-                      {icon} {tag.value}
-                    </Badge>
-                  </Tooltip>
-                );
-              })}
-            </HStack>
-          </Box>
+        {/* Designer Tags */}
+        <div>
+          <h4 className="text-sm font-medium text-cosmic-100 mb-2">Designer Expertise</h4>
+          <div className="flex flex-wrap gap-2">
+            {designer.tags.map(tag => {
+              const { bgColor, textColor, icon } = getTierBadgeProps(tag.tier);
+              return (
+                <div
+                  key={tag.id}
+                  className={`px-3 py-1 rounded-full ${bgColor} ${textColor} text-sm font-medium`}
+                  title={`${tag.value} - ${tag.tier} Tier`}
+                >
+                  {icon} {tag.value}
+                </div>
+              );
+            })}
+          </div>
+        </div>
 
-          {/* Scores */}
-          <SimpleGrid columns={3} spacing={4}>
-            <VStack>
-              <Text fontSize="sm" color="gray.600">Design Quality</Text>
-              <Badge colorScheme="blue" fontSize="lg">
-                {score.designQuality.toFixed(1)}
-              </Badge>
-            </VStack>
-            <VStack>
-              <Text fontSize="sm" color="gray.600">Material Use</Text>
-              <Badge colorScheme="green" fontSize="lg">
-                {score.materialUse.toFixed(1)}
-              </Badge>
-            </VStack>
-            <VStack>
-              <Text fontSize="sm" color="gray.600">Sustainability</Text>
-              <Badge colorScheme="teal" fontSize="lg">
-                {score.sustainability.toFixed(1)}
-              </Badge>
-            </VStack>
-          </SimpleGrid>
+        {/* Scores */}
+        <div className="grid grid-cols-3 gap-4">
+          <div className="text-center">
+            <p className="text-sm text-cosmic-100 mb-1">Design Quality</p>
+            <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-2 py-1 rounded-lg text-lg font-bold">
+              {score.designQuality.toFixed(1)}
+            </div>
+          </div>
+          <div className="text-center">
+            <p className="text-sm text-cosmic-100 mb-1">Material Use</p>
+            <div className="bg-gradient-to-r from-green-500 to-green-600 text-white px-2 py-1 rounded-lg text-lg font-bold">
+              {score.materialUse.toFixed(1)}
+            </div>
+          </div>
+          <div className="text-center">
+            <p className="text-sm text-cosmic-100 mb-1">Sustainability</p>
+            <div className="bg-gradient-to-r from-teal-500 to-teal-600 text-white px-2 py-1 rounded-lg text-lg font-bold">
+              {score.sustainability.toFixed(1)}
+            </div>
+          </div>
+        </div>
 
-          {/* Materials Used */}
-          <Box>
-            <Text fontWeight="bold" mb={2}>Materials Used</Text>
-            <VStack align="stretch" spacing={2}>
-              {materials.map((material, index) => (
-                <HStack key={index} justify="space-between">
-                  <Text fontSize="sm">{material.name}</Text>
-                  <HStack spacing={2}>
-                    <Badge colorScheme="blue">Q: {material.quality}</Badge>
-                    <Badge colorScheme="green">S: {material.sustainability}</Badge>
-                  </HStack>
-                </HStack>
-              ))}
-            </VStack>
-          </Box>
+        {/* Materials Used */}
+        <div>
+          <h4 className="text-sm font-medium text-cosmic-100 mb-2">Materials Used</h4>
+          <div className="space-y-2">
+            {materials.map((material, index) => (
+              <div key={index} className="flex justify-between items-center">
+                <span className="text-sm text-cosmic-100">{material.name}</span>
+                <div className="flex gap-2">
+                  <span className="bg-blue-500/20 text-blue-200 px-2 py-0.5 rounded text-sm">
+                    Q: {material.quality}
+                  </span>
+                  <span className="bg-green-500/20 text-green-200 px-2 py-0.5 rounded text-sm">
+                    S: {material.sustainability}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
 
-          <HStack justify="space-between" align="center">
-            <Text fontWeight="bold" fontSize="xl">
-              ${price.toFixed(2)}
-            </Text>
-            {canReview && (
-              <Button
-                colorScheme="blue"
-                onClick={() => onReview(id)}
-              >
-                Write Review
-              </Button>
-            )}
-          </HStack>
+        <div className="flex justify-between items-center pt-2">
+          <span className="text-2xl font-bold text-white">
+            ${price.toFixed(2)}
+          </span>
+          {canReview && (
+            <button
+              onClick={() => onReview(id)}
+              className="bg-gradient-to-r from-cosmic-500 to-cosmic-600 hover:from-cosmic-600 hover:to-cosmic-700 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200"
+            >
+              Write Review
+            </button>
+          )}
+        </div>
 
-          <Text fontSize="sm" color="gray.600" textAlign="right">
-            {score.totalReviews} reviews
-          </Text>
-        </VStack>
-      </Box>
-    </Box>
+        <div className="text-sm text-cosmic-100 text-right">
+          {score.totalReviews} reviews
+        </div>
+      </div>
+    </motion.div>
   );
 };

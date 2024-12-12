@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <rect width="800" height="600" fill="#f3f4f6"/>
+  <g fill="#9ca3af">
+    <path d="M0 0h800v600H0z" fill-opacity=".1"/>
+    <path d="M395 280h10v40h-10zm-30 15h70v10h-70z"/>
+    <path d="M370 270h60v60h-60zm10 10h40v40h-40z"/>
+  </g>
+  <text x="400" y="380" font-family="system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,sans-serif" font-size="16" text-anchor="middle" fill="#6b7280">
+    Image Unavailable
+  </text>
+</svg>

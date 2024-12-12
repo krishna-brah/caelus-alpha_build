@@ -1,15 +1,4 @@
 import React from 'react';
-import {
-  Box,
-  Grid,
-  Heading,
-  VStack,
-  Text,
-  Progress,
-  SimpleGrid,
-  Badge,
-  useColorModeValue,
-} from '@chakra-ui/react';
 import { Tag } from '../types/tags';
 import { TagDisplay } from './TagDisplay';
 
@@ -28,9 +17,6 @@ export const DesignerDashboard: React.FC<DesignerDashboardProps> = ({
   tags,
   achievements,
 }) => {
-  const bgColor = useColorModeValue('white', 'gray.800');
-  const borderColor = useColorModeValue('gray.200', 'gray.700');
-
   const groupedTags = tags.reduce((acc, tag) => {
     const category = tag.category;
     if (!acc[category]) {
@@ -41,52 +27,52 @@ export const DesignerDashboard: React.FC<DesignerDashboardProps> = ({
   }, {} as Record<string, Tag[]>);
 
   return (
-    <Box p={6}>
-      <VStack spacing={8} align="stretch">
-        <Box>
-          <Heading size="lg" mb={2}>{designerName}'s Dashboard</Heading>
-          <Text color="gray.600">Track your progress and achievements</Text>
-        </Box>
+    <div className="p-6">
+      <div className="space-y-8">
+        <div>
+          <h1 className="text-2xl font-bold mb-2">{designerName}'s Dashboard</h1>
+          <p className="text-cosmic-600">Track your progress and achievements</p>
+        </div>
 
         {/* Achievements Overview */}
-        <SimpleGrid columns={{ base: 1, md: 3 }} spacing={6}>
-          <Box p={4} bg={bgColor} borderRadius="lg" borderWidth="1px" borderColor={borderColor}>
-            <VStack align="start">
-              <Text color="gray.500">Total Projects</Text>
-              <Heading size="lg">{achievements.totalProjects}</Heading>
-            </VStack>
-          </Box>
-          <Box p={4} bg={bgColor} borderRadius="lg" borderWidth="1px" borderColor={borderColor}>
-            <VStack align="start">
-              <Text color="gray.500">Highest Tier</Text>
-              <Heading size="lg">{achievements.highestTier}</Heading>
-            </VStack>
-          </Box>
-          <Box p={4} bg={bgColor} borderRadius="lg" borderWidth="1px" borderColor={borderColor}>
-            <VStack align="start">
-              <Text color="gray.500">Top Rated Listings</Text>
-              <Heading size="lg">{achievements.topRatedListings}</Heading>
-            </VStack>
-          </Box>
-        </SimpleGrid>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="p-4 bg-cream-50 dark:bg-cosmic-800 rounded-lg border border-cosmic-100 dark:border-cosmic-700">
+            <div className="flex flex-col">
+              <span className="text-cosmic-500 dark:text-cosmic-400">Total Projects</span>
+              <span className="text-2xl font-bold">{achievements.totalProjects}</span>
+            </div>
+          </div>
+          <div className="p-4 bg-cream-50 dark:bg-cosmic-800 rounded-lg border border-cosmic-100 dark:border-cosmic-700">
+            <div className="flex flex-col">
+              <span className="text-cosmic-500 dark:text-cosmic-400">Highest Tier</span>
+              <span className="text-2xl font-bold">{achievements.highestTier}</span>
+            </div>
+          </div>
+          <div className="p-4 bg-cream-50 dark:bg-cosmic-800 rounded-lg border border-cosmic-100 dark:border-cosmic-700">
+            <div className="flex flex-col">
+              <span className="text-cosmic-500 dark:text-cosmic-400">Top Rated Listings</span>
+              <span className="text-2xl font-bold">{achievements.topRatedListings}</span>
+            </div>
+          </div>
+        </div>
 
         {/* Tags Progress */}
-        <Box>
-          <Heading size="md" mb={4}>Tag Progress</Heading>
-          <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6}>
+        <div>
+          <h2 className="text-xl font-bold mb-4">Tag Progress</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {Object.entries(groupedTags).map(([category, categoryTags]) => (
-              <Box key={category} p={4} bg={bgColor} borderRadius="lg" borderWidth="1px" borderColor={borderColor}>
-                <VStack align="stretch" spacing={4}>
-                  <Heading size="sm">{category}</Heading>
+              <div key={category} className="p-4 bg-cream-50 dark:bg-cosmic-800 rounded-lg border border-cosmic-100 dark:border-cosmic-700">
+                <div className="space-y-4">
+                  <h3 className="text-lg font-semibold">{category}</h3>
                   {categoryTags.map(tag => (
                     <TagDisplay key={tag.id} tag={tag} />
                   ))}
-                </VStack>
-              </Box>
+                </div>
+              </div>
             ))}
-          </SimpleGrid>
-        </Box>
-      </VStack>
-    </Box>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };

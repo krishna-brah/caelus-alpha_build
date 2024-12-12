@@ -49,8 +49,5 @@ export interface TagProgress {
 export interface FabricScore {
   qualityRating: number;
   sustainabilityScore: number;
-  origin: string;
-  supplier: string;
-  certifications: string[];
   ratedByDesigners: number;
 }

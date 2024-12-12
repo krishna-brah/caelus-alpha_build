@@ -1,28 +1,34 @@
 import React from 'react';
-import { Header } from './Header';
+import { Navbar } from './Navbar';
+import { Footer } from './Footer';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface LayoutProps {
   children: React.ReactNode;
+  hideNav?: boolean;
+  hideFooter?: boolean;
 }
 
-export const Layout: React.FC<LayoutProps> = ({ children }) => {
+export const Layout: React.FC<LayoutProps> = ({
+  children,
+  hideNav = false,
+  hideFooter = false,
+}) => {
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <Header />
+    <div className="min-h-screen flex flex-col">
+      {!hideNav && <Navbar />}
       <AnimatePresence mode="wait">
         <motion.main
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 20 }}
           transition={{ duration: 0.3 }}
-          className="pt-16 pb-8"
+          className={`flex-grow ${!hideNav ? 'pt-16' : ''}`}
         >
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            {children}
-          </div>
+          {children}
         </motion.main>
       </AnimatePresence>
+      {!hideFooter && <Footer />}
     </div>
   );
 };

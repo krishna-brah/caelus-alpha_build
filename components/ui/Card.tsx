@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { cn } from '../../lib/utils/cn';
 
@@ -9,10 +11,10 @@ interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
 export const Card = React.forwardRef<HTMLDivElement, CardProps>(
   ({ className, variant = 'default', hover = true, ...props }, ref) => {
     const variants = {
-      default: 'bg-white dark:bg-neutral-800 shadow-soft',
-      glass: 'bg-white/10 dark:bg-neutral-900/10 backdrop-blur-lg border border-white/20 dark:border-neutral-700/20',
-      neon: 'bg-neutral-900/90 border border-primary-500/50 shadow-neon',
-      minimal: 'bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800',
+      default: 'bg-cream-50 border border-cosmic-100 shadow-lg',
+      glass: 'bg-cream-50/10 backdrop-blur-lg border border-cream-50/20',
+      neon: 'bg-cosmic-900/90 border border-cosmic-500/50 shadow-cosmic',
+      minimal: 'bg-cream-50 border border-cosmic-200',
     };
 
     const hoverEffects = hover
@@ -69,7 +71,7 @@ export const CardDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <p
     ref={ref}
-    className={cn('text-sm text-gray-500 dark:text-gray-400', className)}
+    className={cn('text-sm text-cosmic-600', className)}
     {...props}
   />
 ));

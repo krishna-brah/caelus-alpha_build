@@ -1,6 +1,4 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { ThemeProvider as MuiThemeProvider } from '@mui/material/styles';
-import { getArtisanTechTheme } from '../theme/artisanTech';
 
 type ThemeMode = 'light' | 'dark';
 
@@ -24,7 +22,10 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
       setMode(prefersDark ? 'dark' : 'light');
     }
-  }, []);
+
+    // Update the document class for Tailwind dark mode
+    document.documentElement.classList.toggle('dark', mode === 'dark');
+  }, [mode]);
 
   const toggleTheme = () => {
     const newMode = mode === 'light' ? 'dark' : 'light';
@@ -32,13 +33,13 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     localStorage.setItem('themeMode', newMode);
   };
 
-  const theme = getArtisanTechTheme(mode);
-
   return (
     <ThemeContext.Provider value={{ mode, toggleTheme }}>
-      <MuiThemeProvider theme={theme}>
-        {children}
-      </MuiThemeProvider>
+      <div className={mode === 'dark' ? 'dark' : ''}>
+        <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-200">
+          {children}
+        </div>
+      </div>
     </ThemeContext.Provider>
   );
 }

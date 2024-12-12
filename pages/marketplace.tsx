@@ -1,19 +1,17 @@
 import React from 'react';
-import {
-  Box,
-  Container,
-  Grid,
-  HStack,
-  VStack,
-  Input,
-  Select,
-  Checkbox,
-  Text,
-  Heading,
-  SimpleGrid,
-  useColorModeValue,
-} from '@chakra-ui/react';
+import { Layout } from '../components/layout/Layout';
 import { DesignerListing } from '../components/DesignerListing';
+import { motion } from 'framer-motion';
+import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+
+const fadeIn = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
+};
+
+const staggerContainer = {
+  visible: { transition: { staggerChildren: 0.1 } }
+};
 
 // Mock data - In a real app, this would come from an API
 const mockListings = [
@@ -69,9 +67,6 @@ export default function Marketplace() {
     minTier: '',
   });
 
-  const bgColor = useColorModeValue('gray.50', 'gray.900');
-  const borderColor = useColorModeValue('gray.200', 'gray.700');
-
   const handleFilterChange = (field: string, value: string) => {
     setFilters(prev => ({
       ...prev,
@@ -85,92 +80,135 @@ export default function Marketplace() {
   };
 
   return (
-    <Box minH="100vh" bg={bgColor}>
-      <Container maxW="container.xl" py={8}>
-        <VStack spacing={8} align="stretch">
-          <Box>
-            <Heading mb={2}>Marketplace</Heading>
-            <Text color="gray.600">
-              Discover unique designs from talented creators
-            </Text>
-          </Box>
+    <Layout>
+      <div className="min-h-screen bg-gradient-to-b from-cosmic-900 to-cosmic-800">
+        {/* Background Logo */}
+        <div className="fixed inset-0 opacity-[0.02] pointer-events-none">
+          <img
+            src="/images/logo.webp"
+            alt=""
+            className="w-full h-full object-cover scale-150 rotate-12"
+          />
+        </div>
 
-          {/* Filters */}
-          <Box p={4} borderWidth="1px" borderRadius="lg" bg="white" borderColor={borderColor}>
-            <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={4}>
-              <Box>
-                <Text mb={2}>Search</Text>
-                <Input
-                  placeholder="Search listings..."
-                  value={filters.search}
-                  onChange={(e) => handleFilterChange('search', e.target.value)}
-                />
-              </Box>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-16">
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            variants={staggerContainer}
+            className="space-y-8"
+          >
+            {/* Header */}
+            <motion.div variants={fadeIn} className="text-center mb-12">
+              <h1 className="text-4xl font-bold text-white mb-4 font-space-grotesk">
+                Marketplace
+              </h1>
+              <p className="text-lg text-cosmic-100">
+                Discover unique designs from talented creators
+              </p>
+            </motion.div>
 
-              <Box>
-                <Text mb={2}>Fabric Specialty</Text>
-                <Select
-                  placeholder="All fabrics"
-                  value={filters.fabricSpecialty}
-                  onChange={(e) => handleFilterChange('fabricSpecialty', e.target.value)}
-                >
-                  <option value="Linen">Linen</option>
-                  <option value="Cotton">Cotton</option>
-                  <option value="Silk">Silk</option>
-                  <option value="Wool">Wool</option>
-                  <option value="Denim">Denim</option>
-                  <option value="Cashmere">Cashmere</option>
-                  <option value="Tweed/Hemp">Tweed/Hemp</option>
-                  <option value="Recycled">Recycled Materials</option>
-                </Select>
-              </Box>
+            {/* Filters */}
+            <motion.div variants={fadeIn}>
+              <div className="bg-white/5 backdrop-blur-lg rounded-2xl p-8 border border-white/10">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                  {/* Search */}
+                  <div className="space-y-2">
+                    <label className="block text-sm font-medium text-cosmic-100">
+                      Search
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        placeholder="Search listings..."
+                        value={filters.search}
+                        onChange={(e) => handleFilterChange('search', e.target.value)}
+                        className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2.5 text-white placeholder-cosmic-300 focus:outline-none focus:ring-2 focus:ring-cosmic-500/50"
+                      />
+                      <MagnifyingGlassIcon className="absolute right-3 top-3 h-5 w-5 text-cosmic-300" />
+                    </div>
+                  </div>
 
-              <Box>
-                <Text mb={2}>Clothing Type</Text>
-                <Select
-                  placeholder="All types"
-                  value={filters.clothingType}
-                  onChange={(e) => handleFilterChange('clothingType', e.target.value)}
-                >
-                  <option value="Shirts">Shirts</option>
-                  <option value="Pants">Pants</option>
-                  <option value="Dresses">Dresses</option>
-                  <option value="Jackets">Jackets</option>
-                  <option value="Wedding">Wedding Wear</option>
-                  <option value="Professional">Professional Wear</option>
-                  <option value="Blouses">Blouses</option>
-                  <option value="Jewelry">Jewelry</option>
-                </Select>
-              </Box>
+                  {/* Fabric Specialty */}
+                  <div className="space-y-2">
+                    <label className="block text-sm font-medium text-cosmic-100">
+                      Fabric Specialty
+                    </label>
+                    <select
+                      value={filters.fabricSpecialty}
+                      onChange={(e) => handleFilterChange('fabricSpecialty', e.target.value)}
+                      className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-cosmic-500/50"
+                    >
+                      <option value="">All fabrics</option>
+                      <option value="Linen">Linen</option>
+                      <option value="Cotton">Cotton</option>
+                      <option value="Silk">Silk</option>
+                      <option value="Wool">Wool</option>
+                      <option value="Denim">Denim</option>
+                      <option value="Cashmere">Cashmere</option>
+                      <option value="Tweed/Hemp">Tweed/Hemp</option>
+                      <option value="Recycled">Recycled Materials</option>
+                    </select>
+                  </div>
 
-              <Box>
-                <Text mb={2}>Minimum Tier</Text>
-                <Select
-                  placeholder="Any tier"
-                  value={filters.minTier}
-                  onChange={(e) => handleFilterChange('minTier', e.target.value)}
-                >
-                  <option value="Gold">Gold</option>
-                  <option value="Diamond">Diamond</option>
-                  <option value="Cosmic">Cosmic</option>
-                </Select>
-              </Box>
-            </SimpleGrid>
-          </Box>
+                  {/* Clothing Type */}
+                  <div className="space-y-2">
+                    <label className="block text-sm font-medium text-cosmic-100">
+                      Clothing Type
+                    </label>
+                    <select
+                      value={filters.clothingType}
+                      onChange={(e) => handleFilterChange('clothingType', e.target.value)}
+                      className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-cosmic-500/50"
+                    >
+                      <option value="">All types</option>
+                      <option value="Shirts">Shirts</option>
+                      <option value="Pants">Pants</option>
+                      <option value="Dresses">Dresses</option>
+                      <option value="Jackets">Jackets</option>
+                      <option value="Wedding">Wedding Wear</option>
+                      <option value="Professional">Professional Wear</option>
+                      <option value="Blouses">Blouses</option>
+                      <option value="Jewelry">Jewelry</option>
+                    </select>
+                  </div>
 
-          {/* Listings Grid */}
-          <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6}>
-            {mockListings.map(listing => (
-              <DesignerListing
-                key={listing.id}
-                {...listing}
-                canReview={true}
-                onReview={handleReview}
-              />
-            ))}
-          </SimpleGrid>
-        </VStack>
-      </Container>
-    </Box>
+                  {/* Minimum Tier */}
+                  <div className="space-y-2">
+                    <label className="block text-sm font-medium text-cosmic-100">
+                      Minimum Tier
+                    </label>
+                    <select
+                      value={filters.minTier}
+                      onChange={(e) => handleFilterChange('minTier', e.target.value)}
+                      className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-cosmic-500/50"
+                    >
+                      <option value="">Any tier</option>
+                      <option value="Gold">Gold</option>
+                      <option value="Diamond">Diamond</option>
+                      <option value="Cosmic">Cosmic</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Listings Grid */}
+            <motion.div variants={fadeIn}>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {mockListings.map(listing => (
+                  <DesignerListing
+                    key={listing.id}
+                    {...listing}
+                    canReview={true}
+                    onReview={handleReview}
+                  />
+                ))}
+              </div>
+            </motion.div>
+          </motion.div>
+        </div>
+      </div>
+    </Layout>
   );
 }

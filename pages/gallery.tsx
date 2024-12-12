@@ -1,30 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import {
-  Grid,
-  Card,
-  CardMedia,
-  CardContent,
-  Typography,
-  Box,
-  Tabs,
-  Tab,
-  Chip,
-  IconButton,
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  Button,
-  Divider,
-  Alert,
-} from '@mui/material';
-import ImageGenerator from '../components/ImageGenerator';
-import {
-  Favorite,
-  FavoriteBorder,
-  Close as CloseIcon,
-} from '@mui/icons-material';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import Layout from '../components/Layout';
+import ImageGenerator from '../components/ImageGenerator';
+import { HeartIcon as HeartIconOutline } from '@heroicons/react/24/outline';
+import { HeartIcon as HeartIconSolid } from '@heroicons/react/24/solid';
 
 // This will be replaced with actual fabric data
 const fabricTypes = ['All', 'Linen', 'Cotton', 'Wool', 'Denim', 'Silk'];
@@ -45,7 +24,6 @@ const dummyFabrics = [
 
 const Gallery = () => {
   const [selectedType, setSelectedType] = useState('All');
-  const [selectedFabric, setSelectedFabric] = useState<any>(null);
   const [favorites, setFavorites] = useState<number[]>([]);
   const [fabrics, setFabrics] = useState(dummyFabrics);
   const [isAdmin, setIsAdmin] = useState(false); // In production, this would be based on user role
@@ -66,10 +44,6 @@ const Gallery = () => {
     setFabrics([...fabrics, newFabric]);
   };
 
-  const handleTypeChange = (event: React.SyntheticEvent, newValue: string) => {
-    setSelectedType(newValue);
-  };
-
   const toggleFavorite = (fabricId: number) => {
     setFavorites(prev =>
       prev.includes(fabricId)
@@ -84,158 +58,101 @@ const Gallery = () => {
 
   return (
     <Layout>
-      <Box sx={{ py: 4 }}>
-        <Typography variant="h3" component="h1" gutterBottom align="center">
+      <div className="py-8 px-4 sm:px-6 lg:px-8">
+        <h1 className="text-4xl font-bold text-center text-cosmic-900 dark:text-cosmic-50 mb-8 font-space-grotesk">
           Sustainable Fabric Gallery
-        </Typography>
+        </h1>
 
-        <Box sx={{ mb: 4 }}>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-            <Box>
-              <Typography variant="h6" component="span">
+        <div className="mb-8">
+          <div className="flex justify-between items-center mb-4">
+            <div>
+              <h2 className="text-xl font-semibold text-cosmic-900 dark:text-cosmic-50">
                 Filter by Type:
-              </Typography>
-            </Box>
+              </h2>
+            </div>
             {isAdmin && (
-              <Box>
+              <div>
                 <ImageGenerator
                   onImageGenerated={handleImageGenerated}
                   type="fabric"
                 />
-              </Box>
+              </div>
             )}
-          </Box>
+          </div>
 
-          <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-            <Tabs
-              value={selectedType}
-              onChange={handleTypeChange}
-              variant="scrollable"
-              scrollButtons="auto"
-            >
-              {fabricTypes.map(type => (
-                <Tab key={type} label={type} value={type} />
-              ))}
-            </Tabs>
-          </Box>
-        </Box>
-
-        <Grid container spacing={4}>
-          {filteredFabrics.map((fabric, index) => (
-            <Grid item xs={12} sm={6} md={4} key={fabric.id}>
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
+          <div className="flex space-x-2 overflow-x-auto py-2">
+            {fabricTypes.map(type => (
+              <button
+                key={type}
+                onClick={() => setSelectedType(type)}
+                className={`px-4 py-2 rounded-lg transition-colors duration-200 ${
+                  selectedType === type
+                    ? 'bg-cosmic-900 text-white shadow-lg'
+                    : 'bg-cosmic-100 text-cosmic-900 hover:bg-cosmic-200'
+                }`}
               >
-                <Card
-                  sx={{
-                    height: '100%',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    cursor: 'pointer',
-                    '&:hover': {
-                      transform: 'translateY(-4px)',
-                      transition: 'transform 0.2s',
-                    },
-                  }}
-                  onClick={() => setSelectedFabric(fabric)}
-                >
-                  <CardMedia
-                    component="img"
-                    height="200"
-                    image={fabric.image}
-                    alt={fabric.name}
-                  />
-                  <CardContent>
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
-                      <Typography variant="h6">{fabric.name}</Typography>
-                      <IconButton
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          toggleFavorite(fabric.id);
-                        }}
-                      >
-                        {favorites.includes(fabric.id) ? <Favorite color="error" /> : <FavoriteBorder />}
-                      </IconButton>
-                    </Box>
-                    <Typography variant="body2" color="text.secondary">
-                      {fabric.description}
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            </Grid>
-          ))}
-        </Grid>
+                {type}
+              </button>
+            ))}
+          </div>
+        </div>
 
-        {selectedFabric && (
-          <Dialog
-            open={Boolean(selectedFabric)}
-            onClose={() => setSelectedFabric(null)}
-            maxWidth="md"
-            fullWidth
-          >
-            <DialogTitle>
-              <Box display="flex" justifyContent="space-between" alignItems="center">
-                <Typography variant="h6">{selectedFabric.name}</Typography>
-                <IconButton onClick={() => setSelectedFabric(null)}>
-                  <CloseIcon />
-                </IconButton>
-              </Box>
-            </DialogTitle>
-            <DialogContent>
-              <Grid container spacing={3}>
-                <Grid item xs={12} md={6}>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredFabrics.map((fabric, index) => (
+            <motion.div
+              key={fabric.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+            >
+              <div className="bg-white dark:bg-cosmic-800 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden">
+                <div className="relative">
                   <img
-                    src={selectedFabric.image}
-                    alt={selectedFabric.name}
-                    style={{ width: '100%', borderRadius: 8 }}
+                    src={fabric.image}
+                    alt={fabric.name}
+                    className="w-full h-48 object-cover"
                   />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <Typography variant="body1" paragraph>
-                    {selectedFabric.description}
-                  </Typography>
-                  <Typography variant="subtitle1" gutterBottom>
-                    Sustainability:
-                  </Typography>
-                  <Typography variant="body2" paragraph color="text.secondary">
-                    {selectedFabric.sustainability}
-                  </Typography>
-                  <Typography variant="subtitle1" gutterBottom>
-                    Origin:
-                  </Typography>
-                  <Typography variant="body2" paragraph color="text.secondary">
-                    {selectedFabric.origin}
-                  </Typography>
-                  <Typography variant="subtitle1" gutterBottom>
-                    Best For:
-                  </Typography>
-                  <Box sx={{ mb: 2 }}>
-                    {selectedFabric.bestFor.map((use: string) => (
-                      <Chip
-                        key={use}
-                        label={use}
-                        sx={{ mr: 1, mb: 1 }}
-                      />
-                    ))}
-                  </Box>
-                  <Button
-                    variant="contained"
-                    fullWidth
-                    onClick={() => {
-                      // Handle fabric selection/purchase
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleFavorite(fabric.id);
                     }}
+                    className="absolute top-2 right-2 p-2 rounded-full bg-white/80 hover:bg-white transition-colors duration-200"
+                  >
+                    {favorites.includes(fabric.id) 
+                      ? <HeartIconSolid className="w-6 h-6 text-red-500" />
+                      : <HeartIconOutline className="w-6 h-6 text-cosmic-600" />
+                    }
+                  </button>
+                </div>
+                <div className="p-4">
+                  <h3 className="text-lg font-semibold text-cosmic-900 dark:text-cosmic-50 mb-2">
+                    {fabric.name}
+                  </h3>
+                  <p className="text-cosmic-600 dark:text-cosmic-300 text-sm">
+                    {fabric.description}
+                  </p>
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    {fabric.bestFor.map((use, index) => (
+                      <span
+                        key={index}
+                        className="px-2 py-1 rounded-full bg-cosmic-100 dark:bg-cosmic-700 text-cosmic-900 dark:text-cosmic-100 text-xs"
+                      >
+                        {use}
+                      </span>
+                    ))}
+                  </div>
+                  <button
+                    className="mt-4 w-full py-2 bg-cosmic-500 hover:bg-cosmic-600 text-white rounded-lg transition-colors duration-200"
                   >
                     Request Sample
-                  </Button>
-                </Grid>
-              </Grid>
-            </DialogContent>
-          </Dialog>
-        )}
-      </Box>
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
     </Layout>
   );
 };

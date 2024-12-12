@@ -1,51 +1,4 @@
 import React from 'react';
-import { Card, CardContent, CardMedia, Typography, Box, Chip, styled } from '@mui/material';
-
-const StyledCard = styled(Card)(({ theme }) => ({
-  position: 'relative',
-  overflow: 'hidden',
-  '&::before': {
-    content: '""',
-    position: 'absolute',
-    top: 0,
-    right: 0,
-    width: '100px',
-    height: '100px',
-    background: `linear-gradient(135deg, ${theme.palette.primary.light}22 0%, ${theme.palette.primary.main}11 100%)`,
-    borderRadius: '0 0 0 100%',
-    opacity: 0,
-    transition: 'opacity 0.3s ease-in-out',
-  },
-  '&:hover::before': {
-    opacity: 1,
-  },
-}));
-
-const ImageOverlay = styled(Box)(({ theme }) => ({
-  position: 'absolute',
-  top: 0,
-  left: 0,
-  right: 0,
-  bottom: 0,
-  background: 'linear-gradient(180deg, transparent 60%, rgba(0,0,0,0.7))',
-  opacity: 0,
-  transition: 'opacity 0.3s ease-in-out',
-  display: 'flex',
-  alignItems: 'flex-end',
-  padding: theme.spacing(2),
-  '& > *': {
-    transform: 'translateY(20px)',
-    transition: 'transform 0.3s ease-in-out',
-  },
-}));
-
-const StyledChip = styled(Chip)(({ theme }) => ({
-  position: 'absolute',
-  top: theme.spacing(2),
-  right: theme.spacing(2),
-  backdropFilter: 'blur(4px)',
-  backgroundColor: 'rgba(255, 255, 255, 0.9)',
-}));
 
 interface ArtisanCardProps {
   title: string;
@@ -67,34 +20,46 @@ export const ArtisanCard: React.FC<ArtisanCardProps> = ({
   children,
 }) => {
   return (
-    <StyledCard onClick={onClick} sx={{ cursor: onClick ? 'pointer' : 'default' }}>
+    <div 
+      onClick={onClick} 
+      className={`relative overflow-hidden rounded-xl bg-cream-50 dark:bg-cosmic-800 border border-cosmic-100 dark:border-cosmic-700 shadow-lg transition-all duration-300 hover:shadow-xl ${onClick ? 'cursor-pointer' : ''} group`}
+    >
+      {/* Decorative gradient corner */}
+      <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-cosmic-500/10 to-cosmic-600/5 rounded-bl-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+      
       {image && (
-        <Box sx={{ position: 'relative' }}>
-          <CardMedia
-            component="img"
-            height="240"
-            image={image}
+        <div className="relative">
+          <img
+            src={image}
             alt={title}
+            className="w-full h-60 object-cover"
           />
-          {tag && <StyledChip label={tag} size="small" />}
-        </Box>
+          {tag && (
+            <span className="absolute top-2 right-2 px-2 py-1 text-sm rounded-full bg-cream-50/90 backdrop-blur-sm text-cosmic-900 shadow-sm">
+              {tag}
+            </span>
+          )}
+          {/* Image overlay gradient */}
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+        </div>
       )}
-      <CardContent>
-        <Typography variant="h6" gutterBottom component="div">
+      
+      <div className="p-4 space-y-2">
+        <h3 className="text-xl font-semibold text-cosmic-900 dark:text-cosmic-50">
           {title}
-        </Typography>
+        </h3>
         {subtitle && (
-          <Typography variant="subtitle2" color="text.secondary">
+          <p className="text-sm text-cosmic-600 dark:text-cosmic-300">
             {subtitle}
-          </Typography>
+          </p>
         )}
         {description && (
-          <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+          <p className="text-sm text-cosmic-500 dark:text-cosmic-400 mt-2">
             {description}
-          </Typography>
+          </p>
         )}
         {children}
-      </CardContent>
-    </StyledCard>
+      </div>
+    </div>
   );
 };

@@ -1,28 +1,14 @@
 import React, { useState } from 'react';
-import {
-  Box,
-  Container,
-  Typography,
-  Paper,
-  Grid,
-  TextField,
-  Button,
-  Card,
-  CardContent,
-  CardMedia,
-  Tabs,
-  Tab,
-  IconButton,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-} from '@mui/material';
-import { Edit as EditIcon, Delete as DeleteIcon, Add as AddIcon } from '@mui/icons-material';
-import ImageGenerator from '../components/ImageGenerator';
+import type { ReactElement } from 'react';
+import type { NextPageWithLayout } from './_app';
+import { Layout } from '../components/layout/Layout';
 import { motion } from 'framer-motion';
+import { PencilIcon, TrashIcon, PlusIcon } from '@heroicons/react/24/outline';
+import { Button } from '../components/ui/Button';
+import { Card } from '../components/ui/Card';
+import { cn } from '../lib/utils/cn';
+import ImageGenerator from '../components/ImageGenerator';
 import AIStyleQuestionnaire from '../components/AIStyleQuestionnaire';
-import Layout from '../components/Layout';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -30,28 +16,37 @@ interface TabPanelProps {
   value: number;
 }
 
-function TabPanel(props: TabPanelProps) {
-  const { children, value, index, ...other } = props;
+const TabPanel = ({ children, value, index }: TabPanelProps) => {
+  if (value !== index) return null;
 
   return (
-    <div
+    <motion.div
+      variants={fadeIn}
       role="tabpanel"
-      hidden={value !== index}
       id={`profile-tabpanel-${index}`}
-      {...other}
+      className="bg-white/5 backdrop-blur-lg rounded-2xl p-8 border border-white/10"
     >
-      {value === index && <Box sx={{ py: 3 }}>{children}</Box>}
-    </div>
+      {children}
+    </motion.div>
   );
 }
 
-const Profile = () => {
+const fadeIn = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
+};
+
+const staggerContainer = {
+  visible: { transition: { staggerChildren: 0.1 } }
+};
+
+const ProfilePage: NextPageWithLayout = () => {
   const [tabValue, setTabValue] = useState(0);
   const [openMeasurements, setOpenMeasurements] = useState(false);
   const [openAIQuestionnaire, setOpenAIQuestionnaire] = useState(false);
   const [aiAnalysis, setAiAnalysis] = useState('');
 
-  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+  const handleTabChange = (event: React.MouseEvent<HTMLButtonElement>, newValue: number) => {
     setTabValue(newValue);
   };
 
@@ -86,237 +81,138 @@ const Profile = () => {
   };
 
   return (
-    <Layout>
-      <Box sx={{ py: 4 }}>
-        <Paper sx={{ p: 4, mb: 4 }}>
-          <Grid container spacing={4}>
-            <Grid item xs={12} md={4}>
-              <Box sx={{ textAlign: 'center' }}>
-                {/* Profile Image Placeholder */}
-                <Box
-                  sx={{
-                    width: 200,
-                    height: 200,
-                    borderRadius: '50%',
-                    bgcolor: 'grey.200',
-                    margin: '0 auto',
-                    mb: 2,
-                  }}
-                />
-                <Button variant="outlined" sx={{ mb: 2 }}>
-                  Change Photo
-                </Button>
-              </Box>
-            </Grid>
-            <Grid item xs={12} md={8}>
-              <Typography variant="h4" gutterBottom>
-                {userProfile.name}
-              </Typography>
-              <Typography variant="subtitle1" color="text.secondary" gutterBottom>
-                {userProfile.email}
-              </Typography>
-              <Typography variant="subtitle1" gutterBottom>
-                Account Type: {userProfile.type}
-              </Typography>
-              <Button
-                variant="contained"
-                onClick={() => setOpenMeasurements(true)}
-                sx={{ mt: 2 }}
-              >
-                Update Measurements
-              </Button>
-            </Grid>
-          </Grid>
-        </Paper>
+    <div className="min-h-screen bg-gradient-to-b from-cosmic-900 to-cosmic-800">
+      {/* Background Logo */}
+      <div className="fixed inset-0 opacity-[0.02] pointer-events-none">
+        <img
+          src="/images/logo.webp"
+          alt=""
+          className="w-full h-full object-cover scale-150 rotate-12"
+        />
+      </div>
 
-        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-          <Tabs value={tabValue} onChange={handleTabChange}>
-            <Tab label="Favorites" />
-            <Tab label="Sketches" />
-            <Tab label="AI Style Analysis" />
-            {userProfile.type === 'Designer' && <Tab label="My Designs" />}
-          </Tabs>
-        </Box>
-
-        <TabPanel value={tabValue} index={0}>
-          <Grid container spacing={4}>
-            {userProfile.favorites.map((favorite) => (
-              <Grid item xs={12} sm={6} md={4} key={favorite.id}>
-                <Card>
-                  <CardMedia
-                    component="img"
-                    height="200"
-                    image={favorite.image}
-                    alt={favorite.name}
-                  />
-                  <CardContent>
-                    <Typography variant="h6">{favorite.name}</Typography>
-                    <IconButton size="small" color="error">
-                      <DeleteIcon />
-                    </IconButton>
-                  </CardContent>
-                </Card>
-              </Grid>
-            ))}
-          </Grid>
-        </TabPanel>
-
-        <TabPanel value={tabValue} index={1}>
-          <Grid container spacing={4}>
-            {userProfile.sketches.map((sketch) => (
-              <Grid item xs={12} sm={6} md={4} key={sketch.id}>
-                <Card>
-                  <CardMedia
-                    component="img"
-                    height="200"
-                    image={sketch.image}
-                    alt={sketch.title}
-                  />
-                  <CardContent>
-                    <Typography variant="h6">{sketch.title}</Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      {new Date(sketch.date).toLocaleDateString()}
-                    </Typography>
-                    <Box sx={{ mt: 1 }}>
-                      <IconButton size="small">
-                        <EditIcon />
-                      </IconButton>
-                      <IconButton size="small" color="error">
-                        <DeleteIcon />
-                      </IconButton>
-                    </Box>
-                  </CardContent>
-                </Card>
-              </Grid>
-            ))}
-          </Grid>
-          <Box sx={{ mt: 3, display: 'flex', gap: 2 }}>
-            <ImageGenerator
-              onImageGenerated={(url) => {
-                const newSketch = {
-                  id: userProfile.sketches.length + 1,
-                  title: 'AI Generated Design',
-                  image: url,
-                  date: new Date().toISOString().split('T')[0],
-                };
-                userProfile.sketches.push(newSketch);
-                // In production, this would update the backend
-              }}
-              type="sketch"
-            />
-            <Button
-              variant="outlined"
-              startIcon={<AddIcon />}
-            >
-              Upload Existing Sketch
-            </Button>
-          </Box>
-        </TabPanel>
-
-        <TabPanel value={tabValue} index={2}>
-          <Box>
-            <Typography variant="h5" gutterBottom>
-              AI Style Analysis & Recommendations
-            </Typography>
-            <Typography variant="body1" paragraph color="text.secondary">
-              Get personalized sustainable fashion recommendations based on your preferences and measurements
-            </Typography>
-            
-            {aiAnalysis ? (
-              <>
-                <Paper elevation={1} sx={{ p: 3, mb: 3, bgcolor: 'grey.50' }}>
-                  <Typography variant="h6" gutterBottom>
-                    Your Current Style Analysis
-                  </Typography>
-                  <Typography
-                    component="pre"
-                    sx={{
-                      whiteSpace: 'pre-wrap',
-                      fontFamily: 'inherit',
-                      fontSize: 'inherit',
-                    }}
-                  >
-                    {aiAnalysis}
-                  </Typography>
-                </Paper>
-                <Button
-                  variant="outlined"
-                  onClick={() => setOpenAIQuestionnaire(true)}
-                >
-                  Update Style Analysis
-                </Button>
-              </>
-            ) : (
-              <AIStyleQuestionnaire />
-            )}
-          </Box>
-        </TabPanel>
-
-        {userProfile.type === 'Designer' && (
-          <TabPanel value={tabValue} index={3}>
-            <Typography variant="h6" gutterBottom>
-              My Designs
-            </Typography>
-            {/* Add designs grid here */}
-          </TabPanel>
-        )}
-
-        {/* Measurements Dialog */}
-        <Dialog
-          open={openMeasurements}
-          onClose={() => setOpenMeasurements(false)}
-          maxWidth="sm"
-          fullWidth
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-16">
+        <motion.div
+          initial="hidden"
+          animate="visible"
+          variants={staggerContainer}
+          className="space-y-8"
         >
-          <DialogTitle>Update Measurements</DialogTitle>
-          <DialogContent>
-            <Box component="form" sx={{ mt: 2 }}>
-              <Grid container spacing={2}>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    fullWidth
-                    label="Chest (inches)"
-                    type="number"
-                    defaultValue={userProfile.measurements.chest}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    fullWidth
-                    label="Waist (inches)"
-                    type="number"
-                    defaultValue={userProfile.measurements.waist}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    fullWidth
-                    label="Hips (inches)"
-                    type="number"
-                    defaultValue={userProfile.measurements.hips}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    fullWidth
-                    label="Inseam (inches)"
-                    type="number"
-                    defaultValue={userProfile.measurements.inseam}
-                  />
-                </Grid>
-              </Grid>
-            </Box>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={() => setOpenMeasurements(false)}>Cancel</Button>
-            <Button variant="contained" onClick={() => setOpenMeasurements(false)}>
-              Save Changes
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </Box>
-    </Layout>
+          <motion.div variants={fadeIn}>
+            <div className="bg-white/5 backdrop-blur-lg rounded-2xl p-8 border border-white/10">
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
+                <div className="md:col-span-4 text-center">
+                  {/* Profile Image Placeholder */}
+                  <div className="w-48 h-48 rounded-full bg-cosmic-800/50 mx-auto mb-4 border border-white/10" />
+                  <button className="px-4 py-2 bg-white/5 rounded-lg border border-white/10 text-cosmic-100 hover:bg-white/10 transition-colors duration-200">
+                    Change Photo
+                  </button>
+                </div>
+                <div className="md:col-span-8">
+                  <h1 className="text-3xl font-bold text-white mb-2 font-space-grotesk">
+                    {userProfile.name}
+                  </h1>
+                  <p className="text-cosmic-100 mb-2">
+                    {userProfile.email}
+                  </p>
+                  <p className="text-cosmic-200 mb-4">
+                    Account Type: <span className="text-cosmic-100">{userProfile.type}</span>
+                  </p>
+                  <button
+                    onClick={() => setOpenMeasurements(true)}
+                    className="px-4 py-2 bg-cosmic-500 hover:bg-cosmic-600 text-white rounded-lg transition-colors duration-200"
+                  >
+                    Update Measurements
+                  </button>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </motion.div>
+      </div>
+
+      {/* Measurements Dialog */}
+      {openMeasurements && (
+        <div className="fixed inset-0 z-50 overflow-y-auto">
+          <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+            <div className="fixed inset-0 bg-black/50 transition-opacity" onClick={() => setOpenMeasurements(false)} />
+            <div className="relative transform overflow-hidden rounded-lg bg-white dark:bg-cosmic-900 px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
+              <div>
+                <h3 className="text-lg font-semibold text-cosmic-900 dark:text-cosmic-50 mb-4">
+                  Update Measurements
+                </h3>
+                <div className="mt-4 grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-cosmic-700 dark:text-cosmic-300 mb-1">
+                      Chest (inches)
+                    </label>
+                    <input
+                      type="number"
+                      defaultValue={userProfile.measurements.chest}
+                      className="w-full px-3 py-2 rounded-md border border-cosmic-200 dark:border-cosmic-700 
+                        bg-white dark:bg-cosmic-800 text-cosmic-900 dark:text-cosmic-50
+                        focus:outline-none focus:ring-2 focus:ring-cosmic-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-cosmic-700 dark:text-cosmic-300 mb-1">
+                      Waist (inches)
+                    </label>
+                    <input
+                      type="number"
+                      defaultValue={userProfile.measurements.waist}
+                      className="w-full px-3 py-2 rounded-md border border-cosmic-200 dark:border-cosmic-700 
+                        bg-white dark:bg-cosmic-800 text-cosmic-900 dark:text-cosmic-50
+                        focus:outline-none focus:ring-2 focus:ring-cosmic-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-cosmic-700 dark:text-cosmic-300 mb-1">
+                      Hips (inches)
+                    </label>
+                    <input
+                      type="number"
+                      defaultValue={userProfile.measurements.hips}
+                      className="w-full px-3 py-2 rounded-md border border-cosmic-200 dark:border-cosmic-700 
+                        bg-white dark:bg-cosmic-800 text-cosmic-900 dark:text-cosmic-50
+                        focus:outline-none focus:ring-2 focus:ring-cosmic-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-cosmic-700 dark:text-cosmic-300 mb-1">
+                      Inseam (inches)
+                    </label>
+                    <input
+                      type="number"
+                      defaultValue={userProfile.measurements.inseam}
+                      className="w-full px-3 py-2 rounded-md border border-cosmic-200 dark:border-cosmic-700 
+                        bg-white dark:bg-cosmic-800 text-cosmic-900 dark:text-cosmic-50
+                        focus:outline-none focus:ring-2 focus:ring-cosmic-500"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="mt-6 flex justify-end gap-3">
+                <Button variant="outline" onClick={() => setOpenMeasurements(false)}>
+                  Cancel
+                </Button>
+                <Button onClick={() => setOpenMeasurements(false)}>
+                  Save Changes
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
   );
 };
 
-export default Profile;
+// Remove Layout wrapping from the page component itself
+const getLayout = (page: ReactElement) => {
+  return <Layout>{page}</Layout>;
+};
+
+ProfilePage.getLayout = getLayout;
+
+export default ProfilePage;

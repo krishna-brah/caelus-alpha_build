@@ -1,46 +1,8 @@
 import React, { useState } from 'react';
-import {
-  Box,
-  Container,
-  Typography,
-  Tabs,
-  Tab,
-  Grid,
-  Card,
-  CardContent,
-  CardMedia,
-  Button,
-  Chip,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  TextField,
-  MenuItem,
-} from '@mui/material';
 import { motion } from 'framer-motion';
 import Layout from '../components/Layout';
-
-interface TabPanelProps {
-  children?: React.ReactNode;
-  index: number;
-  value: number;
-}
-
-function TabPanel(props: TabPanelProps) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`bazaar-tabpanel-${index}`}
-      {...other}
-    >
-      {value === index && <Box sx={{ py: 3 }}>{children}</Box>}
-    </div>
-  );
-}
+import { cn } from '../lib/utils/cn';
+import { Dialog } from '@headlessui/react';
 
 // Dummy data - to be replaced with actual data
 const listings = [
@@ -74,7 +36,7 @@ const Bazaar = () => {
   const [openNewBounty, setOpenNewBounty] = useState(false);
   const [openNewListing, setOpenNewListing] = useState(false);
 
-  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+  const handleTabChange = (event: React.MouseEvent<HTMLButtonElement>, newValue: number) => {
     setTabValue(newValue);
   };
 
@@ -92,238 +54,307 @@ const Bazaar = () => {
 
   return (
     <Layout>
-      <Box sx={{ py: 4 }}>
-        <Typography variant="h3" component="h1" gutterBottom align="center">
+      <div className="py-16">
+        <h1 className="text-4xl font-bold text-center text-cosmic-900 dark:text-cosmic-50 mb-8">
           Caelus Bazaar
-        </Typography>
+        </h1>
 
-        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-          <Tabs
-            value={tabValue}
-            onChange={handleTabChange}
-            centered
-          >
-            <Tab label="Marketplace" />
-            <Tab label="Bounties" />
-          </Tabs>
-        </Box>
+        <div className="border-b border-cosmic-200 dark:border-cosmic-700 mb-8">
+          <div className="flex justify-center">
+            <button
+              className={cn(
+                "px-6 py-2 font-medium border-b-2 transition-colors duration-200",
+                tabValue === 0
+                  ? "border-cosmic-500 text-cosmic-900 dark:text-cosmic-50"
+                  : "border-transparent text-cosmic-600 dark:text-cosmic-400 hover:text-cosmic-900 dark:hover:text-cosmic-50"
+              )}
+              onClick={(e) => handleTabChange(e, 0)}
+            >
+              Marketplace
+            </button>
+            <button
+              className={cn(
+                "px-6 py-2 font-medium border-b-2 transition-colors duration-200",
+                tabValue === 1
+                  ? "border-cosmic-500 text-cosmic-900 dark:text-cosmic-50"
+                  : "border-transparent text-cosmic-600 dark:text-cosmic-400 hover:text-cosmic-900 dark:hover:text-cosmic-50"
+              )}
+              onClick={(e) => handleTabChange(e, 1)}
+            >
+              Bounties
+            </button>
+          </div>
+        </div>
 
-        <TabPanel value={tabValue} index={0}>
-          <Box sx={{ mb: 3, display: 'flex', justifyContent: 'flex-end' }}>
-            <Button
-              variant="contained"
+        {/* Marketplace Panel */}
+        <div className={tabValue === 0 ? "block" : "hidden"}>
+          <div className="mb-6 flex justify-end">
+            <button
               onClick={() => setOpenNewListing(true)}
+              className="px-4 py-2 bg-cosmic-500 text-white rounded-lg hover:bg-cosmic-600 transition-colors duration-200"
             >
               Create New Listing
-            </Button>
-          </Box>
+            </button>
+          </div>
 
-          <Grid container spacing={4}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {listings.map((listing, index) => (
-              <Grid item xs={12} sm={6} md={4} key={listing.id}>
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                >
-                  <Card>
-                    <CardMedia
-                      component="img"
-                      height="200"
-                      image={listing.image}
-                      alt={listing.title}
-                    />
-                    <CardContent>
-                      <Typography variant="h6" gutterBottom>
-                        {listing.title}
-                      </Typography>
-                      <Typography variant="subtitle2" color="text.secondary">
-                        By {listing.designer}
-                      </Typography>
-                      <Typography variant="h6" color="primary" sx={{ my: 1 }}>
-                        ${listing.price}
-                      </Typography>
-                      <Typography variant="body2" sx={{ mb: 2 }}>
-                        {listing.description}
-                      </Typography>
-                      <Box sx={{ mb: 2 }}>
-                        {listing.materials.map((material) => (
-                          <Chip
-                            key={material}
-                            label={material}
-                            size="small"
-                            sx={{ mr: 1 }}
-                          />
-                        ))}
-                        <Chip label={`Size ${listing.size}`} size="small" />
-                      </Box>
-                      <Button variant="contained" fullWidth>
-                        Purchase
-                      </Button>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              </Grid>
+              <motion.div
+                key={listing.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className="bg-cream-50 dark:bg-cosmic-800 rounded-xl overflow-hidden shadow-lg"
+              >
+                <div className="aspect-w-16 aspect-h-9">
+                  <img
+                    src={listing.image}
+                    alt={listing.title}
+                    className="object-cover w-full h-full"
+                  />
+                </div>
+                <div className="p-4">
+                  <h3 className="text-xl font-semibold text-cosmic-900 dark:text-cosmic-50 mb-1">
+                    {listing.title}
+                  </h3>
+                  <p className="text-sm text-cosmic-600 dark:text-cosmic-400">
+                    By {listing.designer}
+                  </p>
+                  <p className="text-2xl font-bold text-cosmic-500 my-2">
+                    ${listing.price}
+                  </p>
+                  <p className="text-cosmic-700 dark:text-cosmic-300 mb-4">
+                    {listing.description}
+                  </p>
+                  <div className="mb-4 flex flex-wrap gap-2">
+                    {listing.materials.map((material) => (
+                      <span
+                        key={material}
+                        className="px-2 py-1 text-sm bg-cosmic-100 dark:bg-cosmic-700 text-cosmic-800 dark:text-cosmic-200 rounded-full"
+                      >
+                        {material}
+                      </span>
+                    ))}
+                    <span className="px-2 py-1 text-sm bg-cosmic-100 dark:bg-cosmic-700 text-cosmic-800 dark:text-cosmic-200 rounded-full">
+                      Size {listing.size}
+                    </span>
+                  </div>
+                  <button className="w-full px-4 py-2 bg-cosmic-500 text-white rounded-lg hover:bg-cosmic-600 transition-colors duration-200">
+                    Purchase
+                  </button>
+                </div>
+              </motion.div>
             ))}
-          </Grid>
-        </TabPanel>
+          </div>
+        </div>
 
-        <TabPanel value={tabValue} index={1}>
-          <Box sx={{ mb: 3, display: 'flex', justifyContent: 'flex-end' }}>
-            <Button
-              variant="contained"
+        {/* Bounties Panel */}
+        <div className={tabValue === 1 ? "block" : "hidden"}>
+          <div className="mb-6 flex justify-end">
+            <button
               onClick={() => setOpenNewBounty(true)}
+              className="px-4 py-2 bg-cosmic-500 text-white rounded-lg hover:bg-cosmic-600 transition-colors duration-200"
             >
               Create New Bounty
-            </Button>
-          </Box>
+            </button>
+          </div>
 
-          <Grid container spacing={4}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             {bounties.map((bounty, index) => (
-              <Grid item xs={12} sm={6} key={bounty.id}>
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
+              <motion.div
+                key={bounty.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className="bg-cream-50 dark:bg-cosmic-800 rounded-xl p-6 shadow-lg"
+              >
+                <h3 className="text-xl font-semibold text-cosmic-900 dark:text-cosmic-50 mb-2">
+                  {bounty.title}
+                </h3>
+                <p className="text-lg font-medium text-cosmic-500">
+                  Budget: ${bounty.budget}
+                </p>
+                <p className="text-cosmic-700 dark:text-cosmic-300 my-4">
+                  {bounty.description}
+                </p>
+                <div className="mb-4 flex flex-wrap gap-2">
+                  {bounty.requirements.map((req) => (
+                    <span
+                      key={req}
+                      className="px-2 py-1 text-sm bg-cosmic-100 dark:bg-cosmic-700 text-cosmic-800 dark:text-cosmic-200 rounded-full"
+                    >
+                      {req}
+                    </span>
+                  ))}
+                </div>
+                <button
+                  className={cn(
+                    "w-full px-4 py-2 rounded-lg transition-colors duration-200",
+                    bounty.status === "Open"
+                      ? "bg-cosmic-500 text-white hover:bg-cosmic-600"
+                      : "bg-cosmic-200 text-cosmic-700 cursor-not-allowed"
+                  )}
+                  disabled={bounty.status !== "Open"}
                 >
-                  <Card>
-                    <CardContent>
-                      <Typography variant="h6" gutterBottom>
-                        {bounty.title}
-                      </Typography>
-                      <Typography variant="subtitle1" color="primary">
-                        Budget: ${bounty.budget}
-                      </Typography>
-                      <Typography variant="body1" sx={{ my: 2 }}>
-                        {bounty.description}
-                      </Typography>
-                      <Box sx={{ mb: 2 }}>
-                        {bounty.requirements.map((req) => (
-                          <Chip
-                            key={req}
-                            label={req}
-                            size="small"
-                            sx={{ mr: 1, mb: 1 }}
-                          />
-                        ))}
-                      </Box>
-                      <Button
-                        variant="contained"
-                        fullWidth
-                        disabled={bounty.status !== 'Open'}
-                      >
-                        Accept Bounty
-                      </Button>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              </Grid>
+                  Accept Bounty
+                </button>
+              </motion.div>
             ))}
-          </Grid>
-        </TabPanel>
+          </div>
+        </div>
 
         {/* New Bounty Dialog */}
         <Dialog
           open={openNewBounty}
           onClose={() => setOpenNewBounty(false)}
-          maxWidth="sm"
-          fullWidth
+          className="relative z-50"
         >
-          <DialogTitle>Create New Bounty</DialogTitle>
-          <DialogContent>
-            <Box component="form" onSubmit={handleCreateBounty} sx={{ mt: 2 }}>
-              <TextField
-                fullWidth
-                label="Title"
-                required
-                sx={{ mb: 2 }}
-              />
-              <TextField
-                fullWidth
-                label="Budget Range"
-                required
-                sx={{ mb: 2 }}
-              />
-              <TextField
-                fullWidth
-                label="Description"
-                multiline
-                rows={4}
-                required
-                sx={{ mb: 2 }}
-              />
-              <TextField
-                fullWidth
-                label="Requirements"
-                multiline
-                rows={2}
-                required
-              />
-            </Box>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={() => setOpenNewBounty(false)}>Cancel</Button>
-            <Button variant="contained" onClick={handleCreateBounty}>
-              Create Bounty
-            </Button>
-          </DialogActions>
+          <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
+          <div className="fixed inset-0 flex items-center justify-center p-4">
+            <Dialog.Panel className="mx-auto max-w-sm rounded-2xl bg-cream-50 dark:bg-cosmic-800 p-6">
+              <Dialog.Title className="text-xl font-semibold text-cosmic-900 dark:text-cosmic-50 mb-4">
+                Create New Bounty
+              </Dialog.Title>
+              <form onSubmit={handleCreateBounty} className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-cosmic-700 dark:text-cosmic-300 mb-1">
+                    Title
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    className="w-full px-3 py-2 rounded-lg border border-cosmic-200 dark:border-cosmic-700 bg-white dark:bg-cosmic-900 text-cosmic-900 dark:text-cosmic-50"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-cosmic-700 dark:text-cosmic-300 mb-1">
+                    Budget Range
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    className="w-full px-3 py-2 rounded-lg border border-cosmic-200 dark:border-cosmic-700 bg-white dark:bg-cosmic-900 text-cosmic-900 dark:text-cosmic-50"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-cosmic-700 dark:text-cosmic-300 mb-1">
+                    Description
+                  </label>
+                  <textarea
+                    required
+                    rows={4}
+                    className="w-full px-3 py-2 rounded-lg border border-cosmic-200 dark:border-cosmic-700 bg-white dark:bg-cosmic-900 text-cosmic-900 dark:text-cosmic-50"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-cosmic-700 dark:text-cosmic-300 mb-1">
+                    Requirements
+                  </label>
+                  <textarea
+                    required
+                    rows={2}
+                    className="w-full px-3 py-2 rounded-lg border border-cosmic-200 dark:border-cosmic-700 bg-white dark:bg-cosmic-900 text-cosmic-900 dark:text-cosmic-50"
+                  />
+                </div>
+                <div className="flex justify-end gap-3 mt-6">
+                  <button
+                    type="button"
+                    onClick={() => setOpenNewBounty(false)}
+                    className="px-4 py-2 text-cosmic-600 dark:text-cosmic-400 hover:text-cosmic-900 dark:hover:text-cosmic-50"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-4 py-2 bg-cosmic-500 text-white rounded-lg hover:bg-cosmic-600 transition-colors duration-200"
+                  >
+                    Create Bounty
+                  </button>
+                </div>
+              </form>
+            </Dialog.Panel>
+          </div>
         </Dialog>
 
         {/* New Listing Dialog */}
         <Dialog
           open={openNewListing}
           onClose={() => setOpenNewListing(false)}
-          maxWidth="sm"
-          fullWidth
+          className="relative z-50"
         >
-          <DialogTitle>Create New Listing</DialogTitle>
-          <DialogContent>
-            <Box component="form" onSubmit={handleCreateListing} sx={{ mt: 2 }}>
-              <TextField
-                fullWidth
-                label="Title"
-                required
-                sx={{ mb: 2 }}
-              />
-              <TextField
-                fullWidth
-                label="Price"
-                type="number"
-                required
-                sx={{ mb: 2 }}
-              />
-              <TextField
-                fullWidth
-                label="Description"
-                multiline
-                rows={4}
-                required
-                sx={{ mb: 2 }}
-              />
-              <TextField
-                fullWidth
-                select
-                label="Size"
-                required
-                sx={{ mb: 2 }}
-              >
-                {['XS', 'S', 'M', 'L', 'XL'].map((size) => (
-                  <MenuItem key={size} value={size}>
-                    {size}
-                  </MenuItem>
-                ))}
-              </TextField>
-              {/* Add image upload functionality */}
-            </Box>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={() => setOpenNewListing(false)}>Cancel</Button>
-            <Button variant="contained" onClick={handleCreateListing}>
-              Create Listing
-            </Button>
-          </DialogActions>
+          <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
+          <div className="fixed inset-0 flex items-center justify-center p-4">
+            <Dialog.Panel className="mx-auto max-w-sm rounded-2xl bg-cream-50 dark:bg-cosmic-800 p-6">
+              <Dialog.Title className="text-xl font-semibold text-cosmic-900 dark:text-cosmic-50 mb-4">
+                Create New Listing
+              </Dialog.Title>
+              <form onSubmit={handleCreateListing} className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-cosmic-700 dark:text-cosmic-300 mb-1">
+                    Title
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    className="w-full px-3 py-2 rounded-lg border border-cosmic-200 dark:border-cosmic-700 bg-white dark:bg-cosmic-900 text-cosmic-900 dark:text-cosmic-50"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-cosmic-700 dark:text-cosmic-300 mb-1">
+                    Price
+                  </label>
+                  <input
+                    type="number"
+                    required
+                    className="w-full px-3 py-2 rounded-lg border border-cosmic-200 dark:border-cosmic-700 bg-white dark:bg-cosmic-900 text-cosmic-900 dark:text-cosmic-50"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-cosmic-700 dark:text-cosmic-300 mb-1">
+                    Description
+                  </label>
+                  <textarea
+                    required
+                    rows={4}
+                    className="w-full px-3 py-2 rounded-lg border border-cosmic-200 dark:border-cosmic-700 bg-white dark:bg-cosmic-900 text-cosmic-900 dark:text-cosmic-50"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-cosmic-700 dark:text-cosmic-300 mb-1">
+                    Size
+                  </label>
+                  <select
+                    required
+                    className="w-full px-3 py-2 rounded-lg border border-cosmic-200 dark:border-cosmic-700 bg-white dark:bg-cosmic-900 text-cosmic-900 dark:text-cosmic-50"
+                  >
+                    {['XS', 'S', 'M', 'L', 'XL'].map((size) => (
+                      <option key={size} value={size}>
+                        {size}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                {/* Add image upload functionality */}
+                <div className="flex justify-end gap-3 mt-6">
+                  <button
+                    type="button"
+                    onClick={() => setOpenNewListing(false)}
+                    className="px-4 py-2 text-cosmic-600 dark:text-cosmic-400 hover:text-cosmic-900 dark:hover:text-cosmic-50"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-4 py-2 bg-cosmic-500 text-white rounded-lg hover:bg-cosmic-600 transition-colors duration-200"
+                  >
+                    Create Listing
+                  </button>
+                </div>
+              </form>
+            </Dialog.Panel>
+          </div>
         </Dialog>
-      </Box>
+      </div>
     </Layout>
   );
 };

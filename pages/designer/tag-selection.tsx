@@ -1,57 +1,52 @@
-import React from 'react';
-import {
-  Box,
-  Container,
-  Heading,
-  Text,
-  VStack,
-  Button,
-  useToast,
-  useColorModeValue,
-} from '@chakra-ui/react';
+import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { TagSelection } from '../../components/TagSelection';
+import { useToast } from '../../components/ui/toast';
+import type { Tag } from '@/lib/config/tags';
 
-export default function DesignerTagSelection() {
+const DesignerTagSelection: NextPage = () => {
   const router = useRouter();
-  const toast = useToast();
-  const bgColor = useColorModeValue('gray.50', 'gray.900');
+  const { addToast } = useToast();
 
-  const handleTagSubmit = (selectedTags: {
-    fabrics: string[];
-    clothing: string[];
-    styles: string[];
-  }) => {
-    // In a real app, this would save to the backend
-    console.log('Selected tags:', selectedTags);
-    
-    toast({
-      title: 'Tags Selected',
-      description: 'Your specializations have been saved.',
-      status: 'success',
-      duration: 3000,
-      isClosable: true,
-    });
+  const handleSubmit = async (selectedTags: Tag[]) => {
+    try {
+      const response = await fetch('/api/designer/tags', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ tags: selectedTags }),
+      });
 
-    // Redirect to designer dashboard
-    router.push('/designer/dashboard');
+      if (!response.ok) {
+        throw new Error('Failed to save tags');
+      }
+
+      addToast({
+        title: 'Tags Saved Successfully',
+        message: 'Your specializations have been updated.',
+        type: 'success',
+      });
+
+      // Redirect to dashboard after successful submission
+      router.push('/designer/dashboard');
+    } catch (error) {
+      console.error('Error saving tags:', error);
+      addToast({
+        title: 'Error Saving Tags',
+        message: 'There was a problem saving your specializations. Please try again.',
+        type: 'error',
+      });
+    }
   };
 
   return (
-    <Box minH="100vh" bg={bgColor}>
-      <Container maxW="container.xl" py={8}>
-        <VStack spacing={8} align="stretch">
-          <Box>
-            <Heading mb={2}>Select Your Specializations</Heading>
-            <Text color="gray.600">
-              Choose the tags that best represent your expertise and interests.
-              You can update these later from your profile.
-            </Text>
-          </Box>
-
-          <TagSelection onSubmit={handleTagSubmit} />
-        </VStack>
-      </Container>
-    </Box>
+    <TagSelection
+      maxSelections={5}
+      onSubmit={handleSubmit}
+      initialTags={[]}
+    />
   );
-}
+};
+
+export default DesignerTagSelection;

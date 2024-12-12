@@ -7,66 +7,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model SustainableFabric {
-  id              String    @id @default(cuid())
-  name            String
-  description     String
-  imageUrl        String
-  sustainabilityScore Int    @default(0) // 0-100 score
-  carbonFootprint Float?    // CO2 emissions per kg
-  waterUsage      Float?    // Liters per kg
-  biodegradable   Boolean   @default(false)
-  recycled        Boolean   @default(false)
-  organic         Boolean   @default(false)
-  properties      Json?     // Additional properties like strength, breathability, etc.
-  careInstructions String[]
-  certifications  String[]
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
-  products        Product[]
-  aiSuggestions   AIRecommendation[]
-}
-
-model Product {
-  id          String    @id @default(cuid())
-  name        String
-  description String
-  price       Float
-  imageUrl    String
-  designer    String
-  sustainable Boolean   @default(true)
-  likes       Int       @default(0)
-  rating      Float     @default(0)
-  fabric      SustainableFabric @relation(fields: [fabricId], references: [id])
-  fabricId    String
-  tags        String[]
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  aiSuggestions AIRecommendation[]
-}
-
-model AIRecommendation {
-  id          String    @id @default(cuid())
-  fabricId    String
-  productId   String?
-  suggestion  String
-  confidence  Float
-  reasoning   String
-  metadata    Json?
-  createdAt   DateTime  @default(now())
-  fabric      SustainableFabric @relation(fields: [fabricId], references: [id])
-  product     Product?  @relation(fields: [productId], references: [id])
-}
-
-generator client {
-  provider = "prisma-client-js"
-}
-
-datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-}
-
+// Authentication Models
 model Account {
   id                String   @id @default(cuid())
   userId            String
@@ -93,122 +34,240 @@ model Session {
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-model User {
-  id            String        @id @default(cuid())
-  name          String?
-  email         String?       @unique
-  emailVerified DateTime?
-  image         String?
-  password      String?
-  userType      String        // 'designer' or 'consumer'
-  accounts      Account[]
-  sessions      Session[]
-  tags          Tag[]
-  listings      Listing[]
-  reviews       Review[]
-  fabricScores  FabricScore[]
-  favorites     Favorite[]
-  measurements  Measurements?
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
-}
-
-model Measurements {
-  id      String @id @default(cuid())
-  userId  String @unique
-  user    User   @relation(fields: [userId], references: [id])
-  chest   Float
-  waist   Float
-  hips    Float
-  inseam  Float
-  updates Json[] // Store measurement history
-}
-
-model Tag {
-  id                String   @id @default(cuid())
-  userId            String
-  user              User     @relation(fields: [userId], references: [id])
-  category          String   // 'FabricSpecialty', 'ClothingType', or 'Style'
-  value             String
-  tier              String   // 'Baseline', 'Gold', 'Diamond', or 'Cosmic'
-  projectsCompleted Int      @default(0)
-  nextTierThreshold Int
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
-
-  @@unique([userId, category, value])
-}
-
-model Listing {
-  id                String     @id @default(cuid())
-  title             String
-  description       String
-  price             Float
-  category          String
-  images            String[]
-  materials         Material[]
-  sustainabilityNotes String?
-  designerId        String
-  designer          User       @relation(fields: [designerId], references: [id])
-  reviews           Review[]
-  favorites         Favorite[]
-  createdAt         DateTime   @default(now())
-  updatedAt         DateTime   @updatedAt
-}
-
-model Material {
-  id            String      @id @default(cuid())
-  name          String
-  listing       Listing     @relation(fields: [listingId], references: [id])
-  listingId     String
-  fabricScore   FabricScore @relation(fields: [fabricScoreId], references: [id])
-  fabricScoreId String
-}
-
-model Review {
-  id               String   @id @default(cuid())
-  listing          Listing  @relation(fields: [listingId], references: [id])
-  listingId        String
-  reviewer         User     @relation(fields: [reviewerId], references: [id])
-  reviewerId       String
-  isDesignerReview Boolean
-  designQuality    Float
-  materialUse      Float
-  sustainability   Float
-  comment          String?
-  createdAt        DateTime @default(now())
-}
-
-model FabricScore {
-  id                String     @id @default(cuid())
-  name              String
-  qualityRating     Float
-  sustainabilityScore Float
-  origin            String
-  supplier          String
-  certifications    String[]
-  materials         Material[]
-  ratedBy          User       @relation(fields: [ratedById], references: [id])
-  ratedById        String
-  createdAt        DateTime   @default(now())
-  updatedAt        DateTime   @updatedAt
-}
-
-model Favorite {
-  id        String   @id @default(cuid())
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String
-  listing   Listing  @relation(fields: [listingId], references: [id])
-  listingId String
-  createdAt DateTime @default(now())
-
-  @@unique([userId, listingId])
-}
-
 model VerificationToken {
   identifier String
   token      String   @unique
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+// User Models
+model User {
+  id            String        @id @default(cuid())
+  name          String?
+  email         String?       @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?       @db.Text
+  userType      UserType     @default(CONSUMER)
+  bio           String?       @db.Text
+  website       String?
+  socialLinks   Json?        // Store social media links
+  location      String?
+  
+  // Relations
+  accounts      Account[]
+  sessions      Session[]
+  profile       Profile?
+  tags          DesignerTag[]
+  designs       Design[]
+  collections   Collection[]
+  reviews       Review[]
+  favorites     Favorite[]
+  aiPrompts     AIPrompt[]
+  notifications Notification[]
+  
+  // Metrics
+  reputation    Int          @default(0)
+  projectsCompleted Int      @default(0)
+  
+  // Timestamps
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
+  // Additional Designer Info
+  brandName     String?
+  brandLogo     String?
+  certificates  String[]     @default([])
+}
+
+enum UserType {
+  DESIGNER
+  CONSUMER
+  ADMIN
+}
+
+model Profile {
+  id            String    @id @default(cuid())
+  userId        String    @unique
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  measurements  Json?     // Store body measurements
+  preferences   Json?     // Store style preferences
+  sustainability Json?    // Store sustainability preferences
+  updatedAt     DateTime  @updatedAt
+}
+
+// Designer Tags and Skills
+model DesignerTag {
+  id                String    @id @default(cuid())
+  userId            String
+  user              User      @relation(fields: [userId], references: [id])
+  category          TagCategory
+  value             String
+  tier              TagTier   @default(BASELINE)
+  projectsCompleted Int       @default(0)
+  nextTierThreshold Int
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  @@unique([userId, category, value])
+}
+
+enum TagCategory {
+  FABRIC_SPECIALTY
+  CLOTHING_TYPE
+  STYLE
+}
+
+enum TagTier {
+  BASELINE
+  GOLD
+  DIAMOND
+  COSMIC
+}
+
+// Design and Collection Models
+model Design {
+  id                String    @id @default(cuid())
+  title             String
+  description       String    @db.Text
+  designerId        String
+  designer          User      @relation(fields: [designerId], references: [id])
+  images            String[]
+  materials         Material[]
+  sustainabilityScore Float?
+  aiGenerated       Boolean   @default(false)
+  aiPrompt          AIPrompt?
+  status            DesignStatus @default(DRAFT)
+  visibility        Visibility @default(PRIVATE)
+  collection        Collection? @relation(fields: [collectionId], references: [id])
+  collectionId      String?
+  reviews           Review[]
+  favorites         Favorite[]
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  metadata          Json?     // Store additional design details
+}
+
+enum DesignStatus {
+  DRAFT
+  IN_REVIEW
+  PUBLISHED
+  ARCHIVED
+}
+
+enum Visibility {
+  PRIVATE
+  PUBLIC
+  LIMITED
+}
+
+model Collection {
+  id          String    @id @default(cuid())
+  title       String
+  description String    @db.Text
+  designerId  String
+  designer    User      @relation(fields: [designerId], references: [id])
+  designs     Design[]
+  theme       String?
+  season      String?
+  year        Int?
+  status      CollectionStatus @default(IN_PROGRESS)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+enum CollectionStatus {
+  IN_PROGRESS
+  COMPLETED
+  ARCHIVED
+}
+
+// Material and Sustainability Models
+model Material {
+  id                String   @id @default(cuid())
+  name              String
+  type              String
+  description       String?  @db.Text
+  sustainabilityScore Float
+  certifications    String[]
+  origin            String?
+  supplier          String?
+  pricePerUnit      Float?
+  unit              String?
+  availableQuantity Float?
+  designs           Design[]
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  metadata          Json?    // Store additional material details
+}
+
+// Interaction Models
+model Review {
+  id               String   @id @default(cuid())
+  designId         String
+  design           Design   @relation(fields: [designId], references: [id])
+  reviewerId       String
+  reviewer         User     @relation(fields: [reviewerId], references: [id])
+  rating           Float
+  comment          String?  @db.Text
+  sustainabilityRating Float?
+  innovationRating    Float?
+  qualityRating      Float?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model Favorite {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  designId  String
+  design    Design   @relation(fields: [designId], references: [id])
+  createdAt DateTime @default(now())
+
+  @@unique([userId, designId])
+}
+
+// AI Integration Models
+model AIPrompt {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  prompt      String   @db.Text
+  response    String   @db.Text
+  design      Design?  @relation(fields: [designId], references: [id])
+  designId    String?  @unique
+  type        AIPromptType
+  metadata    Json?    // Store additional AI interaction details
+  createdAt   DateTime @default(now())
+}
+
+enum AIPromptType {
+  DESIGN_GENERATION
+  DESIGN_ENHANCEMENT
+  SUSTAINABILITY_ANALYSIS
+  MATERIAL_RECOMMENDATION
+}
+
+// Notification System
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  type      NotificationType
+  title     String
+  message   String   @db.Text
+  read      Boolean  @default(false)
+  metadata  Json?    // Store additional notification details
+  createdAt DateTime @default(now())
+}
+
+enum NotificationType {
+  DESIGN_REVIEW
+  ACHIEVEMENT
+  SYSTEM
+  COLLABORATION
+  SUSTAINABILITY_ALERT
 }

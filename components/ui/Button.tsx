@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../../lib/utils/cn';
@@ -7,13 +9,13 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: 'bg-gradient-to-r from-primary-500 to-primary-600 text-white hover:from-primary-600 hover:to-primary-700 shadow-lg hover:shadow-xl hover:shadow-primary-500/20',
-        secondary: 'bg-gradient-to-r from-secondary-500 to-secondary-600 text-white hover:from-secondary-600 hover:to-secondary-700 shadow-lg hover:shadow-xl hover:shadow-secondary-500/20',
-        neon: 'bg-neutral-900 text-primary-400 border border-primary-500/50 shadow-neon hover:shadow-neon-strong hover:border-primary-400',
-        outline: 'border-2 border-primary-500 text-primary-500 hover:bg-primary-500 hover:text-white dark:hover:text-white',
-        ghost: 'text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800',
-        glass: 'bg-white/10 backdrop-blur-lg border border-white/20 text-white hover:bg-white/20',
-        minimal: 'text-neutral-600 dark:text-neutral-400 hover:text-primary-500 dark:hover:text-primary-400',
+        default: 'bg-gradient-cosmic text-cream-50 hover:opacity-90 shadow-lg hover:shadow-xl hover:shadow-cosmic-500/20',
+        secondary: 'bg-cream-200 text-cosmic-900 hover:bg-cream-300 shadow-lg hover:shadow-xl hover:shadow-cosmic-500/20',
+        neon: 'bg-cosmic-900 text-cosmic-400 border border-cosmic-500/50 shadow-neon hover:shadow-neon-strong hover:border-cosmic-400',
+        outline: 'border-2 border-cosmic-500 text-cosmic-500 hover:bg-cosmic-500 hover:text-cream-50',
+        ghost: 'text-cosmic-700 hover:bg-cosmic-100',
+        glass: 'bg-cream-50/10 backdrop-blur-lg border border-cream-50/20 text-cream-50 hover:bg-cream-50/20',
+        minimal: 'text-cosmic-600 hover:text-cosmic-500',
       },
       size: {
         default: 'h-11 px-6 py-2 rounded-lg',

@@ -1,10 +1,22 @@
-import CssBaseline from '@mui/material/CssBaseline';
+import type { ReactElement, ReactNode } from 'react';
+import type { NextPage } from 'next';
 import type { AppProps } from 'next/app';
+
+export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
+  getLayout?: (page: ReactElement) => ReactNode;
+}
+
+type AppPropsWithLayout = AppProps & {
+  Component: NextPageWithLayout;
+}
+import { SessionProvider } from 'next-auth/react';
 import { ThemeProvider } from '../lib/contexts/ThemeContext';
 import { AppProvider } from '../lib/contexts/AppContext';
+import { ToastProvider } from '../components/ui/toast';
 import Head from 'next/head';
+import '../styles/globals.css';
 
-function MyApp({ Component, pageProps }: AppProps) {
+function MyApp({ Component, pageProps: { session, ...pageProps } }: AppPropsWithLayout) {
   return (
     <>
       <Head>
@@ -14,35 +26,20 @@ function MyApp({ Component, pageProps }: AppProps) {
           href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap"
           rel="stylesheet"
         />
-        <style jsx global>{`
-          html {
-            scroll-behavior: smooth;
-          }
-
-          @keyframes gradient {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-          }
-
-          .gradient-bg {
-            background: linear-gradient(-45deg, #9C27B0, #6A1B9A, #4A148C, #7B1FA2);
-            background-size: 400% 400%;
-            animation: gradient 15s ease infinite;
-          }
-
-          .glass-effect {
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-          }
-        `}</style>
       </Head>
-      <ThemeProvider>
-        <CssBaseline />
-        <AppProvider>
-          <Component {...pageProps} />
-        </AppProvider>
-      </ThemeProvider>
+      <SessionProvider session={session}>
+        <ThemeProvider>
+          <ToastProvider>
+            <AppProvider>
+              {Component.getLayout ? (
+                Component.getLayout(<Component {...pageProps} />)
+              ) : (
+                <Component {...pageProps} />
+              )}
+            </AppProvider>
+          </ToastProvider>
+        </ThemeProvider>
+      </SessionProvider>
     </>
   );
 }

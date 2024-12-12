@@ -1,131 +1,98 @@
+const { fontFamily } = require('tailwindcss/defaultTheme');
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  darkMode: ['class'],
   content: [
-    "./pages/**/*.{js,ts,jsx,tsx}",
-    "./components/**/*.{js,ts,jsx,tsx}",
+    './pages/**/*.{ts,tsx}',
+    './components/**/*.{ts,tsx}',
+    './app/**/*.{ts,tsx}',
+    './src/**/*.{ts,tsx}',
   ],
   theme: {
+    container: {
+      center: true,
+      padding: '2rem',
+      screens: {
+        '2xl': '1400px',
+      },
+    },
     extend: {
       colors: {
+        border: "hsl(var(--border))",
+        input: "hsl(var(--input))",
+        ring: "hsl(var(--ring))",
+        background: "hsl(var(--background))",
+        foreground: "hsl(var(--foreground))",
         primary: {
-          50: '#eef9ff',
-          100: '#dcf3ff',
-          200: '#b3e7ff',
-          300: '#66d3ff',
-          400: '#1ab8ff',
-          500: '#00a3ff',
-          600: '#0085ff',
-          700: '#0066cc',
-          800: '#0055a8',
-          900: '#004a91',
+          DEFAULT: "hsl(var(--primary))",
+          foreground: "hsl(var(--primary-foreground))",
         },
         secondary: {
-          50: '#fff2f9',
-          100: '#ffe6f5',
-          200: '#ffcced',
-          300: '#ffa3df',
-          400: '#ff66c6',
-          500: '#ff29ad',
-          600: '#ff009c',
-          700: '#cc007d',
-          800: '#a80068',
-          900: '#91005a',
+          DEFAULT: "hsl(var(--secondary))",
+          foreground: "hsl(var(--secondary-foreground))",
+        },
+        destructive: {
+          DEFAULT: "hsl(var(--destructive))",
+          foreground: "hsl(var(--destructive-foreground))",
+        },
+        muted: {
+          DEFAULT: "hsl(var(--muted))",
+          foreground: "hsl(var(--muted-foreground))",
         },
         accent: {
-          50: '#f5f7ff',
-          100: '#ebeeff',
-          200: '#d6ddff',
-          300: '#b3bcff',
-          400: '#808fff',
-          500: '#4d62ff',
-          600: '#1a35ff',
-          700: '#0026ff',
-          800: '#001fd6',
-          900: '#001ab3',
+          DEFAULT: "hsl(var(--accent))",
+          foreground: "hsl(var(--accent-foreground))",
         },
-        neutral: {
-          50: '#f8fafc',
-          100: '#f1f5f9',
-          200: '#e2e8f0',
-          300: '#cbd5e1',
-          400: '#94a3b8',
-          500: '#64748b',
-          600: '#475569',
-          700: '#334155',
-          800: '#1e293b',
-          900: '#0f172a',
+        popover: {
+          DEFAULT: "hsl(var(--popover))",
+          foreground: "hsl(var(--popover-foreground))",
+        },
+        card: {
+          DEFAULT: "hsl(var(--card))",
+          foreground: "hsl(var(--card-foreground))",
+        },
+        cosmic: {
+          50: '#f8f6ff',
+          100: '#f0edff',
+          200: '#e4dcff',
+          300: '#d0bfff',
+          400: '#b794ff',
+          500: '#9c27b0',  // Primary purple from logo
+          600: '#6a1b9a',  // Darker purple from logo
+          700: '#4a148c',  // Deep purple from logo
+          800: '#2c0d54',
+          900: '#1a0933',
+          950: '#0d041a',
+        },
+        cream: {
+          50: '#fdfbf7',   // Background color from logo
+          100: '#f7f1e6',
+          200: '#ede2cc',
+          300: '#e2cba8',
+          400: '#d4b182',
+          500: '#c69664',
+          600: '#b67d4d',
+          700: '#96633d',
+          800: '#7a5035',
+          900: '#63422d',
         },
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
-        display: ['Space Grotesk', 'system-ui', '-apple-system', 'sans-serif'],
+        'space-grotesk': ['Space Grotesk', ...fontFamily.sans],
+        'inter': ['Inter', ...fontFamily.sans],
       },
-      fontSize: {
-        'xs': ['0.75rem', { lineHeight: '1rem' }],
-        'sm': ['0.875rem', { lineHeight: '1.25rem' }],
-        'base': ['1rem', { lineHeight: '1.5rem' }],
-        'lg': ['1.125rem', { lineHeight: '1.75rem' }],
-        'xl': ['1.25rem', { lineHeight: '1.75rem' }],
-        '2xl': ['1.5rem', { lineHeight: '2rem' }],
-        '3xl': ['1.875rem', { lineHeight: '2.25rem' }],
-        '4xl': ['2.25rem', { lineHeight: '2.5rem' }],
-        '5xl': ['3rem', { lineHeight: '1' }],
-        '6xl': ['3.75rem', { lineHeight: '1' }],
-        '7xl': ['4.5rem', { lineHeight: '1' }],
-        '8xl': ['6rem', { lineHeight: '1' }],
-        '9xl': ['8rem', { lineHeight: '1' }],
-      },
-      spacing: {
-        '4.5': '1.125rem',
-        '5.5': '1.375rem',
-        '6.5': '1.625rem',
-        '7.5': '1.875rem',
-        '8.5': '2.125rem',
-        '9.5': '2.375rem',
+      backgroundImage: {
+        'gradient-cosmic': 'linear-gradient(-45deg, #9C27B0, #6A1B9A, #4A148C, #7B1FA2)',
       },
       animation: {
-        'fade-in': 'fadeIn 0.5s ease-in-out',
-        'slide-up': 'slideUp 0.5s ease-out',
-        'slide-down': 'slideDown 0.5s ease-out',
-        'float': 'float 3s ease-in-out infinite',
-        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-        'glow': 'glow 2s ease-in-out infinite alternate',
+        'gradient-flow': 'gradient 15s ease infinite',
       },
       keyframes: {
-        fadeIn: {
-          '0%': { opacity: '0' },
-          '100%': { opacity: '1' },
+        gradient: {
+          '0%, 100%': { backgroundPosition: '0% 50%' },
+          '50%': { backgroundPosition: '100% 50%' },
         },
-        slideUp: {
-          '0%': { transform: 'translateY(20px)', opacity: '0' },
-          '100%': { transform: 'translateY(0)', opacity: '1' },
-        },
-        slideDown: {
-          '0%': { transform: 'translateY(-20px)', opacity: '0' },
-          '100%': { transform: 'translateY(0)', opacity: '1' },
-        },
-        float: {
-          '0%, 100%': { transform: 'translateY(0)' },
-          '50%': { transform: 'translateY(-10px)' },
-        },
-        glow: {
-          '0%': { boxShadow: '0 0 5px rgba(0, 163, 255, 0.5)' },
-          '100%': { boxShadow: '0 0 20px rgba(0, 163, 255, 0.8)' },
-        },
-      },
-      backdropFilter: {
-        'none': 'none',
-        'blur': 'blur(20px)',
-      },
-      boxShadow: {
-        'neon': '0 0 5px theme(colors.primary.400), 0 0 20px theme(colors.primary.500)',
-        'neon-strong': '0 0 10px theme(colors.primary.400), 0 0 30px theme(colors.primary.500), 0 0 50px theme(colors.primary.600)',
-        'soft': '0 2px 15px rgb(0 0 0 / 0.1)',
-      },
-      borderRadius: {
-        '4xl': '2rem',
-        '5xl': '2.5rem',
-        '6xl': '3rem',
       },
     },
   },
@@ -133,5 +100,4 @@ module.exports = {
     require('@tailwindcss/forms'),
     require('@tailwindcss/typography'),
   ],
-  darkMode: 'class',
 }

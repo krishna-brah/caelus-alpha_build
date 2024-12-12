@@ -1,19 +1,8 @@
 import React from 'react';
-import {
-  Box,
-  Button,
-  VStack,
-  Heading,
-  Text,
-  Container,
-  useColorModeValue,
-} from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 
 export default function UserType() {
   const router = useRouter();
-  const bgColor = useColorModeValue('gray.50', 'gray.900');
-  const cardBgColor = useColorModeValue('white', 'gray.800');
 
   const handleUserTypeSelection = (type: 'consumer' | 'designer') => {
     if (type === 'designer') {
@@ -24,61 +13,57 @@ export default function UserType() {
   };
 
   return (
-    <Box minH="100vh" bg={bgColor} py={20}>
-      <Container maxW="container.md">
-        <VStack spacing={8} align="stretch">
-          <Heading textAlign="center">Welcome to Caelus</Heading>
-          <Text textAlign="center" fontSize="lg">
-            Please select how you'll be using our platform
-          </Text>
+    <div className="min-h-screen bg-cream-50 dark:bg-cosmic-900 py-20">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="space-y-8">
+          <div className="text-center">
+            <h1 className="text-4xl font-bold text-cosmic-900 dark:text-cosmic-50 mb-4">
+              Welcome to Caelus
+            </h1>
+            <p className="text-lg text-cosmic-600 dark:text-cosmic-300">
+              Please select how you'll be using our platform
+            </p>
+          </div>
 
-          <VStack spacing={4}>
-            <Box
-              p={6}
-              borderWidth="1px"
-              borderRadius="lg"
-              bg={cardBgColor}
-              w="100%"
-              cursor="pointer"
-              _hover={{ shadow: 'md' }}
+          <div className="space-y-4">
+            <div
+              className="p-6 border border-cosmic-200 dark:border-cosmic-700 rounded-lg bg-cream-50 dark:bg-cosmic-800 w-full cursor-pointer transition-shadow duration-300 hover:shadow-lg"
               onClick={() => handleUserTypeSelection('designer')}
             >
-              <VStack spacing={4}>
-                <Heading size="md">I'm a Designer</Heading>
-                <Text textAlign="center">
+              <div className="space-y-4 text-center">
+                <h2 className="text-2xl font-semibold text-cosmic-900 dark:text-cosmic-50">
+                  I'm a Designer
+                </h2>
+                <p className="text-cosmic-600 dark:text-cosmic-300">
                   Create and sell your designs, collaborate with other designers,
                   and build your reputation through our tagging system.
-                </Text>
-                <Button colorScheme="blue">
+                </p>
+                <button className="px-6 py-2 bg-cosmic-600 text-white rounded-lg font-medium hover:bg-cosmic-700 transition-colors duration-200">
                   Continue as Designer
-                </Button>
-              </VStack>
-            </Box>
+                </button>
+              </div>
+            </div>
 
-            <Box
-              p={6}
-              borderWidth="1px"
-              borderRadius="lg"
-              bg={cardBgColor}
-              w="100%"
-              cursor="pointer"
-              _hover={{ shadow: 'md' }}
+            <div
+              className="p-6 border border-cosmic-200 dark:border-cosmic-700 rounded-lg bg-cream-50 dark:bg-cosmic-800 w-full cursor-pointer transition-shadow duration-300 hover:shadow-lg"
               onClick={() => handleUserTypeSelection('consumer')}
             >
-              <VStack spacing={4}>
-                <Heading size="md">I'm a Consumer</Heading>
-                <Text textAlign="center">
+              <div className="space-y-4 text-center">
+                <h2 className="text-2xl font-semibold text-cosmic-900 dark:text-cosmic-50">
+                  I'm a Consumer
+                </h2>
+                <p className="text-cosmic-600 dark:text-cosmic-300">
                   Discover unique designs, connect with talented designers,
                   and find exactly what you're looking for.
-                </Text>
-                <Button colorScheme="green">
+                </p>
+                <button className="px-6 py-2 bg-cosmic-500 text-white rounded-lg font-medium hover:bg-cosmic-600 transition-colors duration-200">
                   Continue as Consumer
-                </Button>
-              </VStack>
-            </Box>
-          </VStack>
-        </VStack>
-      </Container>
-    </Box>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }

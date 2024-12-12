@@ -31,10 +31,31 @@ interface AppContextType {
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<UserProfile | null>(null);
-  const [aiGeneratedDesigns, setAiGeneratedDesigns] = useState<any[]>([]);
+  const [aiGeneratedDesigns] = useState<any[]>([]);
   const [favorites, setFavorites] = useState<string[]>([]);
   const [styleAnalysis, setStyleAnalysis] = useState<string | null>(null);
+  const [user, setUser] = useState<UserProfile | null>(() => ({
+    id: '1',
+    name: 'John Doe',
+    email: 'john@example.com',
+    userType: 'designer',
+    tags: [
+      {
+        id: '1',
+        category: 'FabricSpecialty',
+        value: 'Denim',
+        tier: 'Diamond',
+        projectsCompleted: 28,
+        nextTierThreshold: 50,
+      },
+    ],
+    measurements: {
+      chest: 40,
+      waist: 34,
+      hips: 42,
+      inseam: 32,
+    },
+  }));
 
   // Check if designer has Diamond or Cosmic tier tags
   const isDesignerQualified = !!user?.tags?.some(
@@ -52,33 +73,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const updateStyleAnalysis = (analysis: string) => {
     setStyleAnalysis(analysis);
   };
-
-  // Mock authentication - replace with real auth in production
-  useEffect(() => {
-    const mockUser: UserProfile = {
-      id: '1',
-      name: 'John Doe',
-      email: 'john@example.com',
-      userType: 'designer',
-      tags: [
-        {
-          id: '1',
-          category: 'FabricSpecialty',
-          value: 'Denim',
-          tier: 'Diamond',
-          projectsCompleted: 28,
-          nextTierThreshold: 50,
-        },
-      ],
-      measurements: {
-        chest: 40,
-        waist: 34,
-        hips: 42,
-        inseam: 32,
-      },
-    };
-    setUser(mockUser);
-  }, []);
 
   return (
     <AppContext.Provider
