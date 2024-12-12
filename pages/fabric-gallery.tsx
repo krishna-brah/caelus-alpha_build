@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
+import Link from 'next/link';
 import { Layout } from '../components/layout/Layout';
 import { motion } from 'framer-motion';
 import { searchPexelsPhotos, getFabricImageUrl, type PexelsPhoto } from '../lib/utils/pexels';
@@ -259,8 +260,15 @@ export default function FabricGalleryPage() {
               <h1 className="text-4xl font-bold text-white mb-4 font-space-grotesk">
                 Sustainable Fabric Gallery
               </h1>
+              <div className="flex justify-center items-center gap-4 mb-4">
+                <Link href="/gallery">
+                  <button className="px-6 py-2 text-sm font-medium bg-white/10 hover:bg-white/20 text-white rounded-lg transition-all duration-200 flex items-center gap-2 backdrop-blur-sm">
+                    View Fashion Gallery
+                  </button>
+                </Link>
+              </div>
               <p className="text-lg text-cosmic-100">
-                Explore and evaluate our curated collection of sustainable fabrics
+                Explore our curated collection of sustainable and eco-friendly fabrics
               </p>
             </motion.div>
 
