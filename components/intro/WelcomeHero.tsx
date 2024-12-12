@@ -59,9 +59,11 @@ export const WelcomeHero = () => {
             variants={fadeIn}
             className="text-8xl sm:text-9xl md:text-[12rem] font-bold mb-12 font-space-grotesk tracking-tight relative [letter-spacing:-0.05em]"
           >
-            <span className="text-white relative z-10 drop-shadow-lg">
-              CÆLEUS
-            </span>
+            <Link href="/welcome" className="cursor-pointer">
+              <span className="text-white relative z-10 drop-shadow-lg hover:opacity-80 transition-opacity">
+                CÆLEUS
+              </span>
+            </Link>
             <div className="absolute inset-0 blur-3xl opacity-30 bg-gradient-to-br from-purple-500 via-purple-400 to-purple-600 scale-110" />
           </motion.h1>
 
