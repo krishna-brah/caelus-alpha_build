@@ -60,8 +60,9 @@ const Gallery = () => {
 
   return (
     <Layout>
-      <div className="min-h-screen bg-gradient-to-b from-cosmic-900 to-cosmic-800">
+      <main className="min-h-screen bg-gradient-to-b from-cosmic-900 to-cosmic-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-16">
+          {/* Header Section */}
           <div className="text-center mb-12">
             <h1 className="text-4xl font-bold text-white mb-4 font-space-grotesk">
               Fashion Design Gallery
@@ -78,6 +79,7 @@ const Gallery = () => {
             </p>
           </div>
 
+          {/* Filters Section */}
           <div className="bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 p-6 mb-8">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-lg font-medium text-white">
@@ -102,8 +104,9 @@ const Gallery = () => {
             </div>
           </div>
 
+          {/* Gallery Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredItems.map((item, index) => (
+            {filteredItems.map((item, index) => (
             <motion.div
               key={item.id}
               initial={{ opacity: 0, y: 20 }}
@@ -155,9 +158,10 @@ const Gallery = () => {
                 </div>
               </div>
             </motion.div>
-          ))}
+            ))}
+          </div>
         </div>
-      </div>
+      </main>
     </Layout>
   );
 };
