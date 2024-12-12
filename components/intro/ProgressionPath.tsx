@@ -124,7 +124,7 @@ export const ProgressionPath = () => {
                   <div className="hidden lg:block absolute top-1/2 -right-4 w-8 h-0.5 bg-white/10" />
                 )}
 
-                <div className="group relative p-6 bg-gradient-to-br from-purple-900/30 via-[#1a0b2e]/40 to-purple-800/20 backdrop-blur-md rounded-xl border border-purple-500/20 hover:scale-[1.02] transition-all duration-300 shadow-lg">
+                <div className="group relative p-6 bg-[#1a0b2e]/60 backdrop-blur-sm rounded-xl border border-purple-500/20 hover:border-purple-500/40 hover:scale-[1.02] transition-all duration-300">
                   {/* Glow effects */}
                   <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-purple-500/10 via-transparent to-purple-300/10" />
                   <div className="absolute -inset-[1px] rounded-xl bg-gradient-to-br from-purple-400/30 via-purple-500/20 to-purple-300/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-xl" />
