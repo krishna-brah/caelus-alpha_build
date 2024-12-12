@@ -72,10 +72,10 @@ const item = {
 
 export const ProgressionPath = () => {
   return (
-    <section className="relative bg-[#1a0b2e]">
+    <section className="relative bg-gradient-to-b from-[#1a0b2e] via-[#1a0b2e] to-transparent">
       <div className="relative">
         {/* Background with logo */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#2a1b3e]/50 to-[#1a0b2e]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#2a1b3e]/50 via-[#1a0b2e] to-transparent" />
         
         {/* Logo watermark */}
         <div className="absolute inset-0 opacity-[0.02] pointer-events-none mix-blend-luminosity overflow-hidden">
@@ -183,8 +183,8 @@ export const ProgressionPath = () => {
               </motion.div>
             ))}
           </motion.div>
-          {/* Bottom spacer to prevent white gap */}
-          <div className="h-24 bg-[#1a0b2e]" />
+          {/* Gradient fade-out to bottom */}
+          <div className="h-24 bg-gradient-to-b from-[#1a0b2e] to-transparent" />
         </div>
       </div>
     </section>
