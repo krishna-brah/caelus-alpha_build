@@ -124,10 +124,11 @@ export const ProgressionPath = () => {
                   <div className="hidden lg:block absolute top-1/2 -right-4 w-8 h-0.5 bg-white/10" />
                 )}
 
-                <div className="group relative p-6 bg-[#1a0b2e]/80 backdrop-blur-sm rounded-xl border border-purple-500/10 hover:scale-[1.02] transition-all duration-300 hover:bg-purple-900/20">
-                  {/* Glow effect */}
-                  <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-purple-500/5 via-transparent to-purple-300/5" />
-                  <div className="absolute -inset-[1px] rounded-xl bg-gradient-to-br from-purple-400/20 via-transparent to-purple-300/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-xl" />
+                <div className="group relative p-6 bg-gradient-to-br from-purple-900/30 via-[#1a0b2e]/40 to-purple-800/20 backdrop-blur-md rounded-xl border border-purple-500/20 hover:scale-[1.02] transition-all duration-300 shadow-lg">
+                  {/* Glow effects */}
+                  <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-purple-500/10 via-transparent to-purple-300/10" />
+                  <div className="absolute -inset-[1px] rounded-xl bg-gradient-to-br from-purple-400/30 via-purple-500/20 to-purple-300/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-xl" />
+                  <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-purple-500/5 to-transparent" />
                   {/* Tier Icon */}
                   <div className="text-4xl mb-4 filter drop-shadow-glow">
                     {tier.icon}
