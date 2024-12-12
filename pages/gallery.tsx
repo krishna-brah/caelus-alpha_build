@@ -78,31 +78,31 @@ const Gallery = () => {
             </p>
           </div>
 
-        <div className="bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 p-6 mb-8">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-medium text-white">
-              Filter by Type
-            </h2>
+          <div className="bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 p-6 mb-8">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-lg font-medium text-white">
+                Filter by Type
+              </h2>
+            </div>
+
+            <div className="flex flex-wrap gap-2">
+              {categories.map(category => (
+                <button
+                  key={category}
+                  onClick={() => setSelectedType(category)}
+                  className={`px-4 py-2 rounded-lg transition-all duration-200 ${
+                    selectedType === category
+                      ? 'bg-cosmic-500 text-white shadow-lg'
+                      : 'bg-white/5 text-cosmic-100 hover:bg-white/10 border border-white/10'
+                  }`}
+                >
+                  {category}
+                </button>
+              ))}
+            </div>
           </div>
 
-          <div className="flex flex-wrap gap-2">
-            {fabricTypes.map(type => (
-              <button
-                key={type}
-                onClick={() => setSelectedType(type)}
-                className={`px-4 py-2 rounded-lg transition-all duration-200 ${
-                  selectedType === type
-                    ? 'bg-cosmic-500 text-white shadow-lg'
-                    : 'bg-white/5 text-cosmic-100 hover:bg-white/10 border border-white/10'
-                }`}
-              >
-                {type}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredItems.map((item, index) => (
             <motion.div
               key={item.id}
