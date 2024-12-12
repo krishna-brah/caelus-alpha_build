@@ -1,26 +1,17 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import Layout from '../components/Layout';
+import { Layout } from '../components/layout/Layout';
 import ImageGenerator from '../components/ImageGenerator';
 import { HeartIcon as HeartIconOutline } from '@heroicons/react/24/outline';
 import { HeartIcon as HeartIconSolid } from '@heroicons/react/24/solid';
 
-// This will be replaced with actual fabric data
+// Import fabric data
+import fabricsData from '../public/images/fabrics-data.json';
+
 const fabricTypes = ['All', 'Linen', 'Cotton', 'Wool', 'Denim', 'Silk'];
 
-const dummyFabrics = [
-  {
-    id: 1,
-    name: 'Organic Linen',
-    type: 'Linen',
-    image: '/images/fabrics/linen1.jpg',
-    description: 'Sustainable organic linen from European flax',
-    sustainability: 'Uses 88% less water than cotton',
-    origin: 'Belgium',
-    bestFor: ['Shirts', 'Dresses', 'Summer wear'],
-  },
-  // Add more fabric items here
-];
+// Use the imported data
+const dummyFabrics = fabricsData;
 
 const Gallery = () => {
   const [selectedType, setSelectedType] = useState('All');

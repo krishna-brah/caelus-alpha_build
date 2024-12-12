@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import Layout from '../components/Layout';
+import { Layout } from '../components/layout/Layout';
 import { cn } from '../lib/utils/cn';
 import { Dialog } from '@headlessui/react';
 

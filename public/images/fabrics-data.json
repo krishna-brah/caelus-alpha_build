@@ -1,0 +1,352 @@
+[
+  {
+    "id": 1,
+    "name": "Premium organic linen from European flax",
+    "type": "Linen",
+    "image": "/images/fabrics/linen1.jpg",
+    "description": "Premium organic linen from European flax",
+    "sustainability": "Uses 88% less water than conventional cotton",
+    "origin": "France",
+    "bestFor": [
+      "Shirts",
+      "Home textiles",
+      "Dresses"
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Sustainable Belgian linen fabric",
+    "type": "Linen",
+    "image": "/images/fabrics/linen2.jpg",
+    "description": "Sustainable Belgian linen fabric",
+    "sustainability": "Uses 88% less water than conventional cotton",
+    "origin": "Belgium",
+    "bestFor": [
+      "Summer wear",
+      "Home textiles",
+      "Shirts"
+    ]
+  },
+  {
+    "id": 3,
+    "name": "Natural flax linen textile",
+    "type": "Linen",
+    "image": "/images/fabrics/linen3.jpg",
+    "description": "Natural flax linen textile",
+    "sustainability": "Uses 88% less water than conventional cotton",
+    "origin": "Netherlands",
+    "bestFor": [
+      "Shirts",
+      "Dresses",
+      "Home textiles"
+    ]
+  },
+  {
+    "id": 4,
+    "name": "Eco-friendly raw linen material",
+    "type": "Linen",
+    "image": "/images/fabrics/linen4.jpg",
+    "description": "Eco-friendly raw linen material",
+    "sustainability": "Uses 88% less water than conventional cotton",
+    "origin": "Netherlands",
+    "bestFor": [
+      "Summer wear",
+      "Home textiles",
+      "Dresses"
+    ]
+  },
+  {
+    "id": 5,
+    "name": "Artisanal woven linen fabric",
+    "type": "Linen",
+    "image": "/images/fabrics/linen5.jpg",
+    "description": "Artisanal woven linen fabric",
+    "sustainability": "Uses 88% less water than conventional cotton",
+    "origin": "Netherlands",
+    "bestFor": [
+      "Shirts",
+      "Dresses",
+      "Home textiles"
+    ]
+  },
+  {
+    "id": 6,
+    "name": "GOTS certified organic cotton",
+    "type": "Cotton",
+    "image": "/images/fabrics/cotton1.jpg",
+    "description": "GOTS certified organic cotton",
+    "sustainability": "GOTS certified, reducing water usage by 71%",
+    "origin": "Egypt",
+    "bestFor": [
+      "Everyday wear",
+      "Childrenswear",
+      "Bedding"
+    ]
+  },
+  {
+    "id": 7,
+    "name": "Sustainable Indian cotton fabric",
+    "type": "Cotton",
+    "image": "/images/fabrics/cotton2.jpg",
+    "description": "Sustainable Indian cotton fabric",
+    "sustainability": "GOTS certified, reducing water usage by 71%",
+    "origin": "Egypt",
+    "bestFor": [
+      "Everyday wear",
+      "Childrenswear",
+      "Undergarments"
+    ]
+  },
+  {
+    "id": 8,
+    "name": "Fair-trade organic cotton textile",
+    "type": "Cotton",
+    "image": "/images/fabrics/cotton3.jpg",
+    "description": "Fair-trade organic cotton textile",
+    "sustainability": "GOTS certified, reducing water usage by 71%",
+    "origin": "Turkey",
+    "bestFor": [
+      "Bedding",
+      "Undergarments",
+      "Childrenswear"
+    ]
+  },
+  {
+    "id": 9,
+    "name": "Natural cotton weave material",
+    "type": "Cotton",
+    "image": "/images/fabrics/cotton4.jpg",
+    "description": "Natural cotton weave material",
+    "sustainability": "GOTS certified, reducing water usage by 71%",
+    "origin": "Egypt",
+    "bestFor": [
+      "Childrenswear",
+      "Bedding",
+      "Everyday wear"
+    ]
+  },
+  {
+    "id": 10,
+    "name": "Premium organic cotton fabric",
+    "type": "Cotton",
+    "image": "/images/fabrics/cotton5.jpg",
+    "description": "Premium organic cotton fabric",
+    "sustainability": "GOTS certified, reducing water usage by 71%",
+    "origin": "India",
+    "bestFor": [
+      "Everyday wear",
+      "Bedding",
+      "Undergarments"
+    ]
+  },
+  {
+    "id": 11,
+    "name": "Merino wool from ethical farms",
+    "type": "Wool",
+    "image": "/images/fabrics/wool1.jpg",
+    "description": "Merino wool from ethical farms",
+    "sustainability": "Biodegradable and from certified ethical farms",
+    "origin": "New Zealand",
+    "bestFor": [
+      "Knitwear",
+      "Winter wear",
+      "Suits"
+    ]
+  },
+  {
+    "id": 12,
+    "name": "Sustainable New Zealand wool fabric",
+    "type": "Wool",
+    "image": "/images/fabrics/wool2.jpg",
+    "description": "Sustainable New Zealand wool fabric",
+    "sustainability": "Biodegradable and from certified ethical farms",
+    "origin": "Scotland",
+    "bestFor": [
+      "Knitwear",
+      "Winter wear",
+      "Suits"
+    ]
+  },
+  {
+    "id": 13,
+    "name": "Organic wool textile material",
+    "type": "Wool",
+    "image": "/images/fabrics/wool3.jpg",
+    "description": "Organic wool textile material",
+    "sustainability": "Biodegradable and from certified ethical farms",
+    "origin": "Scotland",
+    "bestFor": [
+      "Knitwear",
+      "Winter wear",
+      "Suits"
+    ]
+  },
+  {
+    "id": 14,
+    "name": "Natural sheep wool fabric",
+    "type": "Wool",
+    "image": "/images/fabrics/wool4.jpg",
+    "description": "Natural sheep wool fabric",
+    "sustainability": "Biodegradable and from certified ethical farms",
+    "origin": "New Zealand",
+    "bestFor": [
+      "Winter wear",
+      "Suits",
+      "Coats"
+    ]
+  },
+  {
+    "id": 15,
+    "name": "Premium eco-wool textile",
+    "type": "Wool",
+    "image": "/images/fabrics/wool5.jpg",
+    "description": "Premium eco-wool textile",
+    "sustainability": "Biodegradable and from certified ethical farms",
+    "origin": "Australia",
+    "bestFor": [
+      "Knitwear",
+      "Coats",
+      "Suits"
+    ]
+  },
+  {
+    "id": 16,
+    "name": "Organic cotton denim fabric",
+    "type": "Denim",
+    "image": "/images/fabrics/denim1.jpg",
+    "description": "Organic cotton denim fabric",
+    "sustainability": "Made with recycled materials and natural dyes",
+    "origin": "Italy",
+    "bestFor": [
+      "Accessories",
+      "Workwear",
+      "Jackets"
+    ]
+  },
+  {
+    "id": 17,
+    "name": "Sustainable indigo denim material",
+    "type": "Denim",
+    "image": "/images/fabrics/denim2.jpg",
+    "description": "Sustainable indigo denim material",
+    "sustainability": "Made with recycled materials and natural dyes",
+    "origin": "Japan",
+    "bestFor": [
+      "Accessories",
+      "Workwear",
+      "Jackets"
+    ]
+  },
+  {
+    "id": 18,
+    "name": "Eco-friendly recycled denim",
+    "type": "Denim",
+    "image": "/images/fabrics/denim3.jpg",
+    "description": "Eco-friendly recycled denim",
+    "sustainability": "Made with recycled materials and natural dyes",
+    "origin": "Italy",
+    "bestFor": [
+      "Jeans",
+      "Jackets",
+      "Workwear"
+    ]
+  },
+  {
+    "id": 19,
+    "name": "Water-saving denim textile",
+    "type": "Denim",
+    "image": "/images/fabrics/denim4.jpg",
+    "description": "Water-saving denim textile",
+    "sustainability": "Made with recycled materials and natural dyes",
+    "origin": "Italy",
+    "bestFor": [
+      "Jeans",
+      "Jackets",
+      "Workwear"
+    ]
+  },
+  {
+    "id": 20,
+    "name": "Natural indigo denim fabric",
+    "type": "Denim",
+    "image": "/images/fabrics/denim5.jpg",
+    "description": "Natural indigo denim fabric",
+    "sustainability": "Made with recycled materials and natural dyes",
+    "origin": "USA",
+    "bestFor": [
+      "Jackets",
+      "Accessories",
+      "Workwear"
+    ]
+  },
+  {
+    "id": 21,
+    "name": "Peace silk from ethical sources",
+    "type": "Silk",
+    "image": "/images/fabrics/silk1.jpg",
+    "description": "Peace silk from ethical sources",
+    "sustainability": "Cruelty-free production with minimal environmental impact",
+    "origin": "Thailand",
+    "bestFor": [
+      "Luxury garments",
+      "Evening wear",
+      "Special occasions"
+    ]
+  },
+  {
+    "id": 22,
+    "name": "Organic mulberry silk fabric",
+    "type": "Silk",
+    "image": "/images/fabrics/silk2.jpg",
+    "description": "Organic mulberry silk fabric",
+    "sustainability": "Cruelty-free production with minimal environmental impact",
+    "origin": "India",
+    "bestFor": [
+      "Luxury garments",
+      "Scarves",
+      "Evening wear"
+    ]
+  },
+  {
+    "id": 23,
+    "name": "Sustainable wild silk textile",
+    "type": "Silk",
+    "image": "/images/fabrics/silk3.jpg",
+    "description": "Sustainable wild silk textile",
+    "sustainability": "Cruelty-free production with minimal environmental impact",
+    "origin": "India",
+    "bestFor": [
+      "Evening wear",
+      "Scarves",
+      "Special occasions"
+    ]
+  },
+  {
+    "id": 24,
+    "name": "Natural ahimsa silk material",
+    "type": "Silk",
+    "image": "/images/fabrics/silk4.jpg",
+    "description": "Natural ahimsa silk material",
+    "sustainability": "Cruelty-free production with minimal environmental impact",
+    "origin": "India",
+    "bestFor": [
+      "Evening wear",
+      "Scarves",
+      "Luxury garments"
+    ]
+  },
+  {
+    "id": 25,
+    "name": "Eco-conscious silk fabric",
+    "type": "Silk",
+    "image": "/images/fabrics/silk5.jpg",
+    "description": "Eco-conscious silk fabric",
+    "sustainability": "Cruelty-free production with minimal environmental impact",
+    "origin": "Thailand",
+    "bestFor": [
+      "Special occasions",
+      "Scarves",
+      "Evening wear"
+    ]
+  }
+]
