@@ -245,14 +245,7 @@ export default function FabricGalleryPage() {
   return (
     <Layout>
       <div className="min-h-screen bg-gradient-to-b from-cosmic-900 to-cosmic-800">
-        {/* Background Logo */}
-        <div className="fixed inset-0 opacity-[0.02] pointer-events-none">
-          <img
-            src="/images/logo.webp"
-            alt=""
-            className="w-full h-full object-cover scale-150 rotate-12"
-          />
-        </div>
+
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-16">
           <motion.div

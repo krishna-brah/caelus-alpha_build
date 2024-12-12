@@ -10,7 +10,7 @@ const navigation = [
   { name: 'Main Hub', href: '/main-hub' },
   { name: 'Marketplace', href: '/marketplace' },
   { name: 'Bazaar', href: '/bazaar' },
-  { name: 'Fabric Gallery', href: '/fabric-gallery' },
+  { name: 'Fabrics', href: '/gallery', isHighlighted: true },
   { name: 'Our Initiative', href: '/our-initiative' },
   { name: 'Profile', href: '/profile' },
 ];
