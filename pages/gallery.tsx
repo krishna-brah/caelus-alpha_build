@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Layout } from '../components/layout/Layout';
 import Link from 'next/link';
-import ImageGenerator from '../components/ImageGenerator';
 import { HeartIcon as HeartIconOutline } from '@heroicons/react/24/outline';
 import { HeartIcon as HeartIconSolid } from '@heroicons/react/24/solid';
 
@@ -39,34 +38,19 @@ function getTagsForCategory(category: string): string[] {
     'Upcycled Fashion': ['Upcycled', 'Recycled', 'Creative']
   };
   return tags[category] || [];
+}
 
 const Gallery = () => {
   const [selectedType, setSelectedType] = useState('All');
-  const [favorites, setFavorites] = useState<number[]>([]);
-  const [fabrics, setFabrics] = useState(dummyFabrics);
-  const [isAdmin, setIsAdmin] = useState(false); // In production, this would be based on user role
+  const [favorites, setFavorites] = useState<string[]>([]);
 
-  const handleImageGenerated = (imageUrl: string) => {
-    // Add new fabric with generated image
-    const newFabric = {
-      id: fabrics.length + 1,
-      name: 'New Generated Fabric',
-      type: selectedType === 'All' ? 'Linen' : selectedType,
-      image: imageUrl,
-      description: 'AI-generated sustainable fabric',
-      sustainability: 'Pending sustainability information',
-      origin: 'Custom Creation',
-      bestFor: ['Custom pieces'],
-    };
 
-    setFabrics([...fabrics, newFabric]);
-  };
 
-  const toggleFavorite = (fabricId: number) => {
+  const toggleFavorite = (itemId: string) => {
     setFavorites(prev =>
-      prev.includes(fabricId)
-        ? prev.filter(id => id !== fabricId)
-        : [...prev, fabricId]
+      prev.includes(itemId)
+        ? prev.filter(id => id !== itemId)
+        : [...prev, itemId]
     );
   };
 
