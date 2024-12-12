@@ -183,8 +183,7 @@ export const ProgressionPath = () => {
               </motion.div>
             ))}
           </motion.div>
-          {/* Bottom spacer to prevent white gap */}
-          <div className="h-24 bg-[#1a0b2e]" />
+
         </div>
       </div>
     </section>
