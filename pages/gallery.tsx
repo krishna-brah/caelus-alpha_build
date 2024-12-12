@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Layout } from '../components/layout/Layout';
+import Link from 'next/link';
 import ImageGenerator from '../components/ImageGenerator';
 import { HeartIcon as HeartIconOutline } from '@heroicons/react/24/outline';
 import { HeartIcon as HeartIconSolid } from '@heroicons/react/24/solid';
@@ -50,9 +51,21 @@ const Gallery = () => {
   return (
     <Layout>
       <div className="py-8 px-4 sm:px-6 lg:px-8">
-        <h1 className="text-4xl font-bold text-center text-cosmic-900 dark:text-cosmic-50 mb-8 font-space-grotesk">
-          Sustainable Fabric Gallery
-        </h1>
+        <div className="text-center mb-8">
+          <h1 className="text-4xl font-bold text-cosmic-900 dark:text-cosmic-50 mb-4 font-space-grotesk">
+            Sustainable Fabric Gallery
+          </h1>
+          <div className="flex justify-center items-center gap-4">
+            <Link href="/bazaar">
+              <button className="px-6 py-2 text-sm font-medium bg-cosmic-900/10 hover:bg-cosmic-900/20 text-cosmic-900 dark:text-cosmic-50 rounded-lg transition-all duration-200 flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M10.707 3.293a1 1 0 010 1.414L6.414 9H17a1 1 0 110 2H6.414l4.293 4.293a1 1 0 01-1.414 1.414l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 0z" clipRule="evenodd" />
+                </svg>
+                Back to Bazaar
+              </button>
+            </Link>
+          </div>
+        </div>
 
         <div className="mb-8">
           <div className="flex justify-between items-center mb-4">

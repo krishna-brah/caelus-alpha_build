@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Layout } from '../components/layout/Layout';
+import Link from 'next/link';
 import { cn } from '../lib/utils/cn';
 import { Dialog } from '@headlessui/react';
 
@@ -127,9 +128,21 @@ const Bazaar = () => {
   return (
     <Layout>
       <div className="py-16">
-        <h1 className="text-4xl font-bold text-center text-cosmic-900 dark:text-cosmic-50 mb-8">
-          Caelus Bazaar
-        </h1>
+        <div className="text-center mb-8">
+          <h1 className="text-4xl font-bold text-cosmic-900 dark:text-cosmic-50 mb-4">
+            Caelus Bazaar
+          </h1>
+          <div className="flex justify-center items-center gap-4">
+            <Link href="/gallery">
+              <button className="px-6 py-2 text-sm font-medium bg-cosmic-900/10 hover:bg-cosmic-900/20 text-cosmic-900 dark:text-cosmic-50 rounded-lg transition-all duration-200 flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clipRule="evenodd" />
+                </svg>
+                Browse Fabric Gallery
+              </button>
+            </Link>
+          </div>
+        </div>
 
         <div className="border-b border-cosmic-200 dark:border-cosmic-700 mb-8">
           <div className="flex justify-center">
