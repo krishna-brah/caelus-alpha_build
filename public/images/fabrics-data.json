@@ -8,7 +8,7 @@
     "sustainability": "Uses 88% less water than conventional cotton",
     "origin": "France",
     "bestFor": [
-      "Shirts",
+      "Summer wear",
       "Home textiles",
       "Dresses"
     ]
@@ -22,9 +22,9 @@
     "sustainability": "Uses 88% less water than conventional cotton",
     "origin": "Belgium",
     "bestFor": [
-      "Summer wear",
+      "Dresses",
       "Home textiles",
-      "Shirts"
+      "Summer wear"
     ]
   },
   {
@@ -34,7 +34,7 @@
     "image": "/images/fabrics/linen3.jpg",
     "description": "Natural flax linen textile",
     "sustainability": "Uses 88% less water than conventional cotton",
-    "origin": "Netherlands",
+    "origin": "France",
     "bestFor": [
       "Shirts",
       "Dresses",
@@ -48,11 +48,11 @@
     "image": "/images/fabrics/linen4.jpg",
     "description": "Eco-friendly raw linen material",
     "sustainability": "Uses 88% less water than conventional cotton",
-    "origin": "Netherlands",
+    "origin": "France",
     "bestFor": [
-      "Summer wear",
       "Home textiles",
-      "Dresses"
+      "Dresses",
+      "Shirts"
     ]
   },
   {
@@ -62,10 +62,10 @@
     "image": "/images/fabrics/linen5.jpg",
     "description": "Artisanal woven linen fabric",
     "sustainability": "Uses 88% less water than conventional cotton",
-    "origin": "Netherlands",
+    "origin": "Belgium",
     "bestFor": [
-      "Shirts",
       "Dresses",
+      "Summer wear",
       "Home textiles"
     ]
   },
@@ -76,11 +76,11 @@
     "image": "/images/fabrics/cotton1.jpg",
     "description": "GOTS certified organic cotton",
     "sustainability": "GOTS certified, reducing water usage by 71%",
-    "origin": "Egypt",
+    "origin": "Turkey",
     "bestFor": [
       "Everyday wear",
       "Childrenswear",
-      "Bedding"
+      "Undergarments"
     ]
   },
   {
@@ -92,9 +92,9 @@
     "sustainability": "GOTS certified, reducing water usage by 71%",
     "origin": "Egypt",
     "bestFor": [
-      "Everyday wear",
-      "Childrenswear",
-      "Undergarments"
+      "Bedding",
+      "Undergarments",
+      "Childrenswear"
     ]
   },
   {
@@ -104,11 +104,11 @@
     "image": "/images/fabrics/cotton3.jpg",
     "description": "Fair-trade organic cotton textile",
     "sustainability": "GOTS certified, reducing water usage by 71%",
-    "origin": "Turkey",
+    "origin": "Egypt",
     "bestFor": [
-      "Bedding",
-      "Undergarments",
-      "Childrenswear"
+      "Everyday wear",
+      "Childrenswear",
+      "Undergarments"
     ]
   },
   {
@@ -118,11 +118,11 @@
     "image": "/images/fabrics/cotton4.jpg",
     "description": "Natural cotton weave material",
     "sustainability": "GOTS certified, reducing water usage by 71%",
-    "origin": "Egypt",
+    "origin": "Turkey",
     "bestFor": [
       "Childrenswear",
-      "Bedding",
-      "Everyday wear"
+      "Everyday wear",
+      "Bedding"
     ]
   },
   {
@@ -134,9 +134,9 @@
     "sustainability": "GOTS certified, reducing water usage by 71%",
     "origin": "India",
     "bestFor": [
-      "Everyday wear",
+      "Undergarments",
       "Bedding",
-      "Undergarments"
+      "Everyday wear"
     ]
   },
   {
@@ -146,11 +146,11 @@
     "image": "/images/fabrics/wool1.jpg",
     "description": "Merino wool from ethical farms",
     "sustainability": "Biodegradable and from certified ethical farms",
-    "origin": "New Zealand",
+    "origin": "Australia",
     "bestFor": [
-      "Knitwear",
-      "Winter wear",
-      "Suits"
+      "Suits",
+      "Coats",
+      "Knitwear"
     ]
   },
   {
@@ -160,7 +160,7 @@
     "image": "/images/fabrics/wool2.jpg",
     "description": "Sustainable New Zealand wool fabric",
     "sustainability": "Biodegradable and from certified ethical farms",
-    "origin": "Scotland",
+    "origin": "New Zealand",
     "bestFor": [
       "Knitwear",
       "Winter wear",
@@ -176,9 +176,9 @@
     "sustainability": "Biodegradable and from certified ethical farms",
     "origin": "Scotland",
     "bestFor": [
-      "Knitwear",
-      "Winter wear",
-      "Suits"
+      "Coats",
+      "Suits",
+      "Winter wear"
     ]
   },
   {
@@ -188,11 +188,11 @@
     "image": "/images/fabrics/wool4.jpg",
     "description": "Natural sheep wool fabric",
     "sustainability": "Biodegradable and from certified ethical farms",
-    "origin": "New Zealand",
+    "origin": "Scotland",
     "bestFor": [
+      "Knitwear",
       "Winter wear",
-      "Suits",
-      "Coats"
+      "Suits"
     ]
   },
   {
@@ -205,8 +205,8 @@
     "origin": "Australia",
     "bestFor": [
       "Knitwear",
-      "Coats",
-      "Suits"
+      "Winter wear",
+      "Coats"
     ]
   },
   {
@@ -216,11 +216,11 @@
     "image": "/images/fabrics/denim1.jpg",
     "description": "Organic cotton denim fabric",
     "sustainability": "Made with recycled materials and natural dyes",
-    "origin": "Italy",
+    "origin": "USA",
     "bestFor": [
-      "Accessories",
-      "Workwear",
-      "Jackets"
+      "Jackets",
+      "Jeans",
+      "Accessories"
     ]
   },
   {
@@ -230,10 +230,10 @@
     "image": "/images/fabrics/denim2.jpg",
     "description": "Sustainable indigo denim material",
     "sustainability": "Made with recycled materials and natural dyes",
-    "origin": "Japan",
+    "origin": "USA",
     "bestFor": [
-      "Accessories",
       "Workwear",
+      "Accessories",
       "Jackets"
     ]
   },
@@ -244,10 +244,10 @@
     "image": "/images/fabrics/denim3.jpg",
     "description": "Eco-friendly recycled denim",
     "sustainability": "Made with recycled materials and natural dyes",
-    "origin": "Italy",
+    "origin": "Japan",
     "bestFor": [
-      "Jeans",
       "Jackets",
+      "Accessories",
       "Workwear"
     ]
   },
@@ -258,11 +258,11 @@
     "image": "/images/fabrics/denim4.jpg",
     "description": "Water-saving denim textile",
     "sustainability": "Made with recycled materials and natural dyes",
-    "origin": "Italy",
+    "origin": "Japan",
     "bestFor": [
       "Jeans",
-      "Jackets",
-      "Workwear"
+      "Accessories",
+      "Jackets"
     ]
   },
   {
@@ -274,7 +274,7 @@
     "sustainability": "Made with recycled materials and natural dyes",
     "origin": "USA",
     "bestFor": [
-      "Jackets",
+      "Jeans",
       "Accessories",
       "Workwear"
     ]
@@ -288,9 +288,9 @@
     "sustainability": "Cruelty-free production with minimal environmental impact",
     "origin": "Thailand",
     "bestFor": [
-      "Luxury garments",
       "Evening wear",
-      "Special occasions"
+      "Luxury garments",
+      "Scarves"
     ]
   },
   {
@@ -300,11 +300,11 @@
     "image": "/images/fabrics/silk2.jpg",
     "description": "Organic mulberry silk fabric",
     "sustainability": "Cruelty-free production with minimal environmental impact",
-    "origin": "India",
+    "origin": "Thailand",
     "bestFor": [
       "Luxury garments",
-      "Scarves",
-      "Evening wear"
+      "Evening wear",
+      "Scarves"
     ]
   },
   {
@@ -314,11 +314,11 @@
     "image": "/images/fabrics/silk3.jpg",
     "description": "Sustainable wild silk textile",
     "sustainability": "Cruelty-free production with minimal environmental impact",
-    "origin": "India",
+    "origin": "Thailand",
     "bestFor": [
-      "Evening wear",
-      "Scarves",
-      "Special occasions"
+      "Luxury garments",
+      "Special occasions",
+      "Evening wear"
     ]
   },
   {
@@ -330,9 +330,9 @@
     "sustainability": "Cruelty-free production with minimal environmental impact",
     "origin": "India",
     "bestFor": [
-      "Evening wear",
+      "Luxury garments",
       "Scarves",
-      "Luxury garments"
+      "Special occasions"
     ]
   },
   {
@@ -342,7 +342,7 @@
     "image": "/images/fabrics/silk5.jpg",
     "description": "Eco-conscious silk fabric",
     "sustainability": "Cruelty-free production with minimal environmental impact",
-    "origin": "Thailand",
+    "origin": "China",
     "bestFor": [
       "Special occasions",
       "Scarves",

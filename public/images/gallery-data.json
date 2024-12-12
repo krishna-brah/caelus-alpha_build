@@ -1,0 +1,218 @@
+[
+  {
+    "id": "sustainable-fashion-1",
+    "category": "sustainable-fashion",
+    "image": "/images/gallery/sustainable-fashion-1.jpg",
+    "title": "Sustainable Fashion 1",
+    "description": "Sustainable and eco-friendly fashion designs",
+    "photographer": "Susanna Marsiglia",
+    "photographer_url": "https://www.pexels.com/@susydrake"
+  },
+  {
+    "id": "sustainable-fashion-2",
+    "category": "sustainable-fashion",
+    "image": "/images/gallery/sustainable-fashion-2.jpg",
+    "title": "Sustainable Fashion 2",
+    "description": "Sustainable and eco-friendly fashion designs",
+    "photographer": "Antoni Shkraba",
+    "photographer_url": "https://www.pexels.com/@shkrabaanthony"
+  },
+  {
+    "id": "sustainable-fashion-3",
+    "category": "sustainable-fashion",
+    "image": "/images/gallery/sustainable-fashion-3.jpg",
+    "title": "Sustainable Fashion 3",
+    "description": "Sustainable and eco-friendly fashion designs",
+    "photographer": "Yaroslav Shuraev",
+    "photographer_url": "https://www.pexels.com/@yaroslav-shuraev"
+  },
+  {
+    "id": "sustainable-fashion-4",
+    "category": "sustainable-fashion",
+    "image": "/images/gallery/sustainable-fashion-4.jpg",
+    "title": "Sustainable Fashion 4",
+    "description": "Sustainable and eco-friendly fashion designs",
+    "photographer": "Ron Lach",
+    "photographer_url": "https://www.pexels.com/@ron-lach"
+  },
+  {
+    "id": "sustainable-fashion-5",
+    "category": "sustainable-fashion",
+    "image": "/images/gallery/sustainable-fashion-5.jpg",
+    "title": "Sustainable Fashion 5",
+    "description": "Sustainable and eco-friendly fashion designs",
+    "photographer": "Sasha  Kim",
+    "photographer_url": "https://www.pexels.com/@sasha-kim"
+  },
+  {
+    "id": "sustainable-fashion-6",
+    "category": "sustainable-fashion",
+    "image": "/images/gallery/sustainable-fashion-6.jpg",
+    "title": "Sustainable Fashion 6",
+    "description": "Sustainable and eco-friendly fashion designs",
+    "photographer": "Sydney Sang",
+    "photographer_url": "https://www.pexels.com/@urfriendlyphotog"
+  },
+  {
+    "id": "artisanal-fashion-1",
+    "category": "artisanal-fashion",
+    "image": "/images/gallery/artisanal-fashion-1.jpg",
+    "title": "Artisanal Fashion 1",
+    "description": "Handcrafted and artisanal fashion pieces",
+    "photographer": "FbyF Studio",
+    "photographer_url": "https://www.pexels.com/@fbyf-studio-1601304170"
+  },
+  {
+    "id": "artisanal-fashion-2",
+    "category": "artisanal-fashion",
+    "image": "/images/gallery/artisanal-fashion-2.jpg",
+    "title": "Artisanal Fashion 2",
+    "description": "Handcrafted and artisanal fashion pieces",
+    "photographer": "Efrem  Efre",
+    "photographer_url": "https://www.pexels.com/@efrem-efre-2786187"
+  },
+  {
+    "id": "artisanal-fashion-3",
+    "category": "artisanal-fashion",
+    "image": "/images/gallery/artisanal-fashion-3.jpg",
+    "title": "Artisanal Fashion 3",
+    "description": "Handcrafted and artisanal fashion pieces",
+    "photographer": "cottonbro studio",
+    "photographer_url": "https://www.pexels.com/@cottonbro"
+  },
+  {
+    "id": "artisanal-fashion-4",
+    "category": "artisanal-fashion",
+    "image": "/images/gallery/artisanal-fashion-4.jpg",
+    "title": "Artisanal Fashion 4",
+    "description": "Handcrafted and artisanal fashion pieces",
+    "photographer": "Mizuno K",
+    "photographer_url": "https://www.pexels.com/@mizunokozuki"
+  },
+  {
+    "id": "artisanal-fashion-5",
+    "category": "artisanal-fashion",
+    "image": "/images/gallery/artisanal-fashion-5.jpg",
+    "title": "Artisanal Fashion 5",
+    "description": "Handcrafted and artisanal fashion pieces",
+    "photographer": "Antoni Shkraba",
+    "photographer_url": "https://www.pexels.com/@shkrabaanthony"
+  },
+  {
+    "id": "artisanal-fashion-6",
+    "category": "artisanal-fashion",
+    "image": "/images/gallery/artisanal-fashion-6.jpg",
+    "title": "Artisanal Fashion 6",
+    "description": "Handcrafted and artisanal fashion pieces",
+    "photographer": "Tima Miroshnichenko",
+    "photographer_url": "https://www.pexels.com/@tima-miroshnichenko"
+  },
+  {
+    "id": "eco-designs-1",
+    "category": "eco-designs",
+    "image": "/images/gallery/eco-designs-1.jpg",
+    "title": "Eco Designs 1",
+    "description": "Environmentally conscious fashion designs",
+    "photographer": "Anna Shvets",
+    "photographer_url": "https://www.pexels.com/@shvetsa"
+  },
+  {
+    "id": "eco-designs-2",
+    "category": "eco-designs",
+    "image": "/images/gallery/eco-designs-2.jpg",
+    "title": "Eco Designs 2",
+    "description": "Environmentally conscious fashion designs",
+    "photographer": "John Diez",
+    "photographer_url": "https://www.pexels.com/@john-diez"
+  },
+  {
+    "id": "eco-designs-3",
+    "category": "eco-designs",
+    "image": "/images/gallery/eco-designs-3.jpg",
+    "title": "Eco Designs 3",
+    "description": "Environmentally conscious fashion designs",
+    "photographer": "Miriam Alonso",
+    "photographer_url": "https://www.pexels.com/@miriam-alonso"
+  },
+  {
+    "id": "eco-designs-4",
+    "category": "eco-designs",
+    "image": "/images/gallery/eco-designs-4.jpg",
+    "title": "Eco Designs 4",
+    "description": "Environmentally conscious fashion designs",
+    "photographer": "Thirdman",
+    "photographer_url": "https://www.pexels.com/@thirdman"
+  },
+  {
+    "id": "eco-designs-5",
+    "category": "eco-designs",
+    "image": "/images/gallery/eco-designs-5.jpg",
+    "title": "Eco Designs 5",
+    "description": "Environmentally conscious fashion designs",
+    "photographer": "Nataliya Vaitkevich",
+    "photographer_url": "https://www.pexels.com/@n-voitkevich"
+  },
+  {
+    "id": "eco-designs-6",
+    "category": "eco-designs",
+    "image": "/images/gallery/eco-designs-6.jpg",
+    "title": "Eco Designs 6",
+    "description": "Environmentally conscious fashion designs",
+    "photographer": "Miriam Alonso",
+    "photographer_url": "https://www.pexels.com/@miriam-alonso"
+  },
+  {
+    "id": "upcycled-fashion-1",
+    "category": "upcycled-fashion",
+    "image": "/images/gallery/upcycled-fashion-1.jpg",
+    "title": "Upcycled Fashion 1",
+    "description": "Creative upcycled fashion pieces",
+    "photographer": "Sametraw",
+    "photographer_url": "https://www.pexels.com/@sametraw-773276599"
+  },
+  {
+    "id": "upcycled-fashion-2",
+    "category": "upcycled-fashion",
+    "image": "/images/gallery/upcycled-fashion-2.jpg",
+    "title": "Upcycled Fashion 2",
+    "description": "Creative upcycled fashion pieces",
+    "photographer": "Paulo Sérgio Zembruski",
+    "photographer_url": "https://www.pexels.com/@paulo-sergio-zembruski-459692"
+  },
+  {
+    "id": "upcycled-fashion-3",
+    "category": "upcycled-fashion",
+    "image": "/images/gallery/upcycled-fashion-3.jpg",
+    "title": "Upcycled Fashion 3",
+    "description": "Creative upcycled fashion pieces",
+    "photographer": "Astrid Sosa",
+    "photographer_url": "https://www.pexels.com/@astrid"
+  },
+  {
+    "id": "upcycled-fashion-4",
+    "category": "upcycled-fashion",
+    "image": "/images/gallery/upcycled-fashion-4.jpg",
+    "title": "Upcycled Fashion 4",
+    "description": "Creative upcycled fashion pieces",
+    "photographer": "Ｓｕｅｄａ 🌸",
+    "photographer_url": "https://www.pexels.com/@774990922"
+  },
+  {
+    "id": "upcycled-fashion-5",
+    "category": "upcycled-fashion",
+    "image": "/images/gallery/upcycled-fashion-5.jpg",
+    "title": "Upcycled Fashion 5",
+    "description": "Creative upcycled fashion pieces",
+    "photographer": "reyhan diptayana",
+    "photographer_url": "https://www.pexels.com/@reyhandiptayana"
+  },
+  {
+    "id": "upcycled-fashion-6",
+    "category": "upcycled-fashion",
+    "image": "/images/gallery/upcycled-fashion-6.jpg",
+    "title": "Upcycled Fashion 6",
+    "description": "Creative upcycled fashion pieces",
+    "photographer": "chickenbunny",
+    "photographer_url": "https://www.pexels.com/@chickenbunny-102941452"
+  }
+]
