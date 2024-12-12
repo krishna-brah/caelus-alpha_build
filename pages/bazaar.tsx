@@ -4,31 +4,103 @@ import Layout from '../components/Layout';
 import { cn } from '../lib/utils/cn';
 import { Dialog } from '@headlessui/react';
 
-// Dummy data - to be replaced with actual data
+// Sample listings using our categorized images
 const listings = [
   {
     id: 1,
-    title: 'Handcrafted Linen Dress',
-    designer: 'Jane Doe',
+    title: 'Eco-Conscious Evening Dress',
+    designer: 'Elena Sustainae',
     price: 299,
-    image: '/images/listings/dress1.jpg',
-    description: 'Custom-made linen dress with natural dyes',
-    materials: ['Organic Linen'],
+    image: '/images/listings/sustainable-dresses-1.jpg',
+    description: 'Elegant sustainable evening dress made with organic materials',
+    materials: ['Organic Silk', 'Peace Silk'],
     size: 'M',
   },
-  // Add more listings
+  {
+    id: 2,
+    title: 'Natural Cotton Blouse',
+    designer: 'Verde Fashion',
+    price: 129,
+    image: '/images/listings/eco-friendly-tops-1.jpg',
+    description: 'Breathable organic cotton blouse with natural dyes',
+    materials: ['Organic Cotton', 'Natural Dyes'],
+    size: 'S',
+  },
+  {
+    id: 3,
+    title: 'Sustainable Winter Coat',
+    designer: 'EcoWear',
+    price: 399,
+    image: '/images/listings/sustainable-outerwear-1.jpg',
+    description: 'Warm and stylish coat made from recycled materials',
+    materials: ['Recycled Wool', 'Organic Cotton Lining'],
+    size: 'L',
+  },
+  {
+    id: 4,
+    title: 'Handcrafted Accessories Set',
+    designer: 'Artisanal Collective',
+    price: 159,
+    image: '/images/listings/ethical-accessories-1.jpg',
+    description: 'Ethically made accessories using sustainable materials',
+    materials: ['Recycled Metals', 'Sustainable Leather'],
+    size: 'One Size',
+  },
+  {
+    id: 5,
+    title: 'Upcycled Denim Collection',
+    designer: 'ReNew Fashion',
+    price: 199,
+    image: '/images/listings/upcycled-fashion-1.jpg',
+    description: 'Unique pieces created from upcycled denim',
+    materials: ['Upcycled Denim', 'Organic Cotton'],
+    size: 'M',
+  },
+  {
+    id: 6,
+    title: 'Sustainable Fabric Bundle',
+    designer: 'EcoTextiles',
+    price: 89,
+    image: '/images/listings/sustainable-fabrics-1.jpg',
+    description: 'Selection of sustainable fabrics for DIY projects',
+    materials: ['Organic Cotton', 'Hemp', 'Bamboo'],
+    size: 'N/A',
+  }
 ];
 
 const bounties = [
   {
     id: 1,
-    title: 'Sustainable Summer Dress',
-    budget: '200-300',
-    description: 'Looking for a custom summer dress made from organic linen',
-    requirements: ['Linen', 'Natural dyes', 'Size S'],
+    title: 'Sustainable Wedding Dress',
+    budget: '500-800',
+    description: 'Looking for a sustainable wedding dress made from peace silk and organic materials',
+    requirements: ['Peace Silk', 'Natural Dyes', 'Size M', 'Ethical Production'],
     status: 'Open',
   },
-  // Add more bounties
+  {
+    id: 2,
+    title: 'Eco-Friendly Business Suit',
+    budget: '400-600',
+    description: 'Need a professional suit made from sustainable materials for corporate settings',
+    requirements: ['Recycled Wool', 'Size L', 'Professional Style', 'Zero Waste'],
+    status: 'Open',
+  },
+  {
+    id: 3,
+    title: 'Upcycled Denim Collection',
+    budget: '300-500',
+    description: 'Looking for creative designs using upcycled denim for a sustainable fashion show',
+    requirements: ['Upcycled Materials', 'Creative Design', 'Size Range S-L'],
+    status: 'Open',
+  },
+  {
+    id: 4,
+    title: 'Sustainable Activewear Set',
+    budget: '150-250',
+    description: 'Need eco-friendly workout clothes made from recycled materials',
+    requirements: ['Recycled Polyester', 'Moisture Wicking', 'Size S'],
+    status: 'Open',
+  }
 ];
 
 const Bazaar = () => {
