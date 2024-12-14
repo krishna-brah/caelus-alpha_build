@@ -50,6 +50,7 @@ model User {
   emailVerified DateTime?
   image         String?
   password      String?       @db.Text
+  walletAddress String?       @unique
   userType      UserType     @default(CONSUMER)
   bio           String?       @db.Text
   website       String?

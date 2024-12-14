@@ -77,7 +77,7 @@ export const Navbar = () => {
                 </>
               ) : (
                 <>
-                  <Link href="/signin">
+                  <Link href="/auth">
                     <button className="px-4 py-2 text-sm font-medium text-cosmic-100 hover:text-white transition-colors duration-200">
                       Sign In
                     </button>
@@ -188,7 +188,7 @@ export const Navbar = () => {
               ) : (
                 <>
                   <Link 
-                    href="/signin"
+                    href="/auth"
                     className="block w-full"
                     onClick={() => setMobileMenuOpen(false)}
                   >
