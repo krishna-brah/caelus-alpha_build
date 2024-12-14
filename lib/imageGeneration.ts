@@ -1,148 +1,50 @@
-interface GenerationResponseData {
-  revised_prompt: string;
-  url: string;
-}
+/**
+ * Simple fashion design image generation using OpenAI's DALL-E
+ * @module imageGeneration
+ */
 
-export async function generateImage(
-  prompt: string,
-  style: string,
-  apiKey: string
-): Promise<GenerationResponseData> {
-  const enhancedPrompt = `
-    Fashion design concept: ${prompt}
-    Style: ${style}
-    Perspective: Full outfit view
-    Include: Detailed fabric textures, style elements, and sustainable design features
-  `;
-
-  const response = await fetch('https://api.openai.com/v1/images/generations', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${apiKey}`,
-    },
-    body: JSON.stringify({
-      model: "dall-e-3",
-      prompt: enhancedPrompt,
-      n: 1,
-      size: "1024x1024",
-      quality: "standard",
-      response_format: "url",
-    }),
-  });
-
-  if (!response.ok) {
-    throw new Error('Failed to generate image');
-  }
-
-  const data = await response.json();
-  return {
-    revised_prompt: data.data[0].revised_prompt,
-    url: data.data[0].url,
-  };
-}
-
-export async function enhanceImagePrompt(
-  basePrompt: string,
+/**
+ * Generate a fashion design image using DALL-E
+ * @param prompt - The design description
+ * @param style - Design style (e.g., "minimalist", "bohemian", etc.)
+ * @param apiKey - OpenAI API key
+ * @returns Promise<string> - URL of the generated image
+ * @throws {Error} If API key or prompt is missing, or if generation fails
+ */
+export async function generateDesignImage(
+  prompt: string, 
   style: string,
   apiKey: string
 ): Promise<string> {
-  const prompt = `
-    Enhance this fashion design prompt for AI image generation:
-    Base concept: ${basePrompt}
-    Style direction: ${style}
+  if (!apiKey) throw new Error('API key is required');
+  if (!prompt) throw new Error('Prompt is required');
+  
+  try {
+    const response = await fetch('https://api.openai.com/v1/images/generations', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey.trim()}`
+      },
+      body: JSON.stringify({
+        model: "dall-e-3",
+        prompt: `Fashion design: ${prompt}\nStyle: ${style}\nPerspective: Full outfit view`,
+        n: 1,
+        size: "1024x1024",
+        quality: "standard",
+        response_format: "url"
+      })
+    });
 
-    Please provide a detailed, clear prompt that includes:
-    1. Specific design elements
-    2. Material and texture details
-    3. Style and aesthetic elements
-    4. Sustainable features
-    5. Technical fashion terminology
-    
-    Keep the prompt clear and focused on fashion design visualization.
-  `;
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error?.message || 'Failed to generate image');
+    }
 
-  const response = await fetch('https://api.openai.com/v1/chat/completions', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${apiKey}`,
-    },
-    body: JSON.stringify({
-      model: 'gpt-4',
-      messages: [
-        {
-          role: 'system',
-          content: 'You are a fashion design expert helping to create detailed prompts for AI image generation.',
-        },
-        {
-          role: 'user',
-          content: prompt,
-        },
-      ],
-      temperature: 0.7,
-      max_tokens: 300,
-    }),
-  });
-
-  if (!response.ok) {
-    throw new Error('Failed to enhance prompt');
+    const data = await response.json();
+    return data.data[0].url;
+  } catch (error) {
+    console.error('Image generation error:', error);
+    throw new Error(error instanceof Error ? error.message : 'Failed to generate design');
   }
-
-  const data = await response.json();
-  return data.choices[0].message.content;
-}
-
-export async function analyzeGeneratedDesign(
-  imageUrl: string,
-  originalPrompt: string,
-  apiKey: string
-): Promise<string> {
-  const prompt = `
-    Analyze this AI-generated fashion design:
-    Original Prompt: ${originalPrompt}
-    Image URL: ${imageUrl}
-
-    Please provide:
-    1. Design elements analysis
-    2. Sustainability assessment
-    3. Style compatibility
-    4. Potential improvements
-    5. Production considerations
-
-    Focus on practical fashion design insights.
-  `;
-
-  const response = await fetch('https://api.openai.com/v1/chat/completions', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${apiKey}`,
-    },
-    body: JSON.stringify({
-      model: 'gpt-4-vision-preview',
-      messages: [
-        {
-          role: 'system',
-          content: 'You are a fashion design expert analyzing AI-generated fashion designs.',
-        },
-        {
-          role: 'user',
-          content: [
-            { type: 'text', text: prompt },
-            { type: 'image_url', image_url: imageUrl },
-          ],
-        },
-      ],
-      temperature: 0.7,
-      max_tokens: 500,
-    }),
-  });
-
-  if (!response.ok) {
-    throw new Error('Failed to analyze design');
-  }
-
-  const data = await response.json();
-  return data.choices[0].message.content;
 }

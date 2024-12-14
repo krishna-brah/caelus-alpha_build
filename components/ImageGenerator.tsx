@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Button } from './ui/Button';
-import { Card, CardContent } from './ui/Card';
-import { generateImage, enhanceImagePrompt, analyzeGeneratedDesign } from '../lib/imageGeneration';
+import { generateDesignImage } from '../lib/imageGeneration';
+
+const OPENAI_API_KEY = process.env.NEXT_PUBLIC_OPENAI_API_KEY || '';
 
 const styleOptions = [
   'Minimalist',
@@ -20,9 +19,7 @@ const ImageGenerator: React.FC = () => {
   const [style, setStyle] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [generatedImage, setGeneratedImage] = useState('');
-  const [designAnalysis, setDesignAnalysis] = useState('');
-  const [enhancedPrompt, setEnhancedPrompt] = useState('');
+  const [imageUrl, setImageUrl] = useState('');
 
   const handleGenerate = async () => {
     if (!prompt || !style) {
@@ -30,36 +27,22 @@ const ImageGenerator: React.FC = () => {
       return;
     }
 
+    if (!OPENAI_API_KEY) {
+      setError('OpenAI API key is not configured');
+      return;
+    }
+
     setLoading(true);
     setError('');
 
     try {
-      // First, enhance the prompt
-      const enhanced = await enhanceImagePrompt(
-        prompt,
-        style,
-        process.env.NEXT_PUBLIC_OPENAI_API_KEY || ''
-      );
-      setEnhancedPrompt(enhanced);
-
-      // Generate the image
-      const { url } = await generateImage(
-        enhanced,
-        style,
-        process.env.NEXT_PUBLIC_OPENAI_API_KEY || ''
-      );
-      setGeneratedImage(url);
-
-      // Analyze the generated design
-      const analysis = await analyzeGeneratedDesign(
-        url,
-        enhanced,
-        process.env.NEXT_PUBLIC_OPENAI_API_KEY || ''
-      );
-      setDesignAnalysis(analysis);
-    } catch (err) {
-      setError('Failed to generate image. Please try again.');
+      console.log('Generating image...');
+      const url = await generateDesignImage(prompt, style, OPENAI_API_KEY);
+      console.log('Generated image URL:', url);
+      setImageUrl(url);
+    } catch (err: any) {
       console.error('Error:', err);
+      setError(err.message || 'Failed to generate image');
     } finally {
       setLoading(false);
     }
@@ -109,16 +92,16 @@ const ImageGenerator: React.FC = () => {
             <button
               onClick={handleGenerate}
               disabled={loading}
-              className="w-full bg-gradient-to-r from-cosmic-500 to-cosmic-600 hover:from-cosmic-600 hover:to-cosmic-700 text-white px-8 py-4 rounded-xl font-medium text-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-xl hover:shadow-cosmic-500/25"
+              className="w-full bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white px-8 py-4 rounded-xl font-medium text-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
             >
               {loading ? (
-                <div className="flex items-center justify-center">
-                  <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                <span className="flex items-center justify-center gap-2">
+                  <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                   </svg>
-                  Generating...
-                </div>
+                  Creating your design...
+                </span>
               ) : (
                 'Generate Design'
               )}
@@ -131,49 +114,20 @@ const ImageGenerator: React.FC = () => {
             )}
           </div>
 
-          <AnimatePresence>
-            {(enhancedPrompt || generatedImage) && (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                className="mt-12 space-y-8"
-              >
-                {enhancedPrompt && (
-                  <div className="p-6 bg-white/5 backdrop-blur-sm rounded-xl border border-white/10">
-                    <h3 className="text-lg font-medium text-white mb-3 font-space-grotesk">
-                      Enhanced Prompt:
-                    </h3>
-                    <p className="text-cosmic-100">
-                      {enhancedPrompt}
-                    </p>
-                  </div>
-                )}
-
-                {generatedImage && (
-                  <div className="overflow-hidden rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm">
-                    <div className="relative aspect-square">
-                      <img
-                        src={generatedImage}
-                        alt="Generated design"
-                        className="absolute inset-0 w-full h-full object-cover"
-                      />
-                    </div>
-                    {designAnalysis && (
-                      <div className="p-6 border-t border-white/10">
-                        <h3 className="text-xl font-medium text-white mb-4 font-space-grotesk">
-                          Design Analysis
-                        </h3>
-                        <p className="text-cosmic-100 whitespace-pre-line">
-                          {designAnalysis}
-                        </p>
-                      </div>
-                    )}
-                  </div>
-                )}
-              </motion.div>
-            )}
-          </AnimatePresence>
+          {/* Results Section */}
+          {imageUrl && (
+            <div className="mt-12">
+              <div className="overflow-hidden rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm">
+                <div className="relative aspect-square">
+                  <img
+                    src={imageUrl}
+                    alt="Generated design"
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

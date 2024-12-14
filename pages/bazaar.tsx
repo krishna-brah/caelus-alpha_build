@@ -5,6 +5,15 @@ import Link from 'next/link';
 import { cn } from '../lib/utils/cn';
 import { Dialog } from '@headlessui/react';
 
+const fadeIn = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
+};
+
+const staggerContainer = {
+  visible: { transition: { staggerChildren: 0.1 } }
+};
+
 // Sample listings using our categorized images
 const listings = [
   {
@@ -127,318 +136,364 @@ const Bazaar = () => {
 
   return (
     <Layout>
-      <div className="py-16">
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-cosmic-900 dark:text-cosmic-50 mb-4">
-            Caelus Bazaar
-          </h1>
-          <div className="flex justify-center items-center gap-4">
-            <Link href="/gallery">
-              <button className="px-6 py-2 text-sm font-medium bg-cosmic-900/10 hover:bg-cosmic-900/20 text-cosmic-900 dark:text-cosmic-50 rounded-lg transition-all duration-200 flex items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clipRule="evenodd" />
-                </svg>
-                Browse Fabric Gallery
-              </button>
-            </Link>
-          </div>
+      <div className="min-h-screen bg-gradient-to-b from-cosmic-900 to-cosmic-800">
+        {/* Background Logo */}
+        <div className="fixed inset-0 opacity-[0.02] pointer-events-none">
+          <img
+            src="/images/logo.webp"
+            alt=""
+            className="w-full h-full object-cover scale-150 rotate-12"
+          />
         </div>
 
-        <div className="border-b border-cosmic-200 dark:border-cosmic-700 mb-8">
-          <div className="flex justify-center">
-            <button
-              className={cn(
-                "px-6 py-2 font-medium border-b-2 transition-colors duration-200",
-                tabValue === 0
-                  ? "border-cosmic-500 text-cosmic-900 dark:text-cosmic-50"
-                  : "border-transparent text-cosmic-600 dark:text-cosmic-400 hover:text-cosmic-900 dark:hover:text-cosmic-50"
-              )}
-              onClick={(e) => handleTabChange(e, 0)}
-            >
-              Marketplace
-            </button>
-            <button
-              className={cn(
-                "px-6 py-2 font-medium border-b-2 transition-colors duration-200",
-                tabValue === 1
-                  ? "border-cosmic-500 text-cosmic-900 dark:text-cosmic-50"
-                  : "border-transparent text-cosmic-600 dark:text-cosmic-400 hover:text-cosmic-900 dark:hover:text-cosmic-50"
-              )}
-              onClick={(e) => handleTabChange(e, 1)}
-            >
-              Bounties
-            </button>
-          </div>
-        </div>
-
-        {/* Marketplace Panel */}
-        <div className={tabValue === 0 ? "block" : "hidden"}>
-          <div className="mb-6 flex justify-end">
-            <button
-              onClick={() => setOpenNewListing(true)}
-              className="px-4 py-2 bg-cosmic-500 text-white rounded-lg hover:bg-cosmic-600 transition-colors duration-200"
-            >
-              Create New Listing
-            </button>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {listings.map((listing, index) => (
-              <motion.div
-                key={listing.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="bg-cream-50 dark:bg-cosmic-800 rounded-xl overflow-hidden shadow-lg"
-              >
-                <div className="aspect-w-16 aspect-h-9">
-                  <img
-                    src={listing.image}
-                    alt={listing.title}
-                    className="object-cover w-full h-full"
-                  />
-                </div>
-                <div className="p-4">
-                  <h3 className="text-xl font-semibold text-cosmic-900 dark:text-cosmic-50 mb-1">
-                    {listing.title}
-                  </h3>
-                  <p className="text-sm text-cosmic-600 dark:text-cosmic-400">
-                    By {listing.designer}
-                  </p>
-                  <p className="text-2xl font-bold text-cosmic-500 my-2">
-                    ${listing.price}
-                  </p>
-                  <p className="text-cosmic-700 dark:text-cosmic-300 mb-4">
-                    {listing.description}
-                  </p>
-                  <div className="mb-4 flex flex-wrap gap-2">
-                    {listing.materials.map((material) => (
-                      <span
-                        key={material}
-                        className="px-2 py-1 text-sm bg-cosmic-100 dark:bg-cosmic-700 text-cosmic-800 dark:text-cosmic-200 rounded-full"
-                      >
-                        {material}
-                      </span>
-                    ))}
-                    <span className="px-2 py-1 text-sm bg-cosmic-100 dark:bg-cosmic-700 text-cosmic-800 dark:text-cosmic-200 rounded-full">
-                      Size {listing.size}
-                    </span>
-                  </div>
-                  <button className="w-full px-4 py-2 bg-cosmic-500 text-white rounded-lg hover:bg-cosmic-600 transition-colors duration-200">
-                    Purchase
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-16">
+          <motion.div 
+            initial="hidden"
+            animate="visible"
+            variants={staggerContainer}
+            className="space-y-8"
+          >
+            {/* Header */}
+            <motion.div variants={fadeIn} className="text-center mb-12">
+              <h1 className="text-4xl font-bold text-white mb-4 font-space-grotesk">
+                Caelus Bazaar
+              </h1>
+              <p className="text-lg text-cosmic-100">
+                Discover and trade sustainable fashion designs, materials, and custom requests.
+              </p>
+              <div className="mt-6 flex justify-center items-center gap-4">
+                <Link href="/gallery">
+                  <button className="px-6 py-2 text-sm font-medium bg-white/10 hover:bg-white/20 text-white rounded-lg transition-all duration-200 backdrop-blur-sm flex items-center gap-2 border border-white/10">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clipRule="evenodd" />
+                    </svg>
+                    Browse Fabric Gallery
                   </button>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
+                </Link>
+              </div>
+            </motion.div>
 
-        {/* Bounties Panel */}
-        <div className={tabValue === 1 ? "block" : "hidden"}>
-          <div className="mb-6 flex justify-end">
-            <button
-              onClick={() => setOpenNewBounty(true)}
-              className="px-4 py-2 bg-cosmic-500 text-white rounded-lg hover:bg-cosmic-600 transition-colors duration-200"
-            >
-              Create New Bounty
-            </button>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            {bounties.map((bounty, index) => (
-              <motion.div
-                key={bounty.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="bg-cream-50 dark:bg-cosmic-800 rounded-xl p-6 shadow-lg"
-              >
-                <h3 className="text-xl font-semibold text-cosmic-900 dark:text-cosmic-50 mb-2">
-                  {bounty.title}
-                </h3>
-                <p className="text-lg font-medium text-cosmic-500">
-                  Budget: ${bounty.budget}
-                </p>
-                <p className="text-cosmic-700 dark:text-cosmic-300 my-4">
-                  {bounty.description}
-                </p>
-                <div className="mb-4 flex flex-wrap gap-2">
-                  {bounty.requirements.map((req) => (
-                    <span
-                      key={req}
-                      className="px-2 py-1 text-sm bg-cosmic-100 dark:bg-cosmic-700 text-cosmic-800 dark:text-cosmic-200 rounded-full"
-                    >
-                      {req}
-                    </span>
-                  ))}
-                </div>
+            {/* Tabs */}
+            <motion.div variants={fadeIn} className="bg-white/5 backdrop-blur-lg rounded-2xl border border-white/10 p-2">
+              <div className="flex justify-center gap-2">
                 <button
                   className={cn(
-                    "w-full px-4 py-2 rounded-lg transition-colors duration-200",
-                    bounty.status === "Open"
-                      ? "bg-cosmic-500 text-white hover:bg-cosmic-600"
-                      : "bg-cosmic-200 text-cosmic-700 cursor-not-allowed"
+                    "px-6 py-2 font-medium rounded-xl transition-all duration-200",
+                    tabValue === 0
+                      ? "bg-white/10 text-white"
+                      : "text-cosmic-100 hover:bg-white/5 hover:text-white"
                   )}
-                  disabled={bounty.status !== "Open"}
+                  onClick={(e) => handleTabChange(e, 0)}
                 >
-                  Accept Bounty
+                  Marketplace
                 </button>
-              </motion.div>
-            ))}
-          </div>
+                <button
+                  className={cn(
+                    "px-6 py-2 font-medium rounded-xl transition-all duration-200",
+                    tabValue === 1
+                      ? "bg-white/10 text-white"
+                      : "text-cosmic-100 hover:bg-white/5 hover:text-white"
+                  )}
+                  onClick={(e) => handleTabChange(e, 1)}
+                >
+                  Bounties
+                </button>
+              </div>
+            </motion.div>
+
+            {/* Marketplace Panel */}
+            <motion.div variants={fadeIn} className={tabValue === 0 ? "block" : "hidden"}>
+              <div className="bg-white/5 backdrop-blur-lg rounded-2xl p-8 border border-white/10">
+                <div className="flex justify-between items-center mb-6">
+                  <h2 className="text-2xl font-bold text-white font-space-grotesk">
+                    Available Items
+                  </h2>
+                  <button
+                    onClick={() => setOpenNewListing(true)}
+                    className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-xl transition-all duration-200 backdrop-blur-sm border border-white/10"
+                  >
+                    Create New Listing
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {listings.map((listing, index) => (
+                    <motion.div
+                      key={listing.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: index * 0.1 }}
+                      className="bg-white/5 rounded-xl overflow-hidden backdrop-blur-sm border border-white/10 hover:bg-white/10 transition-all duration-300"
+                    >
+                      <div className="aspect-square">
+                        <img
+                          src={listing.image}
+                          alt={listing.title}
+                          className="object-cover w-full h-full"
+                        />
+                      </div>
+                      <div className="p-4">
+                        <h3 className="text-xl font-bold text-white mb-1 font-space-grotesk">
+                          {listing.title}
+                        </h3>
+                        <p className="text-sm text-cosmic-100">
+                          By {listing.designer}
+                        </p>
+                        <p className="text-2xl font-bold text-cosmic-100 my-2">
+                          ${listing.price}
+                        </p>
+                        <p className="text-cosmic-100 mb-4">
+                          {listing.description}
+                        </p>
+                        <div className="mb-4 flex flex-wrap gap-2">
+                          {listing.materials.map((material) => (
+                            <span
+                              key={material}
+                              className="px-2 py-1 text-sm bg-white/5 text-cosmic-100 rounded-full border border-white/10"
+                            >
+                              {material}
+                            </span>
+                          ))}
+                          <span className="px-2 py-1 text-sm bg-white/5 text-cosmic-100 rounded-full border border-white/10">
+                            Size {listing.size}
+                          </span>
+                        </div>
+                        <button className="w-full px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-xl transition-all duration-200 backdrop-blur-sm border border-white/10">
+                          Purchase
+                        </button>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Bounties Panel */}
+            <motion.div variants={fadeIn} className={tabValue === 1 ? "block" : "hidden"}>
+              <div className="bg-white/5 backdrop-blur-lg rounded-2xl p-8 border border-white/10">
+                <div className="flex justify-between items-center mb-6">
+                  <h2 className="text-2xl font-bold text-white font-space-grotesk">
+                    Active Bounties
+                  </h2>
+                  <button
+                    onClick={() => setOpenNewBounty(true)}
+                    className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-xl transition-all duration-200 backdrop-blur-sm border border-white/10"
+                  >
+                    Create New Bounty
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  {bounties.map((bounty, index) => (
+                    <motion.div
+                      key={bounty.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: index * 0.1 }}
+                      className="bg-white/5 rounded-xl p-6 backdrop-blur-sm border border-white/10 hover:bg-white/10 transition-all duration-300"
+                    >
+                      <h3 className="text-xl font-bold text-white mb-2 font-space-grotesk">
+                        {bounty.title}
+                      </h3>
+                      <p className="text-lg font-medium text-cosmic-100">
+                        Budget: ${bounty.budget}
+                      </p>
+                      <p className="text-cosmic-100 my-4">
+                        {bounty.description}
+                      </p>
+                      <div className="mb-4 flex flex-wrap gap-2">
+                        {bounty.requirements.map((req) => (
+                          <span
+                            key={req}
+                            className="px-2 py-1 text-sm bg-white/5 text-cosmic-100 rounded-full border border-white/10"
+                          >
+                            {req}
+                          </span>
+                        ))}
+                      </div>
+                      <button
+                        className={cn(
+                          "w-full px-4 py-2 rounded-xl transition-all duration-200 backdrop-blur-sm border border-white/10",
+                          bounty.status === "Open"
+                            ? "bg-white/10 hover:bg-white/20 text-white"
+                            : "bg-white/5 text-cosmic-100 cursor-not-allowed"
+                        )}
+                        disabled={bounty.status !== "Open"}
+                      >
+                        Accept Bounty
+                      </button>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+
+            {/* New Bounty Dialog */}
+            <Dialog
+              open={openNewBounty}
+              onClose={() => setOpenNewBounty(false)}
+              className="relative z-50"
+            >
+              <div className="fixed inset-0 bg-cosmic-900/80 backdrop-blur-sm" aria-hidden="true" />
+              <div className="fixed inset-0 flex items-center justify-center p-4">
+                <Dialog.Panel className="mx-auto max-w-sm rounded-2xl bg-cosmic-800/90 backdrop-blur-lg border border-white/10 p-6 shadow-2xl">
+                  <Dialog.Title className="text-xl font-bold text-white mb-6 font-space-grotesk">
+                    Create New Bounty
+                  </Dialog.Title>
+                  <form onSubmit={handleCreateBounty} className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-cosmic-100 mb-2">
+                        Title
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        className="w-full px-4 py-2 rounded-xl border border-white/10 bg-white/5 text-white placeholder-cosmic-300 focus:outline-none focus:ring-2 focus:ring-white/20"
+                        placeholder="Enter bounty title"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-cosmic-100 mb-2">
+                        Budget Range
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        className="w-full px-4 py-2 rounded-xl border border-white/10 bg-white/5 text-white placeholder-cosmic-300 focus:outline-none focus:ring-2 focus:ring-white/20"
+                        placeholder="e.g., $500-800"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-cosmic-100 mb-2">
+                        Description
+                      </label>
+                      <textarea
+                        required
+                        rows={4}
+                        className="w-full px-4 py-2 rounded-xl border border-white/10 bg-white/5 text-white placeholder-cosmic-300 focus:outline-none focus:ring-2 focus:ring-white/20 resize-none"
+                        placeholder="Describe what you're looking for"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-cosmic-100 mb-2">
+                        Requirements
+                      </label>
+                      <textarea
+                        required
+                        rows={2}
+                        className="w-full px-4 py-2 rounded-xl border border-white/10 bg-white/5 text-white placeholder-cosmic-300 focus:outline-none focus:ring-2 focus:ring-white/20 resize-none"
+                        placeholder="List your requirements"
+                      />
+                    </div>
+                    <div className="flex justify-end gap-3 mt-6">
+                      <button
+                        type="button"
+                        onClick={() => setOpenNewBounty(false)}
+                        className="px-4 py-2 text-cosmic-100 hover:text-white transition-colors"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="submit"
+                        className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-xl transition-all duration-200 backdrop-blur-sm border border-white/10"
+                      >
+                        Create Bounty
+                      </button>
+                    </div>
+                  </form>
+                </Dialog.Panel>
+              </div>
+            </Dialog>
+
+            {/* New Listing Dialog */}
+            <Dialog
+              open={openNewListing}
+              onClose={() => setOpenNewListing(false)}
+              className="relative z-50"
+            >
+              <div className="fixed inset-0 bg-cosmic-900/80 backdrop-blur-sm" aria-hidden="true" />
+              <div className="fixed inset-0 flex items-center justify-center p-4">
+                <Dialog.Panel className="mx-auto max-w-sm rounded-2xl bg-cosmic-800/90 backdrop-blur-lg border border-white/10 p-6 shadow-2xl">
+                  <Dialog.Title className="text-xl font-bold text-white mb-6 font-space-grotesk">
+                    Create New Listing
+                  </Dialog.Title>
+                  <form onSubmit={handleCreateListing} className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-cosmic-100 mb-2">
+                        Title
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        className="w-full px-4 py-2 rounded-xl border border-white/10 bg-white/5 text-white placeholder-cosmic-300 focus:outline-none focus:ring-2 focus:ring-white/20"
+                        placeholder="Enter listing title"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-cosmic-100 mb-2">
+                        Price
+                      </label>
+                      <input
+                        type="number"
+                        required
+                        className="w-full px-4 py-2 rounded-xl border border-white/10 bg-white/5 text-white placeholder-cosmic-300 focus:outline-none focus:ring-2 focus:ring-white/20"
+                        placeholder="Enter price"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-cosmic-100 mb-2">
+                        Description
+                      </label>
+                      <textarea
+                        required
+                        rows={4}
+                        className="w-full px-4 py-2 rounded-xl border border-white/10 bg-white/5 text-white placeholder-cosmic-300 focus:outline-none focus:ring-2 focus:ring-white/20 resize-none"
+                        placeholder="Describe your item"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-cosmic-100 mb-2">
+                        Materials
+                      </label>
+                      <textarea
+                        required
+                        rows={2}
+                        className="w-full px-4 py-2 rounded-xl border border-white/10 bg-white/5 text-white placeholder-cosmic-300 focus:outline-none focus:ring-2 focus:ring-white/20 resize-none"
+                        placeholder="List materials used"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-cosmic-100 mb-2">
+                        Size
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        className="w-full px-4 py-2 rounded-xl border border-white/10 bg-white/5 text-white placeholder-cosmic-300 focus:outline-none focus:ring-2 focus:ring-white/20"
+                        placeholder="e.g., S, M, L, etc."
+                      />
+                    </div>
+                    <div className="flex justify-end gap-3 mt-6">
+                      <button
+                        type="button"
+                        onClick={() => setOpenNewListing(false)}
+                        className="px-4 py-2 text-cosmic-100 hover:text-white transition-colors"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="submit"
+                        className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-xl transition-all duration-200 backdrop-blur-sm border border-white/10"
+                      >
+                        Create Listing
+                      </button>
+                    </div>
+                  </form>
+                </Dialog.Panel>
+              </div>
+            </Dialog>
+          </motion.div>
         </div>
-
-        {/* New Bounty Dialog */}
-        <Dialog
-          open={openNewBounty}
-          onClose={() => setOpenNewBounty(false)}
-          className="relative z-50"
-        >
-          <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
-          <div className="fixed inset-0 flex items-center justify-center p-4">
-            <Dialog.Panel className="mx-auto max-w-sm rounded-2xl bg-cream-50 dark:bg-cosmic-800 p-6">
-              <Dialog.Title className="text-xl font-semibold text-cosmic-900 dark:text-cosmic-50 mb-4">
-                Create New Bounty
-              </Dialog.Title>
-              <form onSubmit={handleCreateBounty} className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-cosmic-700 dark:text-cosmic-300 mb-1">
-                    Title
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    className="w-full px-3 py-2 rounded-lg border border-cosmic-200 dark:border-cosmic-700 bg-white dark:bg-cosmic-900 text-cosmic-900 dark:text-cosmic-50"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-cosmic-700 dark:text-cosmic-300 mb-1">
-                    Budget Range
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    className="w-full px-3 py-2 rounded-lg border border-cosmic-200 dark:border-cosmic-700 bg-white dark:bg-cosmic-900 text-cosmic-900 dark:text-cosmic-50"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-cosmic-700 dark:text-cosmic-300 mb-1">
-                    Description
-                  </label>
-                  <textarea
-                    required
-                    rows={4}
-                    className="w-full px-3 py-2 rounded-lg border border-cosmic-200 dark:border-cosmic-700 bg-white dark:bg-cosmic-900 text-cosmic-900 dark:text-cosmic-50"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-cosmic-700 dark:text-cosmic-300 mb-1">
-                    Requirements
-                  </label>
-                  <textarea
-                    required
-                    rows={2}
-                    className="w-full px-3 py-2 rounded-lg border border-cosmic-200 dark:border-cosmic-700 bg-white dark:bg-cosmic-900 text-cosmic-900 dark:text-cosmic-50"
-                  />
-                </div>
-                <div className="flex justify-end gap-3 mt-6">
-                  <button
-                    type="button"
-                    onClick={() => setOpenNewBounty(false)}
-                    className="px-4 py-2 text-cosmic-600 dark:text-cosmic-400 hover:text-cosmic-900 dark:hover:text-cosmic-50"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    className="px-4 py-2 bg-cosmic-500 text-white rounded-lg hover:bg-cosmic-600 transition-colors duration-200"
-                  >
-                    Create Bounty
-                  </button>
-                </div>
-              </form>
-            </Dialog.Panel>
-          </div>
-        </Dialog>
-
-        {/* New Listing Dialog */}
-        <Dialog
-          open={openNewListing}
-          onClose={() => setOpenNewListing(false)}
-          className="relative z-50"
-        >
-          <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
-          <div className="fixed inset-0 flex items-center justify-center p-4">
-            <Dialog.Panel className="mx-auto max-w-sm rounded-2xl bg-cream-50 dark:bg-cosmic-800 p-6">
-              <Dialog.Title className="text-xl font-semibold text-cosmic-900 dark:text-cosmic-50 mb-4">
-                Create New Listing
-              </Dialog.Title>
-              <form onSubmit={handleCreateListing} className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-cosmic-700 dark:text-cosmic-300 mb-1">
-                    Title
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    className="w-full px-3 py-2 rounded-lg border border-cosmic-200 dark:border-cosmic-700 bg-white dark:bg-cosmic-900 text-cosmic-900 dark:text-cosmic-50"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-cosmic-700 dark:text-cosmic-300 mb-1">
-                    Price
-                  </label>
-                  <input
-                    type="number"
-                    required
-                    className="w-full px-3 py-2 rounded-lg border border-cosmic-200 dark:border-cosmic-700 bg-white dark:bg-cosmic-900 text-cosmic-900 dark:text-cosmic-50"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-cosmic-700 dark:text-cosmic-300 mb-1">
-                    Description
-                  </label>
-                  <textarea
-                    required
-                    rows={4}
-                    className="w-full px-3 py-2 rounded-lg border border-cosmic-200 dark:border-cosmic-700 bg-white dark:bg-cosmic-900 text-cosmic-900 dark:text-cosmic-50"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-cosmic-700 dark:text-cosmic-300 mb-1">
-                    Size
-                  </label>
-                  <select
-                    required
-                    className="w-full px-3 py-2 rounded-lg border border-cosmic-200 dark:border-cosmic-700 bg-white dark:bg-cosmic-900 text-cosmic-900 dark:text-cosmic-50"
-                  >
-                    {['XS', 'S', 'M', 'L', 'XL'].map((size) => (
-                      <option key={size} value={size}>
-                        {size}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                {/* Add image upload functionality */}
-                <div className="flex justify-end gap-3 mt-6">
-                  <button
-                    type="button"
-                    onClick={() => setOpenNewListing(false)}
-                    className="px-4 py-2 text-cosmic-600 dark:text-cosmic-400 hover:text-cosmic-900 dark:hover:text-cosmic-50"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    className="px-4 py-2 bg-cosmic-500 text-white rounded-lg hover:bg-cosmic-600 transition-colors duration-200"
-                  >
-                    Create Listing
-                  </button>
-                </div>
-              </form>
-            </Dialog.Panel>
-          </div>
-        </Dialog>
       </div>
     </Layout>
   );
