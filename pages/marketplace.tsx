@@ -1,8 +1,13 @@
-import React from 'react';
+import { useEffect, useState } from 'react';
+import { useSession } from 'next-auth/react';
+import Link from 'next/link';
 import { Layout } from '../components/layout/Layout';
-import { DesignerListing } from '../components/DesignerListing';
+import { searchFashionImages, type PexelsImage } from '../utils/pexels';
+import Reviews from '../components/Reviews';
+import ReviewModal from '../components/ReviewModal';
+import { ReviewsProvider } from '../contexts/ReviewsContext';
 import { motion } from 'framer-motion';
-import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+import FabricFilters from '../components/FabricFilters';
 
 const fadeIn = {
   hidden: { opacity: 0, y: 20 },
@@ -13,70 +18,155 @@ const staggerContainer = {
   visible: { transition: { staggerChildren: 0.1 } }
 };
 
-// Mock data - In a real app, this would come from an API
-const mockListings = [
-  {
-    id: '1',
-    title: 'Custom Denim Jacket',
-    imageUrl: '/mock-images/denim-jacket.jpg',
-    designer: {
-      name: 'Alex Design',
-      tags: [
-        {
-          id: '1',
-          category: 'FabricSpecialty',
-          value: 'Denim',
-          tier: 'Diamond',
-          projectsCompleted: 28,
-          nextTierThreshold: 50,
-        },
-        {
-          id: '2',
-          category: 'Style',
-          value: 'Casual',
-          tier: 'Gold',
-          projectsCompleted: 12,
-          nextTierThreshold: 25,
-        },
-      ],
-    },
-    score: {
-      designQuality: 9.4,
-      materialUse: 9.0,
-      sustainability: 8.8,
-      totalReviews: 15,
-    },
-    materials: [
-      {
-        name: 'Organic Cotton',
-        quality: 9.2,
-        sustainability: 8.8,
-      },
-    ],
-    price: 299.99,
-  },
-  // Add more mock listings as needed
-];
+interface Product {
+  id: number;
+  name: string;
+  price: number;
+  image: PexelsImage;
+  category: string;
+  subCategory: string;
+  fabricType: string;
+}
+
+const generatePrice = () => {
+  return Math.floor(Math.random() * (200 - 20 + 1) + 20);
+};
+
+const fabricCategories = {
+  Cotton: [
+    'Natural White Cotton',
+    'Black Cotton',
+    'Navy Cotton',
+    'Grey Cotton',
+    'Ecru Cotton',
+    'Organic Cotton',
+  ],
+  Linen: [
+    'Natural Linen',
+    'White Linen',
+    'Charcoal Linen',
+    'Oatmeal Linen',
+    'Sand Linen',
+  ],
+  Silk: [
+    'Natural White Silk',
+    'Black Silk',
+    'Ivory Silk',
+    'Pearl Silk',
+    'Champagne Silk',
+  ],
+  Wool: [
+    'Natural Wool',
+    'Charcoal Wool',
+    'Navy Wool',
+    'Grey Wool',
+    'Camel Wool',
+  ],
+  Denim: [
+    'Indigo Denim',
+    'Light Wash Denim',
+    'Dark Wash Denim',
+    'Black Denim',
+    'Raw Denim',
+  ],
+  Velvet: [
+    'Black Velvet',
+    'Royal Blue Velvet',
+    'Emerald Velvet',
+    'Burgundy Velvet',
+    'Navy Velvet',
+  ],
+  'Recycled Polyester': [
+    'Black Recycled Poly',
+    'Navy Recycled Poly',
+    'Grey Recycled Poly',
+    'White Recycled Poly',
+    'Charcoal Recycled Poly',
+  ],
+  'Organic Hemp': [
+    'Natural Hemp',
+    'White Hemp',
+    'Grey Hemp',
+    'Brown Hemp',
+    'Black Hemp',
+  ],
+  'Bamboo': [
+    'Natural Bamboo',
+    'White Bamboo',
+    'Ivory Bamboo',
+    'Grey Bamboo',
+    'Black Bamboo',
+  ],
+};
 
 export default function Marketplace() {
-  const [filters, setFilters] = React.useState({
+  const { data: session } = useSession();
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedProduct, setSelectedProduct] = useState<number | null>(null);
+  const [showReviewModal, setShowReviewModal] = useState(false);
+  const [filters, setFilters] = useState({
     search: '',
-    fabricSpecialty: '',
-    clothingType: '',
-    style: '',
-    minTier: '',
+    fabricCategory: '',
+    fabricVariant: '',
+    pattern: '',
   });
 
-  const handleFilterChange = (field: string, value: string) => {
-    setFilters(prev => ({
-      ...prev,
-      [field]: value,
-    }));
-  };
+  const [availableVariants, setAvailableVariants] = useState<string[]>([]);
 
-  const handleReview = (listingId: string) => {
-    console.log('Review listing:', listingId);
-    // In a real app, this would open a review modal
+  useEffect(() => {
+    const fetchProducts = async () => {
+      setLoading(true);
+      try {
+        // Get images for each fabric category
+        const allProducts = await Promise.all(
+          Object.keys(fabricCategories).map(async (category) => {
+            const images = await searchFashionImages(`${category.toLowerCase()} fabric texture close up`, 3);
+            const variants = fabricCategories[category as keyof typeof fabricCategories];
+            
+            // Create products for each image in this category
+            return images.map((image: PexelsImage) => {
+              const variant = variants[Math.floor(Math.random() * variants.length)];
+              return {
+                id: image.id,
+                name: variant,
+                price: generatePrice(),
+                image,
+                category: category,
+                subCategory: variant,
+                fabricType: category
+              };
+            });
+          })
+        );
+
+        // Flatten the array of arrays into a single array of products
+        const flattenedProducts = allProducts.flat();
+        setProducts(flattenedProducts);
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  const handleFilterChange = (field: string, value: string) => {
+    if (field === 'fabricCategory') {
+      setAvailableVariants(value ? fabricCategories[value as keyof typeof fabricCategories] : []);
+      setFilters(prev => ({
+        ...prev,
+        [field]: value,
+        fabricVariant: '', // Reset variant when category changes
+      }));
+    } else {
+      setFilters(prev => ({
+        ...prev,
+        [field]: value,
+      }));
+    }
   };
 
   return (
@@ -91,7 +181,7 @@ export default function Marketplace() {
           />
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-16 relative">
           <motion.div
             initial="hidden"
             animate="visible"
@@ -99,116 +189,156 @@ export default function Marketplace() {
             className="space-y-8"
           >
             {/* Header */}
-            <motion.div variants={fadeIn} className="text-center mb-12">
-              <h1 className="text-4xl font-bold text-white mb-4 font-space-grotesk">
-                Marketplace
-              </h1>
-              <p className="text-lg text-cosmic-100">
-                Discover unique designs from talented creators
-              </p>
+            <motion.div variants={fadeIn} className="space-y-8">
+              <div className="text-center relative z-30">
+                <h1 className="text-4xl font-bold text-white mb-4 font-space-grotesk">
+                  Fabric Marketplace
+                </h1>
+                <p className="text-lg text-cosmic-100">
+                  Discover sustainable and high-quality fabrics for your designs
+                </p>
+              </div>
+
+              {/* Filters */}
+              <div className="bg-white/5 backdrop-blur-lg rounded-2xl p-8 border border-white/10 shadow-xl relative z-40">
+                <FabricFilters
+                  filters={filters}
+                  onFilterChange={handleFilterChange}
+                  fabricCategories={fabricCategories}
+                  availableVariants={availableVariants}
+                />
+              </div>
             </motion.div>
 
-            {/* Filters */}
+            {/* Products Grid */}
             <motion.div variants={fadeIn}>
-              <div className="bg-white/5 backdrop-blur-lg rounded-2xl p-8 border border-white/10">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                  {/* Search */}
-                  <div className="space-y-2">
-                    <label className="block text-sm font-medium text-cosmic-100">
-                      Search
-                    </label>
-                    <div className="relative">
-                      <input
-                        type="text"
-                        placeholder="Search listings..."
-                        value={filters.search}
-                        onChange={(e) => handleFilterChange('search', e.target.value)}
-                        className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2.5 text-white placeholder-cosmic-300 focus:outline-none focus:ring-2 focus:ring-cosmic-500/50"
-                      />
-                      <MagnifyingGlassIcon className="absolute right-3 top-3 h-5 w-5 text-cosmic-300" />
-                    </div>
-                  </div>
-
-                  {/* Fabric Specialty */}
-                  <div className="space-y-2">
-                    <label className="block text-sm font-medium text-cosmic-100">
-                      Fabric Specialty
-                    </label>
-                    <select
-                      value={filters.fabricSpecialty}
-                      onChange={(e) => handleFilterChange('fabricSpecialty', e.target.value)}
-                      className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-cosmic-500/50"
-                    >
-                      <option value="">All fabrics</option>
-                      <option value="Linen">Linen</option>
-                      <option value="Cotton">Cotton</option>
-                      <option value="Silk">Silk</option>
-                      <option value="Wool">Wool</option>
-                      <option value="Denim">Denim</option>
-                      <option value="Cashmere">Cashmere</option>
-                      <option value="Tweed/Hemp">Tweed/Hemp</option>
-                      <option value="Recycled">Recycled Materials</option>
-                    </select>
-                  </div>
-
-                  {/* Clothing Type */}
-                  <div className="space-y-2">
-                    <label className="block text-sm font-medium text-cosmic-100">
-                      Clothing Type
-                    </label>
-                    <select
-                      value={filters.clothingType}
-                      onChange={(e) => handleFilterChange('clothingType', e.target.value)}
-                      className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-cosmic-500/50"
-                    >
-                      <option value="">All types</option>
-                      <option value="Shirts">Shirts</option>
-                      <option value="Pants">Pants</option>
-                      <option value="Dresses">Dresses</option>
-                      <option value="Jackets">Jackets</option>
-                      <option value="Wedding">Wedding Wear</option>
-                      <option value="Professional">Professional Wear</option>
-                      <option value="Blouses">Blouses</option>
-                      <option value="Jewelry">Jewelry</option>
-                    </select>
-                  </div>
-
-                  {/* Minimum Tier */}
-                  <div className="space-y-2">
-                    <label className="block text-sm font-medium text-cosmic-100">
-                      Minimum Tier
-                    </label>
-                    <select
-                      value={filters.minTier}
-                      onChange={(e) => handleFilterChange('minTier', e.target.value)}
-                      className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-cosmic-500/50"
-                    >
-                      <option value="">Any tier</option>
-                      <option value="Gold">Gold</option>
-                      <option value="Diamond">Diamond</option>
-                      <option value="Cosmic">Cosmic</option>
-                    </select>
-                  </div>
+              {loading ? (
+                <div className="flex justify-center items-center min-h-[400px]">
+                  <div className="text-cosmic-100">Loading products...</div>
                 </div>
-              </div>
-            </motion.div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                  {products.filter(product => {
+                    const searchTerms = filters.search.toLowerCase().split(' ').filter(term => term.length > 0);
+                    const searchMatch = !filters.search || searchTerms.every(term => {
+                      const productText = `${product.name} ${product.category} ${product.subCategory} ${product.fabricType}`.toLowerCase();
+                      return productText.includes(term);
+                    });
+                    
+                    const categoryMatch = !filters.fabricCategory || 
+                      product.category === filters.fabricCategory;
+                    
+                    const variantMatch = !filters.fabricVariant || 
+                      product.subCategory === filters.fabricVariant;
+                    
+                    const patternMatch = !filters.pattern || 
+                      product.subCategory.toLowerCase().includes(filters.pattern.toLowerCase());
+                    
+                    return searchMatch && categoryMatch && variantMatch && patternMatch;
+                  }).map((product) => (
+                    <div
+                      key={product.id}
+                      className="bg-white/5 rounded-2xl overflow-hidden border border-white/10 hover:border-cosmic-500/50 hover:shadow-lg hover:shadow-cosmic-500/10 transition-all duration-300"
+                    >
+                      {/* Product Image */}
+                      <div className="aspect-square relative overflow-hidden group rounded-2xl">
+                        <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-white/0" />
+                        <img
+                          src={product.image.src.large}
+                          alt={product.name}
+                          className="absolute inset-0 w-full h-full object-cover transform group-hover:scale-110 transition-all duration-700 group-hover:brightness-110"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-cosmic-900/80 via-cosmic-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300" />
+                        <div className="absolute bottom-0 left-0 right-0 p-4 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                          <div className="text-sm font-medium">Click to view details</div>
+                        </div>
+                      </div>
 
-            {/* Listings Grid */}
-            <motion.div variants={fadeIn}>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {mockListings.map(listing => (
-                  <DesignerListing
-                    key={listing.id}
-                    {...listing}
-                    canReview={true}
-                    onReview={handleReview}
-                  />
-                ))}
-              </div>
+                      {/* Product Info */}
+                      <div className="absolute inset-0 flex flex-col justify-end p-6 bg-gradient-to-t from-cosmic-900/80 via-cosmic-900/50 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300">
+                        <div className="space-y-2">
+                          <div className="flex justify-between items-start">
+                            <div>
+                              <h3 className="text-xl font-bold text-white">{product.name}</h3>
+                              <div className="flex flex-wrap gap-2 mt-2">
+                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium bg-cosmic-500/20 text-cosmic-500 border border-cosmic-500/20">
+                                  {product.category}
+                                </span>
+                                {product.subCategory !== product.name && (
+                                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium bg-cosmic-400/20 text-cosmic-400 border border-cosmic-400/20">
+                                    {product.subCategory}
+                                  </span>
+                                )}
+                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium bg-white/10 text-white/90 border border-white/20">
+                                  ${product.price} per meter
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="flex flex-col gap-4">
+                            {/* Pattern Details */}
+                            <p className="text-sm text-white/90">
+                              Premium {product.name.toLowerCase()}, crafted with sustainable materials and perfect for high-quality fashion projects.
+                            </p>
+
+                            {/* Credits */}
+                            <div className="text-xs text-white/70">
+                              Photo by{' '}
+                              <a
+                                href={product.image.photographer_url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="hover:text-white transition-colors duration-200"
+                              >
+                                {product.image.photographer}
+                              </a>
+                            </div>
+
+                            {/* Reviews Section */}
+                            <div className="space-y-4">
+                              <Reviews productId={product.id} />
+                              
+                              {session ? (
+                                <button
+                                  onClick={() => {
+                                    setSelectedProduct(product.id);
+                                    setShowReviewModal(true);
+                                  }}
+                                  className="w-full px-4 py-2 text-sm font-medium text-white bg-cosmic-500/20 border border-cosmic-500/30 rounded-lg hover:bg-cosmic-500/30 transition-all duration-200"
+                                >
+                                  Write a Review
+                                </button>
+                              ) : (
+                                <Link href="/auth?callbackUrl=/marketplace">
+                                  <button className="w-full px-4 py-2 text-sm font-medium text-white bg-white/10 border border-white/20 rounded-lg hover:bg-white/20 transition-all duration-200">
+                                    Sign in to Review
+                                  </button>
+                                </Link>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </motion.div>
           </motion.div>
         </div>
       </div>
+      {/* Review Modal */}
+      {selectedProduct !== null && (
+        <ReviewModal
+          productId={selectedProduct}
+          isOpen={showReviewModal}
+          onClose={() => {
+            setShowReviewModal(false);
+            setSelectedProduct(null);
+          }}
+        />
+      )}
     </Layout>
   );
 }

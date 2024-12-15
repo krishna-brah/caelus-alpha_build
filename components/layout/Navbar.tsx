@@ -69,7 +69,7 @@ export const Navbar = () => {
                     </button>
                   </Link>
                   <button
-                    onClick={() => signOut()}
+                    onClick={() => signOut({ callbackUrl: '/' })}
                     className="px-4 py-2 text-sm font-medium text-white border border-white/10 rounded-lg hover:bg-white/5 transition-all duration-200"
                   >
                     Sign Out
@@ -77,12 +77,12 @@ export const Navbar = () => {
                 </>
               ) : (
                 <>
-                  <Link href="/auth">
+                  <Link href={`/auth?callbackUrl=${encodeURIComponent(router.asPath)}`}>
                     <button className="px-4 py-2 text-sm font-medium text-cosmic-100 hover:text-white transition-colors duration-200">
                       Sign In
                     </button>
                   </Link>
-                  <Link href="/signup">
+                  <Link href={`/auth?mode=signup&callbackUrl=${encodeURIComponent(router.asPath)}`}>
                     <button className="px-4 py-2 text-sm font-medium bg-gradient-to-r from-cosmic-500 to-cosmic-600 hover:from-cosmic-600 hover:to-cosmic-700 text-white rounded-lg transition-all duration-200 shadow-lg hover:shadow-cosmic-500/25">
                       Get Started
                     </button>

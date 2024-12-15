@@ -1,7 +1,7 @@
 import React from 'react';
 import { Layout } from '../components/layout/Layout';
 import AIStyleQuestionnaire from '../components/AIStyleQuestionnaire';
-import ImageGenerator from '../components/ImageGenerator';
+import AuthImageGenerator from '../components/AuthImageGenerator';
 import { motion } from 'framer-motion';
 
 const fadeIn = {
@@ -65,7 +65,7 @@ export default function MainHub() {
                       Create unique fashion designs with AI assistance
                     </p>
                     <div className="mt-4">
-                      <ImageGenerator />
+                      <AuthImageGenerator />
                     </div>
                   </div>
                 </div>

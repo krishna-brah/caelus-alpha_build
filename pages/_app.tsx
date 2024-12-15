@@ -6,6 +6,7 @@ import { config } from '../lib/web3Config';
 import { SessionProvider } from 'next-auth/react';
 import { ThemeProvider } from '../lib/contexts/ThemeContext';
 import { AppProvider } from '../lib/contexts/AppContext';
+import { ReviewsProvider } from '../contexts/ReviewsContext';
 import Head from 'next/head';
 import '../styles/globals.css';
 
@@ -32,11 +33,13 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppPropsWith
         <WagmiConfig config={config}>
           <ThemeProvider>
             <AppProvider>
-              {Component.getLayout ? (
-                Component.getLayout(<Component {...pageProps} />)
-              ) : (
-                <Component {...pageProps} />
-              )}
+              <ReviewsProvider>
+                {Component.getLayout ? (
+                  Component.getLayout(<Component {...pageProps} />)
+                ) : (
+                  <Component {...pageProps} />
+                )}
+              </ReviewsProvider>
             </AppProvider>
           </ThemeProvider>
         </WagmiConfig>

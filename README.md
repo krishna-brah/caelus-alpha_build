@@ -1,6 +1,6 @@
-# Caelus Platform 🌟
+# CAELEUS - Sustainable Fashion Platform 🌟
 
-Caelus is a revolutionary sustainable fashion platform that connects designers and consumers through an AI-powered ecosystem. Our platform emphasizes high-quality, sustainable fashion while fostering a community of conscious creators and consumers.
+CAELEUS is a revolutionary sustainable fashion platform that connects designers and consumers through an AI-powered ecosystem. Our platform emphasizes high-quality, sustainable fashion while fostering a community of conscious creators and consumers.
 
 ## 🌿 Vision
 
