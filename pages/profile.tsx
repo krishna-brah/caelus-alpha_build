@@ -29,7 +29,7 @@ const TabPanel = ({ children, value, index }: TabPanelProps) => {
       {children}
     </motion.div>
   );
-}
+};
 
 const fadeIn = {
   hidden: { opacity: 0, y: 20 },
@@ -45,9 +45,20 @@ const ProfilePage: NextPageWithLayout = () => {
   const [openMeasurements, setOpenMeasurements] = useState(false);
   const [openAIQuestionnaire, setOpenAIQuestionnaire] = useState(false);
   const [aiAnalysis, setAiAnalysis] = useState('');
+  const [images, setImages] = useState<File[]>([]);
 
   const handleTabChange = (event: React.MouseEvent<HTMLButtonElement>, newValue: number) => {
     setTabValue(newValue);
+  };
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setImages([...images, ...Array.from(e.target.files)]);
+    }
+  };
+
+  const handleRemoveImage = (index: number) => {
+    setImages(images.filter((_, i) => i !== index));
   };
 
   // Dummy data - to be replaced with actual user data
@@ -125,6 +136,42 @@ const ProfilePage: NextPageWithLayout = () => {
                     Update Measurements
                   </button>
                 </div>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Image Upload Section */}
+          <motion.div variants={fadeIn}>
+            <div className="bg-white/5 backdrop-blur-lg rounded-2xl p-8 border border-white/10">
+              <h2 className="text-2xl font-medium text-white mb-4">Upload Your Creations</h2>
+              <input
+                type="file"
+                accept="image/*"
+                multiple
+                onChange={handleImageUpload}
+                className="block w-full px-4 py-2 mb-4 bg-white/10 text-cosmic-100 rounded-lg border border-white/10 focus:outline-none focus:ring-2 focus:ring-cosmic-500"
+              />
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                {images.map((image, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="relative group"
+                  >
+                    <img
+                      src={URL.createObjectURL(image)}
+                      alt={`Uploaded ${index}`}
+                      className="w-full h-48 object-cover rounded-lg shadow-md"
+                    />
+                    <button
+                      onClick={() => handleRemoveImage(index)}
+                      className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full hover:bg-red-600"
+                    >
+                      &times;
+                    </button>
+                  </motion.div>
+                ))}
               </div>
             </div>
           </motion.div>
@@ -212,7 +259,6 @@ const ProfilePage: NextPageWithLayout = () => {
 const getLayout = (page: ReactElement) => {
   return <Layout>{page}</Layout>;
 };
-
 ProfilePage.getLayout = getLayout;
 
 export default ProfilePage;
