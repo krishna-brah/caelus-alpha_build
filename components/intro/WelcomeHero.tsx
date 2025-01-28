@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '../ui/Button';
+import EmailInput from './EmailInput';
 
 const fadeIn = {
   hidden: { opacity: 0, y: 20 },
@@ -72,7 +73,7 @@ export const WelcomeHero = () => {
             variants={fadeIn}
             className="text-2xl sm:text-3xl md:text-4xl text-white mb-8 font-space-grotesk tracking-wide drop-shadow-md"
           >
-            Where AI Meets Sustainable Fashion
+            Where AI Meets Sustainable Fashion. <br /> Join our sustainable fashion revolution.
           </motion.p>
 
           {/* Description */}
@@ -80,26 +81,23 @@ export const WelcomeHero = () => {
             variants={fadeIn}
             className="max-w-2xl mx-auto text-xl text-purple-50 mb-12 font-inter leading-relaxed drop-shadow brightness-150"
           >
-            Join our revolutionary platform that combines artificial intelligence with
-            sustainable fashion design. Create eco-conscious designs, connect with
-            like-minded creators, and be part of the future of fashion.
+            Join our platform that blends AI with sustainable fashion. 
+            Design eco-friendly creations, connect with like-minded designers, 
+            explore sustainable fabrics, and shape the future of fashion. 
+            Make a positive impact today!
           </motion.p>
 
           {/* CTA Buttons */}
           <motion.div
             variants={fadeIn}
-            className="flex flex-col sm:flex-row gap-6 justify-center items-center"
+            className="flex flex-col gap-6 justify-center items-center"
           >
-            <Link href="/main-hub">
-              <button className="w-full sm:w-auto px-8 py-6 text-lg font-semibold bg-gradient-to-r from-cosmic-500 to-cosmic-600 hover:from-cosmic-600 hover:to-cosmic-700 text-white rounded-xl transition-all duration-200 shadow-xl hover:shadow-cosmic-500/25 hover:scale-105">
-                Start Creating
-              </button>
-            </Link>
             <Link href="/our-initiative">
-              <button className="w-full sm:w-auto px-8 py-6 text-lg font-semibold border-2 border-white/20 text-white rounded-xl hover:bg-white/5 transition-all duration-200">
+              <button className="w-full sm:w-auto px-8 py-3 mb-8 text-md font-semibold border-2 border-white/20 text-white rounded-xl hover:bg-white/5 transition-all duration-200">
                 Learn More
               </button>
             </Link>
+            <EmailInput />
           </motion.div>
 
           {/* Feature Highlights */}
@@ -140,7 +138,7 @@ export const WelcomeHero = () => {
               </Link>
             ))}
           </motion.div>
-          </motion.div>
+          </motion.div>xs
         </div>
       </div>
 
