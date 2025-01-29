@@ -3,250 +3,288 @@ import type { ReactElement } from 'react';
 import type { NextPageWithLayout } from './_app';
 import { Layout } from '../components/layout/Layout';
 import { motion } from 'framer-motion';
-import { PencilIcon, TrashIcon, PlusIcon } from '@heroicons/react/24/outline';
 import { Button } from '../components/ui/Button';
-import { Card } from '../components/ui/Card';
-import { cn } from '../lib/utils/cn';
-import ImageGenerator from '../components/ImageGenerator';
-import AIStyleQuestionnaire from '../components/AIStyleQuestionnaire';
+import { FaFacebook, FaTwitter, FaInstagram } from 'react-icons/fa';
 
-interface TabPanelProps {
-  children?: React.ReactNode;
-  index: number;
-  value: number;
-}
+// Social Media Icons Mapping
+const socialIcons: { [key: string]: React.ReactNode } = {
+  Facebook: <FaFacebook className="w-5 h-5 text-blue-500" />,
+  Twitter: <FaTwitter className="w-5 h-5 text-blue-400" />,
+  Instagram: <FaInstagram className="w-5 h-5 text-pink-500" />,
+};
 
-const TabPanel = ({ children, value, index }: TabPanelProps) => {
-  if (value !== index) return null;
+// Dummy User Profile Data
+const userProfile = {
+  name: 'John Doe',
+  email: 'john@example.com',
+  type: 'Designer',
+  socials: [
+    { platform: 'Facebook', url: 'https://facebook.com/johndoe' },
+    { platform: 'Twitter', url: 'https://twitter.com/johndoe' },
+    { platform: 'Instagram', url: 'https://instagram.com/johndoe' },
+  ],
+  tags: [
+    { name: 'Cotton', color: '#ff6b6b' },
+    { name: 'Linen', color: '#1e90ff' },
+    { name: 'Denim', color: '#4caf50' },
+  ],
+};
 
+// Social Media Component
+const SocialMediaLinks = ({ socials }: { socials: { platform: string; url: string }[] }) => {
   return (
-    <motion.div
-      variants={fadeIn}
-      role="tabpanel"
-      id={`profile-tabpanel-${index}`}
-      className="bg-white/5 backdrop-blur-lg rounded-2xl p-8 border border-white/10"
-    >
-      {children}
-    </motion.div>
+    <div className="flex gap-4 mt-4">
+      {socials.map((social) => (
+        <a
+          key={social.platform}
+          href={social.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-2 px-3 py-2 bg-white/10 rounded-lg border border-white/10 text-cosmic-100 hover:bg-white/20 transition-colors duration-200"
+        >
+          {socialIcons[social.platform] || <span>{social.platform}</span>}
+          <span className="hidden sm:inline">{social.platform}</span>
+        </a>
+      ))}
+    </div>
   );
 };
 
-const fadeIn = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
-};
-
-const staggerContainer = {
-  visible: { transition: { staggerChildren: 0.1 } }
+// Specialization Tags Component
+const SpecializationTags = ({ tags }: { tags: { name: string; color: string }[] }) => {
+  return (
+    <div className="flex flex-wrap gap-2 mt-4">
+      {tags.map((tag, index) => (
+        <span
+          key={index}
+          style={{ backgroundColor: tag.color }}
+          className="px-3 py-1 text-white rounded-full text-sm font-semibold"
+        >
+          {tag.name}
+        </span>
+      ))}
+    </div>
+  );
 };
 
 const ProfilePage: NextPageWithLayout = () => {
-  const [tabValue, setTabValue] = useState(0);
-  const [openMeasurements, setOpenMeasurements] = useState(false);
-  const [openAIQuestionnaire, setOpenAIQuestionnaire] = useState(false);
-  const [aiAnalysis, setAiAnalysis] = useState('');
-  const [images, setImages] = useState<File[]>([]);
+  const [socialLinks, setSocialLinks] = useState(userProfile.socials);
+  const [tags, setTags] = useState(userProfile.tags);
 
-  const handleTabChange = (event: React.MouseEvent<HTMLButtonElement>, newValue: number) => {
-    setTabValue(newValue);
-  };
+  const [openSocialsModal, setOpenSocialsModal] = useState(false);
+  const [openTagsModal, setOpenTagsModal] = useState(false);
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      setImages([...images, ...Array.from(e.target.files)]);
+  const [newSocial, setNewSocial] = useState({ platform: 'Facebook', url: '' });
+  const [newTag, setNewTag] = useState({ name: '', color: '#ff6b6b' });
+
+  // Social Media Handlers
+  const handleAddSocial = () => {
+    if (newSocial.url.trim() !== '') {
+      setSocialLinks([...socialLinks, newSocial]);
+      setNewSocial({ platform: 'Facebook', url: '' });
     }
   };
 
-  const handleRemoveImage = (index: number) => {
-    setImages(images.filter((_, i) => i !== index));
+  const handleRemoveSocial = (index: number) => {
+    setSocialLinks(socialLinks.filter((_, i) => i !== index));
   };
 
-  // Dummy data - to be replaced with actual user data
-  const userProfile = {
-    name: 'John Doe',
-    email: 'john@example.com',
-    type: 'Designer', // or 'Consumer'
-    measurements: {
-      chest: 40,
-      waist: 34,
-      hips: 42,
-      inseam: 32,
-    },
-    favorites: [
-      {
-        id: 1,
-        name: 'Organic Linen',
-        image: '/images/fabrics/linen1.jpg',
-      },
-      // Add more favorites
-    ],
-    sketches: [
-      {
-        id: 1,
-        title: 'Summer Collection 2025',
-        image: '/images/sketches/sketch1.jpg',
-        date: '2024-12-01',
-      },
-      // Add more sketches
-    ],
+  // Specialization Tags Handlers
+  const handleAddTag = () => {
+    if (newTag.name.trim() !== '') {
+      setTags([...tags, newTag]);
+      setNewTag({ name: '', color: '#ff6b6b' });
+    }
+  };
+
+  const handleRemoveTag = (index: number) => {
+    setTags(tags.filter((_, i) => i !== index));
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-cosmic-900 to-cosmic-800">
-      {/* Background Logo */}
-      <div className="fixed inset-0 opacity-[0.02] pointer-events-none">
-        <img
-          src="/images/logo.webp"
-          alt=""
-          className="w-full h-full object-cover scale-150 rotate-12"
-        />
-      </div>
-
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-16">
-        <motion.div
-          initial="hidden"
-          animate="visible"
-          variants={staggerContainer}
-          className="space-y-8"
-        >
-          <motion.div variants={fadeIn}>
+        <motion.div className="space-y-8">
+          <motion.div>
             <div className="bg-white/5 backdrop-blur-lg rounded-2xl p-8 border border-white/10">
               <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
                 <div className="md:col-span-4 text-center">
-                  {/* Profile Image Placeholder */}
                   <div className="w-48 h-48 rounded-full bg-cosmic-800/50 mx-auto mb-4 border border-white/10" />
                   <button className="px-4 py-2 bg-white/5 rounded-lg border border-white/10 text-cosmic-100 hover:bg-white/10 transition-colors duration-200">
                     Change Photo
                   </button>
                 </div>
                 <div className="md:col-span-8">
-                  <h1 className="text-3xl font-bold text-white mb-2 font-space-grotesk">
-                    {userProfile.name}
-                  </h1>
-                  <p className="text-cosmic-100 mb-2">
-                    {userProfile.email}
-                  </p>
+                  <h1 className="text-3xl font-bold text-white mb-2">{userProfile.name}</h1>
+                  <p className="text-cosmic-100 mb-2">{userProfile.email}</p>
                   <p className="text-cosmic-200 mb-4">
                     Account Type: <span className="text-cosmic-100">{userProfile.type}</span>
                   </p>
+
+                  {/* Social Media Links */}
+                  <SocialMediaLinks socials={socialLinks} />
                   <button
-                    onClick={() => setOpenMeasurements(true)}
-                    className="px-4 py-2 bg-cosmic-500 hover:bg-cosmic-600 text-white rounded-lg transition-colors duration-200"
+                    onClick={() => setOpenSocialsModal(true)}
+                    className="px-4 py-2 bg-cosmic-500 hover:bg-cosmic-600 text-white rounded-lg mt-4"
                   >
-                    Update Measurements
+                    Edit Social Media Links
+                  </button>
+
+                  {/* Specialization Tags */}
+                  <h3 className="text-xl text-white font-semibold mt-6">Specializations</h3>
+                  <SpecializationTags tags={tags} />
+                  <button
+                    onClick={() => setOpenTagsModal(true)}
+                    className="px-4 py-2 bg-cosmic-500 hover:bg-cosmic-600 text-white rounded-lg mt-4"
+                  >
+                    Edit Specializations
                   </button>
                 </div>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Image Upload Section */}
-          <motion.div variants={fadeIn}>
-            <div className="bg-white/5 backdrop-blur-lg rounded-2xl p-8 border border-white/10">
-              <h2 className="text-2xl font-medium text-white mb-4">Upload Your Creations</h2>
-              <input
-                type="file"
-                accept="image/*"
-                multiple
-                onChange={handleImageUpload}
-                className="block w-full px-4 py-2 mb-4 bg-white/10 text-cosmic-100 rounded-lg border border-white/10 focus:outline-none focus:ring-2 focus:ring-cosmic-500"
-              />
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                {images.map((image, index) => (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    className="relative group"
-                  >
-                    <img
-                      src={URL.createObjectURL(image)}
-                      alt={`Uploaded ${index}`}
-                      className="w-full h-48 object-cover rounded-lg shadow-md"
-                    />
-                    <button
-                      onClick={() => handleRemoveImage(index)}
-                      className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full hover:bg-red-600"
-                    >
-                      &times;
-                    </button>
-                  </motion.div>
-                ))}
               </div>
             </div>
           </motion.div>
         </motion.div>
       </div>
 
-      {/* Measurements Dialog */}
-      {openMeasurements && (
-        <div className="fixed inset-0 z-50 overflow-y-auto">
-          <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-            <div className="fixed inset-0 bg-black/50 transition-opacity" onClick={() => setOpenMeasurements(false)} />
-            <div className="relative transform overflow-hidden rounded-lg bg-white dark:bg-cosmic-900 px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
-              <div>
-                <h3 className="text-lg font-semibold text-cosmic-900 dark:text-cosmic-50 mb-4">
-                  Update Measurements
-                </h3>
-                <div className="mt-4 grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-cosmic-700 dark:text-cosmic-300 mb-1">
-                      Chest (inches)
-                    </label>
-                    <input
-                      type="number"
-                      defaultValue={userProfile.measurements.chest}
-                      className="w-full px-3 py-2 rounded-md border border-cosmic-200 dark:border-cosmic-700 
-                        bg-white dark:bg-cosmic-800 text-cosmic-900 dark:text-cosmic-50
-                        focus:outline-none focus:ring-2 focus:ring-cosmic-500"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-cosmic-700 dark:text-cosmic-300 mb-1">
-                      Waist (inches)
-                    </label>
-                    <input
-                      type="number"
-                      defaultValue={userProfile.measurements.waist}
-                      className="w-full px-3 py-2 rounded-md border border-cosmic-200 dark:border-cosmic-700 
-                        bg-white dark:bg-cosmic-800 text-cosmic-900 dark:text-cosmic-50
-                        focus:outline-none focus:ring-2 focus:ring-cosmic-500"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-cosmic-700 dark:text-cosmic-300 mb-1">
-                      Hips (inches)
-                    </label>
-                    <input
-                      type="number"
-                      defaultValue={userProfile.measurements.hips}
-                      className="w-full px-3 py-2 rounded-md border border-cosmic-200 dark:border-cosmic-700 
-                        bg-white dark:bg-cosmic-800 text-cosmic-900 dark:text-cosmic-50
-                        focus:outline-none focus:ring-2 focus:ring-cosmic-500"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-cosmic-700 dark:text-cosmic-300 mb-1">
-                      Inseam (inches)
-                    </label>
-                    <input
-                      type="number"
-                      defaultValue={userProfile.measurements.inseam}
-                      className="w-full px-3 py-2 rounded-md border border-cosmic-200 dark:border-cosmic-700 
-                        bg-white dark:bg-cosmic-800 text-cosmic-900 dark:text-cosmic-50
-                        focus:outline-none focus:ring-2 focus:ring-cosmic-500"
-                    />
-                  </div>
-                </div>
+      {/* Social Media Edit Modal */}
+      {openSocialsModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="bg-white p-6 rounded-lg w-96">
+            <h3 className="text-lg font-semibold text-black mb-4">Edit Social Media Links</h3>
+            {socialLinks.map((social, index) => (
+              <div key={index} className="flex items-center gap-2 mb-3">
+                <select
+                  value={social.platform}
+                  onChange={(e) => {
+                    const updated = [...socialLinks];
+                    updated[index].platform = e.target.value;
+                    setSocialLinks(updated);
+                  }}
+                  className="px-3 py-2 border rounded-lg"
+                >
+                  <option>Facebook</option>
+                  <option>Twitter</option>
+                  <option>Instagram</option>
+                </select>
+                <input
+                  type="url"
+                  value={social.url}
+                  onChange={(e) => {
+                    const updated = [...socialLinks];
+                    updated[index].url = e.target.value;
+                    setSocialLinks(updated);
+                  }}
+                  className="flex-1 px-3 py-2 border rounded-lg"
+                />
+                <button
+                  onClick={() => handleRemoveSocial(index)}
+                  className="text-red-500 hover:text-red-600"
+                >
+                  &times;
+                </button>
               </div>
-              <div className="mt-6 flex justify-end gap-3">
-                <Button variant="outline" onClick={() => setOpenMeasurements(false)}>
-                  Cancel
-                </Button>
-                <Button onClick={() => setOpenMeasurements(false)}>
-                  Save Changes
-                </Button>
+            ))}
+
+            {/* Add New Social Media */}
+            <div className="flex items-center gap-2 mb-4">
+              <select
+                value={newSocial.platform}
+                onChange={(e) => setNewSocial({ ...newSocial, platform: e.target.value })}
+                className="px-3 py-2 border rounded-lg"
+              >
+                <option>Facebook</option>
+                <option>Twitter</option>
+                <option>Instagram</option>
+              </select>
+              <input
+                type="url"
+                placeholder="Enter URL"
+                value={newSocial.url}
+                onChange={(e) => setNewSocial({ ...newSocial, url: e.target.value })}
+                className="flex-1 px-3 py-2 border rounded-lg"
+              />
+              <button
+                onClick={handleAddSocial}
+                className="px-3 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"
+              >
+                Add
+              </button>
+            </div>
+
+            <div className="mt-4 flex justify-end gap-2">
+              <Button variant="outline" onClick={() => setOpenSocialsModal(false)}>
+                Cancel
+              </Button>
+              <Button onClick={() => setOpenSocialsModal(false)}>Save</Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Specialization Tags Edit Modal */}
+      {openTagsModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="bg-white p-6 rounded-lg w-96">
+            <h3 className="text-lg font-semibold text-black mb-4">Edit Specializations</h3>
+            {tags.map((tag, index) => (
+              <div key={index} className="flex items-center gap-2 mb-3">
+                <input
+                  type="text"
+                  value={tag.name}
+                  onChange={(e) => {
+                    const updated = [...tags];
+                    updated[index].name = e.target.value;
+                    setTags(updated);
+                  }}
+                  className="flex-1 px-3 py-2 border rounded-lg"
+                />
+                <input
+                  type="color"
+                  value={tag.color}
+                  onChange={(e) => {
+                    const updated = [...tags];
+                    updated[index].color = e.target.value;
+                    setTags(updated);
+                  }}
+                  className="w-10 h-10"
+                />
+                <button
+                  onClick={() => handleRemoveTag(index)}
+                  className="text-red-500 hover:text-red-600"
+                >
+                  &times;
+                </button>
               </div>
+            ))}
+
+            {/* Add New Tag */}
+            <div className="flex items-center gap-2 mb-4">
+              <input
+                type="text"
+                placeholder="New Tag"
+                value={newTag.name}
+                onChange={(e) => setNewTag({ ...newTag, name: e.target.value })}
+                className="flex-1 px-3 py-2 border rounded-lg"
+              />
+              <input
+                type="color"
+                value={newTag.color}
+                onChange={(e) => setNewTag({ ...newTag, color: e.target.value })}
+                className="w-10 h-10"
+              />
+              <button
+                onClick={handleAddTag}
+                className="px-3 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"
+              >
+                Add
+              </button>
+            </div>
+
+            <div className="mt-4 flex justify-end gap-2">
+              <Button variant="outline" onClick={() => setOpenTagsModal(false)}>
+                Cancel
+              </Button>
+              <Button onClick={() => setOpenTagsModal(false)}>Save</Button>
             </div>
           </div>
         </div>
@@ -255,10 +293,8 @@ const ProfilePage: NextPageWithLayout = () => {
   );
 };
 
-// Remove Layout wrapping from the page component itself
-const getLayout = (page: ReactElement) => {
-  return <Layout>{page}</Layout>;
-};
+// Layout Wrapper
+const getLayout = (page: ReactElement) => <Layout>{page}</Layout>;
 ProfilePage.getLayout = getLayout;
 
 export default ProfilePage;
