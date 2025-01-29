@@ -149,10 +149,10 @@ const ProfilePage: NextPageWithLayout = () => {
       {/* Social Media Edit Modal */}
       {openSocialsModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="bg-white p-6 rounded-lg w-96">
+          <div className="bg-white p-6 rounded-lg w-[700px]">
             <h3 className="text-lg font-semibold text-black mb-4">Edit Social Media Links</h3>
             {socialLinks.map((social, index) => (
-              <div key={index} className="flex items-center gap-2 mb-3">
+              <div key={index} className="flex items-center gap-3 mb-3">
                 <select
                   value={social.platform}
                   onChange={(e) => {
@@ -160,7 +160,7 @@ const ProfilePage: NextPageWithLayout = () => {
                     updated[index].platform = e.target.value;
                     setSocialLinks(updated);
                   }}
-                  className="px-3 py-2 border rounded-lg"
+                  className="px-4 py-3 border rounded-lg w-[150px]"
                 >
                   <option>Facebook</option>
                   <option>Twitter</option>
@@ -174,11 +174,11 @@ const ProfilePage: NextPageWithLayout = () => {
                     updated[index].url = e.target.value;
                     setSocialLinks(updated);
                   }}
-                  className="flex-1 px-3 py-2 border rounded-lg"
+                  className="flex-1 px-4 py-3 border rounded-lg"
                 />
                 <button
                   onClick={() => handleRemoveSocial(index)}
-                  className="text-red-500 hover:text-red-600"
+                  className="text-red-500 hover:text-red-600 text-lg"
                 >
                   &times;
                 </button>
@@ -186,11 +186,11 @@ const ProfilePage: NextPageWithLayout = () => {
             ))}
 
             {/* Add New Social Media */}
-            <div className="flex items-center gap-2 mb-4">
+            <div className="flex items-center gap-3 mb-4">
               <select
                 value={newSocial.platform}
                 onChange={(e) => setNewSocial({ ...newSocial, platform: e.target.value })}
-                className="px-3 py-2 border rounded-lg"
+                className="px-4 py-3 border rounded-lg w-[150px]"
               >
                 <option>Facebook</option>
                 <option>Twitter</option>
@@ -201,11 +201,11 @@ const ProfilePage: NextPageWithLayout = () => {
                 placeholder="Enter URL"
                 value={newSocial.url}
                 onChange={(e) => setNewSocial({ ...newSocial, url: e.target.value })}
-                className="flex-1 px-3 py-2 border rounded-lg"
+                className="flex-1 px-4 py-3 border rounded-lg"
               />
               <button
                 onClick={handleAddSocial}
-                className="px-3 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"
+                className="px-4 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600"
               >
                 Add
               </button>
@@ -224,10 +224,10 @@ const ProfilePage: NextPageWithLayout = () => {
       {/* Specialization Tags Edit Modal */}
       {openTagsModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="bg-white p-6 rounded-lg w-96">
+          <div className="bg-white p-6 rounded-lg w-[700px]">
             <h3 className="text-lg font-semibold text-black mb-4">Edit Specializations</h3>
             {tags.map((tag, index) => (
-              <div key={index} className="flex items-center gap-2 mb-3">
+              <div key={index} className="flex items-center gap-3 mb-3">
                 <input
                   type="text"
                   value={tag.name}
@@ -236,7 +236,7 @@ const ProfilePage: NextPageWithLayout = () => {
                     updated[index].name = e.target.value;
                     setTags(updated);
                   }}
-                  className="flex-1 px-3 py-2 border rounded-lg"
+                  className="flex-1 px-4 py-3 border rounded-lg"
                 />
                 <input
                   type="color"
@@ -246,11 +246,11 @@ const ProfilePage: NextPageWithLayout = () => {
                     updated[index].color = e.target.value;
                     setTags(updated);
                   }}
-                  className="w-10 h-10"
+                  className="w-12 h-12"
                 />
                 <button
                   onClick={() => handleRemoveTag(index)}
-                  className="text-red-500 hover:text-red-600"
+                  className="text-red-500 hover:text-red-600 text-lg"
                 >
                   &times;
                 </button>
@@ -258,23 +258,23 @@ const ProfilePage: NextPageWithLayout = () => {
             ))}
 
             {/* Add New Tag */}
-            <div className="flex items-center gap-2 mb-4">
+            <div className="flex items-center gap-3 mb-4">
               <input
                 type="text"
                 placeholder="New Tag"
                 value={newTag.name}
                 onChange={(e) => setNewTag({ ...newTag, name: e.target.value })}
-                className="flex-1 px-3 py-2 border rounded-lg"
+                className="flex-1 px-4 py-3 border rounded-lg"
               />
               <input
                 type="color"
                 value={newTag.color}
                 onChange={(e) => setNewTag({ ...newTag, color: e.target.value })}
-                className="w-10 h-10"
+                className="w-12 h-12"
               />
               <button
                 onClick={handleAddTag}
-                className="px-3 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"
+                className="px-4 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600"
               >
                 Add
               </button>
