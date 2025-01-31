@@ -67,6 +67,103 @@ const SpecializationTags = ({ tags }: { tags: { name: string; color: string }[] 
   );
 };
 
+// Sketch Upload Component
+const SketchUpload = () => {
+  const [sketches, setSketches] = useState<File[]>([]);
+
+  const handleUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files) {
+      setSketches([...sketches, ...Array.from(event.target.files)]);
+    }
+  };
+
+  return (
+    <div className="mt-6">
+      <h3 className="text-xl text-white font-semibold">Sketches</h3>
+      <input type="file" multiple accept="image/*" onChange={handleUpload} className="mt-2" />
+      <div className="grid grid-cols-3 gap-4 mt-4">
+        {sketches.map((file, index) => (
+          <img key={index} src={URL.createObjectURL(file)} alt="Sketch" className="w-full h-32 object-cover rounded-lg" />
+        ))}
+      </div>
+    </div>
+  );
+};
+
+// Previous Creations Component
+const PreviousCreations = () => {
+  const [creations, setCreations] = useState<{ title: string; description: string; image: File | null }[]>([]);
+  const [newCreation, setNewCreation] = useState<{ title: string; description: string; image: File | null }>({
+    title: '',
+    description: '',
+    image: null,
+  });
+
+  const handleUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files.length > 0) {
+      setNewCreation({ ...newCreation, image: event.target.files[0] });
+    }
+  };
+
+  const handleAdd = () => {
+    if (newCreation.title && newCreation.image) {
+      setCreations([...creations, newCreation]);
+      setNewCreation({ title: '', description: '', image: null });
+    }
+  };
+
+  return (
+    <div className="mt-6">
+      <h3 className="text-xl text-white font-semibold">Previous Creations</h3>
+      <input type="text" placeholder="Title" value={newCreation.title} onChange={(e) => setNewCreation({ ...newCreation, title: e.target.value })} className="mt-2 p-2 border rounded-lg w-full" />
+      <textarea placeholder="Description" value={newCreation.description} onChange={(e) => setNewCreation({ ...newCreation, description: e.target.value })} className="mt-2 p-2 border rounded-lg w-full"></textarea>
+      <input type="file" accept="image/*" onChange={handleUpload} className="mt-2" />
+      <button onClick={handleAdd} className="mt-2 px-4 py-2 bg-cosmic-500 text-white rounded-lg">Add</button>
+
+      <div className="grid grid-cols-3 gap-4 mt-4">
+        {creations.map((creation, index) => (
+          <div key={index} className="p-4 border rounded-lg bg-white/10">
+            {creation.image && <img src={URL.createObjectURL(creation.image)} alt={creation.title} className="w-full h-32 object-cover rounded-lg" />}
+            <h4 className="text-white mt-2">{creation.title}</h4>
+            <p className="text-cosmic-100 text-sm">{creation.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+// Inspirations Component
+const Inspirations = () => {
+  const [inspirations, setInspirations] = useState<{ link: string; note: string }[]>([]);
+  const [newInspiration, setNewInspiration] = useState({ link: '', note: '' });
+
+  const handleAdd = () => {
+    if (newInspiration.link) {
+      setInspirations([...inspirations, newInspiration]);
+      setNewInspiration({ link: '', note: '' });
+    }
+  };
+
+  return (
+    <div className="mt-6">
+      <h3 className="text-xl text-white font-semibold">Inspirations</h3>
+      <input type="text" placeholder="Link" value={newInspiration.link} onChange={(e) => setNewInspiration({ ...newInspiration, link: e.target.value })} className="mt-2 p-2 border rounded-lg w-full" />
+      <textarea placeholder="Note" value={newInspiration.note} onChange={(e) => setNewInspiration({ ...newInspiration, note: e.target.value })} className="mt-2 p-2 border rounded-lg w-full"></textarea>
+      <button onClick={handleAdd} className="mt-2 px-4 py-2 bg-cosmic-500 text-white rounded-lg">Add</button>
+
+      <ul className="mt-4">
+        {inspirations.map((item, index) => (
+          <li key={index} className="p-2 border rounded-lg bg-white/10">
+            <a href={item.link} target="_blank" rel="noopener noreferrer" className="text-cosmic-200 underline">{item.link}</a>
+            <p className="text-cosmic-100 text-sm">{item.note}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
 const ProfilePage: NextPageWithLayout = () => {
   const [socialLinks, setSocialLinks] = useState(userProfile.socials);
   const [tags, setTags] = useState(userProfile.tags);
@@ -286,6 +383,9 @@ const ProfilePage: NextPageWithLayout = () => {
               </Button>
               <Button onClick={() => setOpenTagsModal(false)}>Save</Button>
             </div>
+            <SketchUpload />
+            <PreviousCreations />
+            <Inspirations />
           </div>
         </div>
       )}
