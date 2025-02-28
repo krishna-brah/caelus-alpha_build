@@ -23,12 +23,12 @@ const EmailInput: React.FC = () => {
 
   return (
     <div className="text-center">
-      <div className="max-w-md mx-auto bg-white/5 backdrop-blur-lg rounded-2xl px-20 py-10 border border-white/10">
+      <div className="max-w-lg mx-auto bg-white/5 backdrop-blur-lg rounded-2xl px-20 py-10 border border-white/10">
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <label
               htmlFor="email"
-              className="block text-lg font-medium text-cosmic-100 mb-3 font-space-grotesk"
+              className="block text-lg font-medium text-cosmic-100 mt-3 mb-3 font-space-grotesk"
             >
               Enter your email to get started
             </label>

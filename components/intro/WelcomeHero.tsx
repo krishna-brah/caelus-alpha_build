@@ -138,7 +138,7 @@ export const WelcomeHero = () => {
               </Link>
             ))}
           </motion.div>
-          </motion.div>xs
+          </motion.div>
         </div>
       </div>
 

@@ -73,9 +73,7 @@ const SpecializationTags = ({
   );
 };
 
-// ------------------------------------------------------------------
-// UPDATED: "Instagram-like" posts section with a detail popup
-// ------------------------------------------------------------------
+// Move the IPost interface and PostType type before the ProfilePage component
 type PostType = 'Sketch' | 'Previous Creation' | 'Inspiration';
 
 interface IPost {
@@ -86,113 +84,184 @@ interface IPost {
   caption: string;
 }
 
-const PostsSection = () => {
-  const [posts, setPosts] = useState<IPost[]>([]);
+const ProfilePage: NextPageWithLayout = () => {
+  // Move all useState declarations here
+  const [activeTab, setActiveTab] = useState<'favorites' | 'sketchbook' | 'designs' | 'orders'>('favorites');
+  const [favoritePosts, setFavoritePosts] = useState<IPost[]>([]);
+  const [sketchbookPosts, setSketchbookPosts] = useState<IPost[]>([]);
+  const [designPosts, setDesignPosts] = useState<IPost[]>([]);
+  const [socialLinks, setSocialLinks] = useState(userProfile.socials);
+  const [tags, setTags] = useState(userProfile.tags);
+  const [openSocialsModal, setOpenSocialsModal] = useState(false);
+  const [openTagsModal, setOpenTagsModal] = useState(false);
+  const [newSocial, setNewSocial] = useState({ platform: 'Facebook', url: '' });
+  const [newTag, setNewTag] = useState({ name: '', color: '#ff6b6b' });
 
-  // Controls for the "Create new post" modal
-  const [showModal, setShowModal] = useState(false);
-  const [uploadFile, setUploadFile] = useState<File | null>(null);
-  const [postType, setPostType] = useState<PostType>('Sketch');
-  const [title, setTitle] = useState('');
-  const [caption, setCaption] = useState('');
-
-  // For viewing an individual post's detail
-  const [selectedPost, setSelectedPost] = useState<IPost | null>(null);
-
-  // Handle file change
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files.length > 0) {
-      setUploadFile(e.target.files[0]);
-    }
+  // Handles toggling posts into favorites
+  const toggleFavorite = (post: IPost) => {
+    setFavoritePosts((prev) => {
+      if (prev.some((fav) => fav.id === post.id)) {
+        return prev.filter((fav) => fav.id !== post.id);
+      }
+      return [...prev, post];
+    });
   };
 
-  // Called when the user hits “Share” in the modal
-  const handleCreatePost = () => {
-    if (!uploadFile) return; // no file selected
+  // Function to upload posts to Sketchbook or Designs
+  const handleCreateSketchbookPost = (newPost: IPost) => {
+    setSketchbookPosts([...sketchbookPosts, newPost]);
+  };
+  const handleCreateDesignPost = (newPost: IPost) => {
+    setDesignPosts([...designPosts, newPost]);
+  };
 
-    const newPost: IPost = {
-      id: String(Date.now()),
-      type: postType,
-      fileUrl: URL.createObjectURL(uploadFile),
-      title: title.trim(),
-      caption: caption.trim(),
+  const renderTabs = () => {
+    return (
+      <div className="">
+        {/* Navigation Buttons */}
+        <div className="flex gap-6 justify-center mb-10">
+          <button
+            className={`px-24 py-3 rounded-lg text-xl ${activeTab === 'favorites' ? 'bg-cosmic-500 text-white' : 'bg-gray-700 text-gray-300'}`}
+            onClick={() => setActiveTab('favorites')}
+          >
+            Favorites
+          </button>
+          <button
+            className={`px-24 py-3 rounded-lg text-xl ${activeTab === 'sketchbook' ? 'bg-cosmic-500 text-white' : 'bg-gray-700 text-gray-300'}`}
+            onClick={() => setActiveTab('sketchbook')}
+          >
+            Sketchbook
+          </button>
+          <button
+            className={`px-24 py-3 rounded-lg text-xl ${activeTab === 'designs' ? 'bg-cosmic-500 text-white' : 'bg-gray-700 text-gray-300'}`}
+            onClick={() => setActiveTab('designs')}
+          >
+            Designs
+          </button>
+          <button
+            className={`px-24 py-3 rounded-lg text-xl ${activeTab === 'orders' ? 'bg-cosmic-500 text-white' : 'bg-gray-700 text-gray-300'}`}
+            onClick={() => setActiveTab('orders')}
+          >
+            Orders
+          </button>
+        </div>
+
+        {/* Conditional Rendering for Sections */}
+        {activeTab === 'favorites' && (
+          <div>
+            {favoritePosts.length > 0 ? (
+              <div className="grid grid-cols-3 gap-4">
+                {favoritePosts.map((post) => (
+                  <div key={post.id} className="bg-white/5 rounded-lg p-2">
+                    <img src={post.fileUrl} alt="favorite" className="w-full h-48 object-cover rounded" />
+                    <p className="text-sm font-semibold text-white mt-2">{post.title}</p>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-white text-center mt-20 mb-20">No favorites yet.</p>
+            )}
+          </div>
+        )}
+
+        {activeTab === 'sketchbook' && (
+          <PostsSection handleCreatePost={handleCreateSketchbookPost} posts={sketchbookPosts} />
+        )}
+
+        {activeTab === 'designs' && (
+          <PostsSection handleCreatePost={handleCreateDesignPost} posts={designPosts} />
+        )}
+
+        {activeTab === 'orders' && (
+          <div className="text-white text-center mt-20 mb-20">
+            <p>No orders at this moment.</p>
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  // ------------------------------------------------------------------
+  // UPDATED: "Instagram-like" posts section with a detail popup
+  // ------------------------------------------------------------------
+  const PostsSection = ({ handleCreatePost, posts }: { handleCreatePost: (post: IPost) => void; posts: IPost[] }) => {
+    const [showModal, setShowModal] = useState(false);
+    const [uploadFile, setUploadFile] = useState<File | null>(null);
+    const [postType, setPostType] = useState<PostType>('Sketch');
+    const [title, setTitle] = useState('');
+    const [caption, setCaption] = useState('');
+
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (e.target.files && e.target.files.length > 0) {
+        setUploadFile(e.target.files[0]);
+      }
     };
 
-    setPosts([...posts, newPost]);
-    // reset
-    setShowModal(false);
-    setUploadFile(null);
-    setTitle('');
-    setCaption('');
-    setPostType('Sketch');
-  };
+    const handleCreateNewPost = () => {
+      if (!uploadFile) return;
+      const newPost: IPost = {
+        id: String(Date.now()),
+        type: postType,
+        fileUrl: URL.createObjectURL(uploadFile),
+        title: title.trim(),
+        caption: caption.trim(),
+      };
+      handleCreatePost(newPost);
+      setShowModal(false);
+      setUploadFile(null);
+      setTitle('');
+      setCaption('');
+      setPostType('Sketch');
+    };
 
-  // Renders the “Share Photos” placeholder if no posts
-  if (posts.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center py-20 px-4">
-        {/* Left-aligned by removing items-center */}
-        <div className="text-4xl mb-4">📷</div>
-        <h2 className="text-2xl font-semibold mb-2 text-white">Share Photos</h2>
-        <p className="text-white text-sm mb-4">
-          When you share photos, they will appear on your profile.
-        </p>
-        <button
-          onClick={() => setShowModal(true)}
-          className="text-blue-500 font-semibold"
-        >
-          Share your first photo
-        </button>
+      <div className="py-8 px-4">
+        {posts.length === 0 ? (
+          <div className="text-center">
+            <p className="text-white text-center mt-10 mb-10">No posts yet.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-3 gap-4">
+            {posts.map((post) => (
+              <div key={post.id} className="bg-white/5 rounded-lg p-2">
+                <img src={post.fileUrl} alt="post" className="w-full h-48 object-cover rounded" />
+                <p className="text-sm font-semibold text-white mt-2">{post.title}</p>
+              </div>
+            ))}
+          </div>
+        )}
+        <div className="mt-0 mb-10 text-center">
+          <button onClick={() => setShowModal(true)} className="px-4 py-2 bg-cosmic-500 text-white rounded-lg">
+            Upload New Post
+          </button>
+        </div>
 
-        {/* "Create New Post" Modal */}
         {showModal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-            <div className="bg-white p-6 rounded-lg w-[400px] relative">
-              <h3 className="text-lg font-semibold text-black text-center mb-4">
-                Create new post
-              </h3>
-
+            <div className="bg-gradient-to-b from-cosmic-900 to-cosmic-800 p-6 rounded-lg w-[400px] relative">
+              <h3 className="text-lg font-semibold text-white text-center mb-4">Create new post</h3>
               <div className="border border-dashed border-gray-300 p-6 text-center mb-4 rounded">
                 <p className="text-gray-500 text-sm">Drag photos and videos here</p>
                 <p className="text-sm mt-2">or</p>
                 <input type="file" onChange={handleFileChange} className="mt-2" />
               </div>
-
-              {/* Post Type, Title, Caption */}
-              <select
-                className="block w-full mb-2 p-2 border rounded"
-                value={postType}
-                onChange={(e) => setPostType(e.target.value as PostType)}
-              >
-                <option value="Sketch">Sketch</option>
-                <option value="Previous Creation">Previous Creation</option>
-                <option value="Inspiration">Inspiration</option>
-              </select>
-
               <input
-                className="block w-full mb-2 p-2 border rounded"
+                className="block w-full mb-2 p-2 border rounded text-black"
                 placeholder="Title"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
               />
               <textarea
-                className="block w-full mb-2 p-2 border rounded"
+                className="block w-full mb-2 p-2 border rounded text-black"
                 placeholder="Caption"
                 value={caption}
                 onChange={(e) => setCaption(e.target.value)}
               />
-
               <div className="flex justify-end gap-2 mt-4">
-                <button
-                  onClick={() => setShowModal(false)}
-                  className="px-4 py-2 bg-gray-200 text-black rounded"
-                >
+                <button onClick={() => setShowModal(false)} className="px-4 py-2 bg-gray-200 text-black rounded">
                   Cancel
                 </button>
-                <button
-                  onClick={handleCreatePost}
-                  className="px-4 py-2 bg-blue-500 text-white rounded"
-                >
+                <button onClick={handleCreateNewPost} className="px-4 py-2 bg-blue-500 text-white rounded">
                   Share
                 </button>
               </div>
@@ -201,165 +270,7 @@ const PostsSection = () => {
         )}
       </div>
     );
-  }
-
-  // If we have posts, show grid
-  return (
-    <div className="py-8 px-4">
-      {/* Left aligned by removing mx-auto */}
-      <div className="grid grid-cols-3 gap-4">
-        {posts.map((post) => (
-          <div
-            key={post.id}
-            className="bg-white/5 rounded-lg p-2 cursor-pointer hover:bg-white/10 transition"
-            onClick={() => setSelectedPost(post)}
-          >
-            <img
-              src={post.fileUrl}
-              alt="post"
-              className="w-full h-48 object-cover rounded"
-            />
-            <p className="mt-2 text-sm font-semibold text-white">{post.title}</p>
-            <p className="text-xs text-gray-300">{post.caption}</p>
-            <p className="text-xs text-gray-500 italic mt-1">{post.type}</p>
-          </div>
-        ))}
-      </div>
-
-      <div className="mt-8 items-center justify-center text-center">
-        <button
-          onClick={() => setShowModal(true)}
-          className="px-4 py-2 bg-cosmic-500 hover:bg-cosmic-600 text-white rounded-lg mt-4"
-        >
-          Add another post
-        </button>
-      </div>
-
-      {/* The "Create New Post" Modal (same code, reused) */}
-      {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="bg-white p-6 rounded-lg w-[400px] relative">
-            <h3 className="text-lg font-semibold text-black text-center mb-4">
-              Create new post
-            </h3>
-            <div className="border border-dashed border-gray-300 p-6 text-center mb-4 rounded">
-              <p className="text-gray-500 text-sm">Drag photos and videos here</p>
-              <p className="text-sm mt-2">or</p>
-              <input type="file" onChange={handleFileChange} className="mt-2" />
-            </div>
-
-            <select
-              className="block w-full mb-2 p-2 border rounded"
-              value={postType}
-              onChange={(e) => setPostType(e.target.value as PostType)}
-            >
-              <option value="Sketch">Sketch</option>
-              <option value="Previous Creation">Previous Creation</option>
-              <option value="Inspiration">Inspiration</option>
-            </select>
-
-            <input
-              className="block w-full mb-2 p-2 border rounded"
-              placeholder="Title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-            />
-            <textarea
-              className="block w-full mb-2 p-2 border rounded"
-              placeholder="Caption"
-              value={caption}
-              onChange={(e) => setCaption(e.target.value)}
-            />
-            <div className="flex justify-end gap-2 mt-4">
-              <button
-                onClick={() => setShowModal(false)}
-                className="px-4 py-2 bg-gray-200 text-black rounded"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleCreatePost}
-                className="px-4 py-2 bg-blue-500 text-white rounded"
-              >
-                Share
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* The "View Post" Modal for a larger preview & details */}
-      {selectedPost && (
-        <div
-          className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50"
-          onClick={() => setSelectedPost(null)}
-        >
-          {/* Click outside closes modal */}
-          <div
-            className="flex flex-col md:flex-row bg-cosmic-800 max-w-4xl w-full rounded-lg overflow-hidden"
-            onClick={(e) => e.stopPropagation()} // prevent close when clicking inside
-          >
-            {/* Left side: the bigger image */}
-            <div className="md:w-1/2 w-full bg-black flex items-center justify-center">
-              <img
-                src={selectedPost.fileUrl}
-                alt="selected"
-                className="max-h-[80vh] object-contain"
-              />
-            </div>
-
-            {/* Right side: text info, comments, close button */}
-            <div className="md:w-1/2 w-full p-4 relative text-white flex flex-col">
-              <button
-                onClick={() => setSelectedPost(null)}
-                className="absolute right-4 top-2 text-2xl leading-none"
-              >
-                &times;
-              </button>
-
-              <h3 className="font-bold text-lg mb-1">{selectedPost.title}</h3>
-              <p className="text-sm text-gray-200 mb-4">{selectedPost.caption}</p>
-              <p className="text-xs text-gray-500 italic mb-2">
-                {selectedPost.type}
-              </p>
-              <hr className="border-gray-600 mb-4" />
-
-              {/* Placeholder comments */}
-              <div className="flex-1 overflow-y-auto text-sm">
-                <p className="text-gray-400">Comments go here...</p>
-              </div>
-
-              {/* Post a comment bar (just a placeholder) */}
-              <div className="mt-4 flex gap-2">
-                <input
-                  type="text"
-                  placeholder="Add a comment..."
-                  className="flex-1 px-2 py-1 rounded bg-cosmic-900 border border-gray-600"
-                />
-                <button className="px-3 py-1 bg-blue-500 rounded text-white">
-                  Post
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-};
-
-// ------------------------------------------------------------------
-// EXISTING PAGE COMPONENT
-// ------------------------------------------------------------------
-const ProfilePage: NextPageWithLayout = () => {
-  const [socialLinks, setSocialLinks] = useState(userProfile.socials);
-  const [tags, setTags] = useState(userProfile.tags);
-
-  const [openSocialsModal, setOpenSocialsModal] = useState(false);
-  const [openTagsModal, setOpenTagsModal] = useState(false);
-
-  const [newSocial, setNewSocial] = useState({ platform: 'Facebook', url: '' });
-  const [newTag, setNewTag] = useState({ name: '', color: '#ff6b6b' });
+  };
 
   // Social & Tag handlers (same as your original code)
   const handleAddSocial = () => {
@@ -435,16 +346,15 @@ const ProfilePage: NextPageWithLayout = () => {
       </div>
 
       {/* Divider */}
-      <div className="border-t border-white/10 mt-8" />
+      {/* <div className="border-t border-white/10 mt-8" /> */}
 
-      {/* NEW: Instagram-like Posts Section */}
-      <PostsSection />
+      {renderTabs()}
 
       {/* MODALS for Socials & Tags (unchanged) */}
       {openSocialsModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="bg-white p-6 rounded-lg w-[700px]">
-            <h3 className="text-lg font-semibold text-black mb-4">
+          <div className="bg-gradient-to-b from-cosmic-900 to-cosmic-800 p-6 rounded-lg w-[700px]">
+            <h3 className="text-lg font-semibold text-white mb-4">
               Edit Social Media Links
             </h3>
             {socialLinks.map((social, index) => (
@@ -456,7 +366,7 @@ const ProfilePage: NextPageWithLayout = () => {
                     updated[index].platform = e.target.value;
                     setSocialLinks(updated);
                   }}
-                  className="px-4 py-3 border rounded-lg w-[150px]"
+                  className="px-4 py-3 border rounded-lg w-[150px] text-black"
                 >
                   <option>Facebook</option>
                   <option>Twitter</option>
@@ -470,7 +380,7 @@ const ProfilePage: NextPageWithLayout = () => {
                     updated[index].url = e.target.value;
                     setSocialLinks(updated);
                   }}
-                  className="flex-1 px-4 py-3 border rounded-lg"
+                  className="flex-1 px-4 py-3 border rounded-lg text-black"
                 />
                 <button
                   onClick={() => handleRemoveSocial(index)}
@@ -488,7 +398,7 @@ const ProfilePage: NextPageWithLayout = () => {
                 onChange={(e) =>
                   setNewSocial({ ...newSocial, platform: e.target.value })
                 }
-                className="px-4 py-3 border rounded-lg w-[150px]"
+                className="px-4 py-3 border rounded-lg w-[150px] text-black"
               >
                 <option>Facebook</option>
                 <option>Twitter</option>
@@ -499,11 +409,11 @@ const ProfilePage: NextPageWithLayout = () => {
                 placeholder="Enter URL"
                 value={newSocial.url}
                 onChange={(e) => setNewSocial({ ...newSocial, url: e.target.value })}
-                className="flex-1 px-4 py-3 border rounded-lg"
+                className="flex-1 px-4 py-3 border rounded-lg text-black"
               />
               <button
                 onClick={handleAddSocial}
-                className="px-4 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600"
+                className="px-4 py-3 bg-green-500 text-black rounded-lg hover:bg-green-600"
               >
                 Add
               </button>
@@ -521,12 +431,12 @@ const ProfilePage: NextPageWithLayout = () => {
 
       {openTagsModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="bg-white p-6 rounded-lg w-[700px]">
-            <h3 className="text-lg font-semibold text-black mb-4">
+          <div className="bg-gradient-to-b from-cosmic-900 to-cosmic-800 p-6 rounded-lg w-[700px]">
+            <h3 className="text-lg font-semibold text-white mb-4">
               Edit Specializations
             </h3>
             {tags.map((tag, index) => (
-              <div key={index} className="flex items-center gap-3 mb-3">
+              <div key={index} className="flex items-center gap-3 mb-3 text-black">
                 <input
                   type="text"
                   value={tag.name}
@@ -535,7 +445,7 @@ const ProfilePage: NextPageWithLayout = () => {
                     updated[index].name = e.target.value;
                     setTags(updated);
                   }}
-                  className="flex-1 px-4 py-3 border rounded-lg"
+                  className="flex-1 px-4 py-3 border rounded-lg text-black"
                 />
                 <input
                   type="color"
@@ -563,7 +473,7 @@ const ProfilePage: NextPageWithLayout = () => {
                 placeholder="New Tag"
                 value={newTag.name}
                 onChange={(e) => setNewTag({ ...newTag, name: e.target.value })}
-                className="flex-1 px-4 py-3 border rounded-lg"
+                className="flex-1 px-4 py-3 border rounded-lg text-black"
               />
               <input
                 type="color"
@@ -573,7 +483,7 @@ const ProfilePage: NextPageWithLayout = () => {
               />
               <button
                 onClick={handleAddTag}
-                className="px-4 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600"
+                className="px-4 py-3 bg-green-500 text-black rounded-lg hover:bg-green-600"
               >
                 Add
               </button>

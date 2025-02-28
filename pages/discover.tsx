@@ -1,107 +1,90 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { useRouter } from 'next/router';
 import { motion } from 'framer-motion';
 import { Layout } from '../components/layout/Layout';
 
-// 🔹 Fallback images (used if API fails)
-const placeholderImages = [
-  "/images/fallback1.jpg",
-  "/images/fallback2.jpg",
-  "/images/fallback3.jpg",
-  "/images/fallback4.jpg"
+// 🔹 Placeholder profile data (only using temporary images)
+const placeholderProfiles = [
+  { id: 1, name: "Alex Rivera", image: "/images/profile/profile1.jpg", username: "@alexrivera" },
+  { id: 2, name: "Parth Manoharan", image: "/images/profile/profile2.jpg", username: "@sophiachen" },
+  { id: 3, name: "Jordan Smith", image: "/images/profile/profile3.jpg", username: "@jordanlee" },
+  { id: 4, name: "Mia Gonzalez", image: "/images/profile/profile4.jpg", username: "@miagonzalez" },
 ];
 
-// 🔹 Fetch AI-Generated Images (Pexels API)
-const generateImage = async (interest: string) => {
-  try {
-    console.log(`Fetching image for: ${interest}`);
-    const response = await fetch(
-      `https://api.pexels.com/v1/search?query=${encodeURIComponent(interest + " fashion")}&per_page=1`,
-      {
-        headers: {
-          'Authorization': 'SGSwVbUEUb6bu4cUfAO6N3HGHfeLyDdIAF1bwnLBaA4vUbLRDsnMAQKD'
-        }
-      }
-    );
-
-    const data = await response.json();
-    console.log("API Response:", data);
-
-    return data.photos?.[0]?.src?.large || data.photos?.[0]?.src?.medium || placeholderImages[Math.floor(Math.random() * placeholderImages.length)];
-  } catch (error) {
-    console.error("Error fetching images:", error);
-    return placeholderImages[Math.floor(Math.random() * placeholderImages.length)];
-  }
-};
-
-// 🔹 Initial Interests (Adjust based on user behavior)
-const initialInterests = ['sustainable', 'streetwear', 'vintage', 'minimalist'];
+// 🔹 Fetch People’s Profiles (Mock API - Commented out)
+// const fetchProfiles = async () => {
+//   try {
+//     console.log("Fetching profiles...");
+//     const response = await fetch("https://api.example.com/profiles"); // Replace with actual API
+//     const data = await response.json();
+//     console.log("API Response:", data);
+//     return data.profiles || placeholderProfiles;
+//   } catch (error) {
+//     console.error("Error fetching profiles:", error);
+//     return placeholderProfiles;
+//   }
+// };
 
 const Discover = () => {
-  const [images, setImages] = useState<{ id: number; url: string; label: string }[]>([]);
-  const [userInterests, setUserInterests] = useState(initialInterests);
+  const [profiles, setProfiles] = useState(placeholderProfiles);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(1);
-  const maxPages = 5; // Prevents endless scrolling
+  const maxPages = 5; // Prevent endless scrolling
   const observer = useRef<IntersectionObserver | null>(null);
-  const lastImageRef = useRef<HTMLDivElement | null>(null);
+  const lastProfileRef = useRef<HTMLDivElement | null>(null);
+  const router = useRouter();
 
-  // 🔹 Fetch Initial Images (Runs on Mount)
+  // 🔹 Fetch Initial Profiles (Now using static data)
   useEffect(() => {
-    fetchImages();
+    // setProfiles(placeholderProfiles); // No API call needed
   }, []);
 
-  // 🔹 Fetch Images (Triggered on Scroll)
-  const fetchImages = useCallback(async () => {
+  // 🔹 Fetch More Profiles (Simulating Lazy Loading)
+  const fetchMoreProfiles = useCallback(() => {
     if (!hasMore || loading) return;
-    
+
     setLoading(true);
-    console.log("Loading more images...");
+    console.log("Loading more profiles...");
 
-    const newImages = await Promise.all(
-      userInterests.map(async (interest, index) => {
-        const imgUrl = await generateImage(interest);
-        return { id: images.length + index, url: imgUrl, label: interest };
-      })
-    );
+    setTimeout(() => {
+      setProfiles((prev) => [...prev, ...placeholderProfiles]); // Just appending the same data for now
+      setLoading(false);
 
-    setImages((prev) => [...prev, ...newImages]);
-    setLoading(false);
+      if (page >= maxPages) {
+        setHasMore(false);
+      } else {
+        setPage((prev) => prev + 1);
+      }
+    }, 1000); // Simulating network delay
+  }, [page, loading, hasMore]);
 
-    if (page >= maxPages) {
-      setHasMore(false);
-    } else {
-      setPage((prev) => prev + 1);
-    }
-  }, [userInterests, images, page, loading, hasMore]);
-
-  // 🔹 Auto-Load More (When Last Image Is in View)
+  // 🔹 Auto-Load More (When Last Profile Is in View)
   useEffect(() => {
-    if (!hasMore || images.length === 0) return;
+    if (!hasMore || profiles.length === 0) return;
 
     if (observer.current) observer.current.disconnect();
 
     observer.current = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting) {
-          console.log("Last image in view - Loading more...");
-          fetchImages();
+          console.log("Last profile in view - Loading more...");
+          fetchMoreProfiles();
         }
       },
       { threshold: 0.5 }
     );
 
-    if (lastImageRef.current) {
-      observer.current.observe(lastImageRef.current);
+    if (lastProfileRef.current) {
+      observer.current.observe(lastProfileRef.current);
     }
 
     return () => observer.current?.disconnect();
-  }, [fetchImages, hasMore, images]);
+  }, [fetchMoreProfiles, hasMore, profiles]);
 
-  // 🔹 Handle User Interaction (Refines Recommendations)
-  const handleInteraction = (label: string) => {
-    setUserInterests((prev) => [...new Set([...prev, label])]);
-    fetchImages();
+  // 🔹 Navigate to Profile
+  const visitProfile = (id: number) => {
+    router.push(`/profile/${id}`);
   };
 
   return (
@@ -111,36 +94,28 @@ const Discover = () => {
           {/* Header */}
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6 }} className="text-center mb-12">
             <h1 className="text-4xl font-bold text-white font-space-grotesk">
-              Discover Sustainable Fashion
+              Discover People & Creators
             </h1>
             <p className="text-lg text-cosmic-100 mt-2">
-              Get AI-powered inspiration based on your interests.
+              Find interesting people and check out their profiles.
             </p>
           </motion.div>
 
-          {/* 🔹 Masonry Grid Layout */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
-            {images.map((img, index) => (
+          {/* 🔹 Grid Layout */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+            {profiles.map((profile, index) => (
               <motion.div
-                key={img.id}
-                className="relative cursor-pointer group"
+                key={profile.id}
+                className="relative cursor-pointer group p-4 bg-cosmic-800 rounded-xl shadow-lg"
                 whileHover={{ scale: 1.05 }}
-                onClick={() => handleInteraction(img.label)}
-                ref={index === images.length - 1 ? lastImageRef : null} // Observe last image
+                onClick={() => visitProfile(profile.id)}
+                ref={index === profiles.length - 1 ? lastProfileRef : null} // Observe last profile
               >
-                <img src={img.url} alt={`Fashion ${img.id}`} className="w-full h-full object-cover rounded-lg" />
-                <div className="absolute bottom-2 left-2 bg-black/50 text-white px-2 py-1 text-xs rounded">
-                  {img.label}
+                <img src={profile.image} alt={profile.name} className="w-full h-48 object-cover rounded-lg" />
+                <div className="mt-4 text-center">
+                  <h3 className="text-lg font-bold text-white">{profile.name}</h3>
+                  <p className="text-sm text-cosmic-100">{profile.username}</p>
                 </div>
-                {/* ❤️ Like Button */}
-                <button className="absolute top-2 right-2 bg-white/20 p-2 rounded-full opacity-0 group-hover:opacity-100 transition"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleInteraction(img.label);
-                  }}
-                >
-                  ❤️
-                </button>
               </motion.div>
             ))}
           </div>
@@ -149,7 +124,7 @@ const Discover = () => {
           {loading && (
             <div className="mt-12 text-center">
               <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-cosmic-500 border-t-transparent" />
-              <p className="text-cosmic-100 mt-4">Loading more fashion ideas...</p>
+              <p className="text-cosmic-100 mt-4">Loading more profiles...</p>
             </div>
           )}
 
